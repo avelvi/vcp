@@ -1,5 +1,23 @@
-<html>
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Content Portal</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+</head>
 <body>
-<h2>Hello VCP</h2>
+
+<div class="row">
+    <h1 class="text-center">Video Content Portal</h1>
+    <ng-view ></ng-view>
+</div>
+<script type="text/javascript" src="/static/js/angular.js"></script>
+<script type="text/javascript" src="/static/js/angular-route.js"></script>
+<script type="text/javascript" src="/static/js/angular-resource.js"></script>
+<script type="text/javascript" src="/static/angular/app-controllers.js"></script>
+<script type="text/javascript" src="/static/angular/app-services.js"></script>
+<script type="text/javascript" src="/static/angular/app.js"></script>
 </body>
 </html>
