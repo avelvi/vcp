@@ -14,7 +14,7 @@ import java.net.UnknownHostException;
  */
 
 @Configuration
-@EnableMongoRepositories("com.aivlev.vcp.repository")
+@EnableMongoRepositories("com.aivlev.vcp.repository.storage")
 public class MongoConfig {
 
     @Value("${db.host}")

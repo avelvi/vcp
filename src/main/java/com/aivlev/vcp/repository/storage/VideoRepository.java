@@ -1,4 +1,4 @@
-package com.aivlev.vcp.repository;
+package com.aivlev.vcp.repository.storage;
 
 import com.aivlev.vcp.model.Video;
 import org.springframework.data.repository.PagingAndSortingRepository;

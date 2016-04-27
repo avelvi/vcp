@@ -1,5 +1,6 @@
 package com.aivlev.vcp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,10 +13,12 @@ import java.util.List;
  */
 
 @Document
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "video")
 public class Video {
 
     @Id
     private String id;
+    @Field("title")
     private String title;
     private String description;
     @Field(value = "created_date")
@@ -102,6 +105,6 @@ public class Video {
 
     @Override
     public String toString() {
-        return String.format("Video [id=%s, videoUrl=%s, thumbnails=%s, owner=%s]", id, videoUrl, thumbnails, owner);
+        return String.format("Video [id=%s, title=%s, videoUrl=%s, thumbnails=%s, owner=%s]", id, title, videoUrl, thumbnails, owner);
     }
 }
