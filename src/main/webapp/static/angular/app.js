@@ -1,1 +1,0 @@
-var app = angular.module('app', ['app-filters', 'app-services', 'app-controllers']);

@@ -4,10 +4,7 @@ package com.aivlev.vcp.service.impl;
  * Created by aivlev on 4/20/16.
  */
 
-import com.aivlev.vcp.model.Role;
-import com.aivlev.vcp.model.UploadForm;
-import com.aivlev.vcp.model.User;
-import com.aivlev.vcp.model.Video;
+import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +23,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class TestDataService {
@@ -69,6 +63,9 @@ public class TestDataService {
             } else if (!mongoTemplate.collectionExists(Video.class)) {
                 reason = "Collection video not found";
                 return true;
+            } else if (!mongoTemplate.collectionExists(Authority.class)) {
+                reason = "Collection authority not found";
+                return true;
             }
         }
         return createTestData;
@@ -78,7 +75,8 @@ public class TestDataService {
         createMediaDirsIfNecessary();
         clearMediaSubFolders();
         clearCollections();
-        List<User> accounts = createUsers();
+        List<Authority> authorities = createAuthorities();
+        List<User> accounts = createUsers(authorities);
         createVideos(accounts);
         LOGGER.info("Test mongo db created successfully");
     }
@@ -113,20 +111,58 @@ public class TestDataService {
         mongoTemplate.remove(new Query(), Video.class);
     }
 
-    private List<User> getUsers() {
+    private List<Authority> getAuthorities() {
         return new ArrayList<>(Arrays.asList(
-                new User("Tim", "Surname 1", "login1", "test1@test.ua", "12345", Role.ADMIN, "https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg"),
-                new User("Ron", "Surname 2", "login2", "test2@test.ua", "12345", Role.USER, "https://s3.amazonaws.com/uifaces/faces/twitter/k/128.jpg"),
-                new User("Alex", "Surname 3", "login3", "test3@test.ua", "12345", Role.USER, "https://s3.amazonaws.com/uifaces/faces/twitter/marcosmoralez/128.jpg")));
+                new Authority("admin"),
+                new Authority("user")
+                ));
     }
 
-    private List<User> createUsers() {
+    private List<User> getUsers() {
+
+        return new ArrayList<>(Arrays.asList(
+                new User("Tim", "Surname 1", "login1", "test1@test.ua", "12345",
+//                        new HashSet<Authority>(Arrays.asList("admin")),
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg"),
+                new User("Ron", "Surname 2", "login2", "test2@test.ua", "12345",
+//                        Role.USER,
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/k/128.jpg"),
+                new User("Alex", "Surname 3", "login3", "test3@test.ua", "12345",
+//                        Role.USER,
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/marcosmoralez/128.jpg")));
+    }
+
+    private List<User> createUsers(List<Authority> authorities) {
         List<User> users = getUsers();
+        Set<Authority> authoritySet = new HashSet<>(authorities);
+        int i = 0;
         for (User user : users) {
+            if(i == 2){
+                user.setAuthorities(authoritySet);
+            } else {
+                Iterator<Authority> it = authoritySet.iterator();
+                while (it.hasNext()){
+                    Authority authority = it.next();
+                    if(authority.getName().equals("user")){
+                        user.setAuthorities(new HashSet<>(Arrays.asList(authority)));
+                        break;
+                    }
+                }
+            }
             mongoTemplate.insert(user);
+            i++;
         }
         LOGGER.info("Created {} test users", users.size());
         return users;
+    }
+
+    private List<Authority> createAuthorities() {
+        List<Authority> authorities = getAuthorities();
+        for (Authority authority : authorities) {
+            mongoTemplate.insert(authority);
+        }
+        LOGGER.info("Created {} test authority", authorities.size());
+        return authorities;
     }
 
     private void createVideos(List<User> accounts) {

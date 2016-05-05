@@ -5,12 +5,17 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+import java.util.Set;
+
 /**
  * Created by aivlev on 4/19/16.
  */
 
 @Document
-public class User {
+public class User implements Serializable{
+
+    private static final long serialVersionUID = -4891639544969424612L;
 
     @Id
     private String id;
@@ -21,21 +26,23 @@ public class User {
     @Indexed(unique = true, name = "user_email")
     private String email;
     private String password;
-    private Role role;
+    private Set<Authority> authorities;
     private String avatar;
 
     public User(){
         super();
     }
 
-    public User(String name, String surname, String login, String email, String password, Role role, String avatar) {
+    public User(String name, String surname, String login, String email, String password,
+//                Set<Authority> authorities,
+                String avatar) {
         super();
         this.name = name;
         this.surname = surname;
         this.login = login;
         this.email = email;
         this.password = password;
-        this.role = role;
+//        this.authorities = authorities;
         this.avatar = avatar;
     }
 
@@ -87,12 +94,12 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Authority> getAuthorities() {
+        return authorities;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 
     public String getAvatar() {
@@ -110,7 +117,7 @@ public class User {
                 "name=%s, " +
                 "surname=%s, " +
                 "login=%s " +
-                "role=%s]", id, name, surname, login, role, avatar);
+                "authorities=%s]", id, name, surname, login, authorities, avatar);
     }
 
 

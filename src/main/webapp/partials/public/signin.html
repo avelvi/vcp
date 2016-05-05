@@ -3,23 +3,24 @@
 
     <div class="signin-header">
         <section class="logo text-center">
-            <h1><a ng-href="#/">Video Content Portal</a></h1>
+            <h1><a ng-href="#/home">Video Content Portal</a></h1>
         </section>
     </div>
-
     <div class="signin-body">
         <div class="container">
             <div class="form-container">
+                <span ng-show="authenticationError" class="help-block">
+                                    Please check your credentials and try again.
+                                </span>
 
-                <form class="form-horizontal" ng-controller="LoginController">
+                <form class="form-horizontal">
                     <fieldset>
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{'has-error-login is-focused' : authenticationError}">
                             <div class="input-group input-group-first">
                                 <span class="input-group-addon">
-                                    <span class="ti-email"></span>
+                                    <span class="ti-user"></span>
                                 </span>
-                                <input type="email" class="form-control input-lg" placeholder="Email" id="email" ng-model="email" required>
-                                <span ng-show="form.email.$dirty && form.email.$error.required" class="help-block">Email is required</span>
+                                <input type="text" class="form-control input-lg" placeholder="User Name" id="username" ng-model="username" required="required">
                             </div>
                         </div>
                         <div class="form-group">
@@ -27,13 +28,16 @@
                                 <span class="input-group-addon">
                                     <span class="ti-lock"></span>
                                 </span>
-                                <input type="password" class="form-control input-lg" placeholder="Password" id="password" ng-model="password" required>
+                                <input type="password" class="form-control input-lg" placeholder="Password" id="password" ng-model="password" required="required">
                             </div>
                         </div>
 
                         <div class="divider divider-xl"></div>
                         <div class="form-group">
-                            <a href="#" ng-click="doLogin()" class="btn btn-primary btn-lg btn-block text-center">Log in</a>
+                            <button class="btn btn-lg btn-primary btn-block" ng-click="doLogin()">
+                                Log in
+                                <div class="ripple-wrapper"></div></button>
+                            <!--<a href="javascript:void(0)" ng-click="doLogin()" class="btn btn-primary btn-lg btn-block text-center">Log in</a>-->
                         </div>
                     </fieldset>
                 </form>

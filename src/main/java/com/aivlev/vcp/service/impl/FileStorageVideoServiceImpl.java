@@ -9,8 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,6 +49,12 @@ public class FileStorageVideoServiceImpl implements VideoService {
             LOGGER.error("Error has occurred while saving video", e.getMessage());
             throw new ProcessMediaContentException("Error has occurred while saving video: " + e.getMessage(), e);
         }
+    }
+
+    @Nonnull
+    @Override
+    public ResponseHolder<Page<Video>> findAllVideosByOwnerId(@Nonnull String ownerId, @Nonnull Pageable pageable) {
+        return new ResponseHolder<>(videoRepository.findByOwnerId(ownerId, pageable));
     }
 
     private String saveVideoInternal(Path tempFilePath) throws IOException {

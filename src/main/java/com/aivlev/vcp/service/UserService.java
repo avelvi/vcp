@@ -14,4 +14,8 @@ public interface UserService {
 
     @Nonnull
     ResponseHolder<Video> uploadVideo (@Nonnull User user, @Nonnull UploadForm form);
+
+    User findByLogin(String login);
+
+    void save(User user);
 }

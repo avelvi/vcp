@@ -19,4 +19,7 @@ public interface VideoService {
 
     @Nonnull
     String saveVideo (@Nonnull Path tempFilePath) throws ProcessMediaContentException;
+
+    @Nonnull
+    ResponseHolder<Page<Video>> findAllVideosByOwnerId(@Nonnull String ownerId, @Nonnull Pageable pageable);
 }

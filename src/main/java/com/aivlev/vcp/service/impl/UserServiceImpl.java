@@ -5,6 +5,7 @@ import com.aivlev.vcp.model.ResponseHolder;
 import com.aivlev.vcp.model.UploadForm;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.model.Video;
+import com.aivlev.vcp.repository.storage.UserRepository;
 import com.aivlev.vcp.repository.storage.VideoRepository;
 import com.aivlev.vcp.repository.search.VideoSearchRepository;
 import com.aivlev.vcp.service.ImageService;
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService {
     private ImageService imageService;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     private VideoRepository videoRepository;
 
     @Autowired
@@ -47,9 +51,21 @@ public class UserServiceImpl implements UserService {
         String videoUrl = videoService.saveVideo(tempUploadedVideoPath);
         byte[] thumbnailImageData = thumbnailService.createThumbnail(tempUploadedVideoPath);
         String thumbnailImageUrl = imageService.saveImageData(thumbnailImageData);
-        Video video = new Video(form.getTitle(), form.getDescription(), String.valueOf(new Date()), videoUrl, Collections.singletonList(thumbnailImageUrl), user);
+        Video video = new Video(form.getTitle(), form.getDescription(), String.valueOf(new Date().getTime()), videoUrl, Collections.singletonList(thumbnailImageUrl), user);
         videoRepository.save(video);
         videoSearchRepository.save(video);
         return new ResponseHolder<>(video);
     }
+
+    @Override
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
+    @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+
 }

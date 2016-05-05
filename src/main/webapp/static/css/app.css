@@ -277,3 +277,169 @@ h6.created_date {
     text-decoration: none;
 }
 
+@media (min-width: 768px){
+    .page-err .err-container {
+        padding: 100px 0 0;
+    }
+}
+
+.page-err .err {
+    color: #fafafa;
+}
+
+@media (min-width: 768px) {
+    .page-err .err h1 {
+        font-size: 180px;
+    }
+}
+
+.page-err .err h1 {
+    margin-bottom: 35px;
+    color: #8c8c8c;
+    font-size: 150px;
+    font-weight: 300;
+    text-shadow: 2px 2px 5px rgba(0,0,0,.2);
+}
+
+@media (min-width: 768px) {
+    .page-err .err h2 {
+        font-size: 36px;
+    }
+}
+
+.page-err .err h2 {
+    color: #8c8c8c;
+    margin: 0;
+    font-weight: 300;
+    font-size: 28px;
+}
+
+.page-err .err-body {
+    padding: 20px 10px;
+}
+
+.page-err .btn-goback {
+    color: #8c8c8c;
+    background-color: transparent;
+    border-color: #8c8c8c;
+}
+
+.help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: red;
+    text-align: center;
+}
+
+
+.three-dots-row-spinner {
+    width: 30px;
+    height: 30px;
+    background-color: #333;
+    margin: 100px auto;
+    -webkit-animation: rotateplane 1.2s infinite ease-in-out;
+    animation: rotateplane 1.2s infinite ease-in-out;
+}
+
+.three-dots-row-spinner {
+    background-color: #009688;
+    width: 50px;
+    height: 50px;
+}
+
+.page {
+    padding: 15px;
+}
+
+.table-dynamic .table-filters {
+    margin: 10px 0;
+    padding: 8px;
+}
+
+.table-dynamic .table-bordered {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-dynamic .table-footer {
+    margin: 10px 0;
+    padding: 8px;
+}
+
+.navbar-default .navbar-brand {
+    color: #7e0000;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+    color: #7e0000;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .active > a {
+    background-image: -webkit-linear-gradient(top, #940000 0%, #7e0000 100%);
+    background-image:      -o-linear-gradient(top, #940000 0%, #7e0000 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#940000), to(#7e0000));
+    background-image:         linear-gradient(to bottom, #940000 0%, #7e0000 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdbdbdb', endColorstr='#ffe2e2e2', GradientType=0);
+    background-repeat: repeat-x;
+    -webkit-box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: #ffffff;
+    background-color: #e7e7e7;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    color: #ffffff;
+    background-color: #e7e7e7;
+}
+
+.navbar {
+    border-top: none;
+}
+
+.navbar-default {
+    border-radius: 0px;
+}
+
+.ti-search {
+    color: #7e0000 !important;
+}
+
+img.img30_30 {
+    width: 30px;
+    height: 30px;
+}
+
+@media (min-width: 768px){
+    .navbar-nav > li.profile > a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+}
+
+.dropdown-menu > li > a {
+    color: #777;
+    font-weight: 300;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #7e0000;
+    font-weight: 300;
+
+    background-image: -webkit-linear-gradient(top, #940000 0%, #7e0000 100%);
+    background-image:      -o-linear-gradient(top, #940000 0%, #7e0000 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#940000), to(#7e0000));
+    background-image:         linear-gradient(to bottom, #940000 0%, #7e0000 100%);
+}
+
+table.my-table tr td:last-child {
+    white-space: nowrap;
+    width: 1px;
+}

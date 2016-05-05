@@ -5,6 +5,8 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.filter.RequestContextFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.*;
@@ -36,10 +38,14 @@ public class ApplicationInitializer implements WebApplicationInitializer {
     }
 
     private void registerFilters(ServletContext container) {
-        FilterRegistration.Dynamic fr = container.addFilter("encodingFilter", new CharacterEncodingFilter());
-        fr.setInitParameter("encoding", "UTF-8");
-        fr.setInitParameter("forceEncoding", "true");
-        fr.addMappingForUrlPatterns(null, true, "/*");
+        registerFilter(container, new CharacterEncodingFilter("UTF-8", true));
+        registerFilter(container, new RequestContextFilter());
+        registerFilter(container, new DelegatingFilterProxy("springSecurityFilterChain"), "springSecurityFilterChain");
+    }
+
+    private void registerFilter(ServletContext container, Filter filter, String... filterNames) {
+        String filterName = filterNames.length > 0 ? filterNames[0] : filter.getClass().getSimpleName();
+        container.addFilter(filterName, filter).addMappingForUrlPatterns(null, true, "/*");
     }
 
     private void registerDispatcherServlet(ServletContext container, WebApplicationContext ctx) {
