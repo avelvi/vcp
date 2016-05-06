@@ -1,0 +1,14 @@
+<div class="container">
+    <h1>Edit Category Details</h1>
+
+    <form role="form">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Category Name" ng-model="category.name">
+        </div>
+        <button class="btn btn-success btn-sm" ng-click="updateCategory()">
+            Save</button>
+        <button class="btn btn-danger btn-sm" ng-click="cancel()">
+            Cancel</button>
+    </form>
+</div>

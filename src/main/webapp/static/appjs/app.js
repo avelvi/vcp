@@ -96,6 +96,27 @@ app.config(['$routeProvider', 'USER_ROLES',
                 loginRequired: true,
                 authorizedRoles: [USER_ROLES.admin]
             }
+        }).when("/admin/categories", {
+            templateUrl: "partials/admin/categories.html",
+            controller: "CategoriesListController",
+            access: {
+                loginRequired: true,
+                authorizedRoles: [USER_ROLES.admin]
+            }
+        }).when("/admin/categories/edit/:id", {
+            templateUrl: "partials/admin/category_details.html",
+            controller: "CategoryDetailsController",
+            access: {
+                loginRequired: true,
+                authorizedRoles: [USER_ROLES.admin]
+            }
+        }).when("/admin/categories/create", {
+            templateUrl: "partials/admin/category_creation.html",
+            controller: "CategoryCreationController",
+            access: {
+                loginRequired: true,
+                authorizedRoles: [USER_ROLES.admin]
+            }
         }).when("/admin/companies", {
             templateUrl: "partials/admin/companies.html",
             controller: "CompaniesListController",

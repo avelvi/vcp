@@ -1,12 +1,9 @@
 package com.aivlev.vcp.controller;
 
-import com.aivlev.vcp.model.Company;
-import com.aivlev.vcp.model.ResponseHolder;
-import com.aivlev.vcp.model.User;
-import com.aivlev.vcp.model.Video;
+import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.service.AdminService;
+import com.aivlev.vcp.service.CategoryService;
 import com.aivlev.vcp.service.CompanyService;
-import com.aivlev.vcp.service.UserService;
 import com.aivlev.vcp.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,13 +29,16 @@ public class AdminController {
     @Autowired
     CompanyService companyService;
 
+    @Autowired
+    CategoryService categoryService;
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public Object getAllUsers(@PageableDefault(size = 12)Pageable pageable){
         Page<User> result = adminService.findAllUsers(pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public Object getUser(@PathVariable(value = "id") String id){
         User user = adminService.findUser(id);
         if(user == null){
@@ -55,7 +55,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/companies", method = RequestMethod.GET)
-    public Object getCompanies(@PageableDefault(size = 12)Pageable pageable){
+    public Object getCompanies(@PageableDefault(size = 10)Pageable pageable){
         Page<Company> result = companyService.findAllCompanies(pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/companies/{id}", method = RequestMethod.PUT)
-    public Object getCompany(@PathVariable(value = "id") String id, @RequestBody Company company){
+    public Object updateCompany(@PathVariable(value = "id") String id, @RequestBody Company company){
         Company comp = companyService.updateCompany(company);
         if(company == null){
             return new ResponseEntity<Company>(HttpStatus.NOT_FOUND);
@@ -85,8 +85,43 @@ public class AdminController {
 
     @RequestMapping(value = "/companies", method = RequestMethod.POST)
     public Object createCompany(@RequestBody Company company){
-        Company comp = companyService.save(company);
+        Company comp = companyService.saveCompany(company);
         return new ResponseEntity<>(comp, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/categories", method = RequestMethod.GET)
+    public Object getCategories(@PageableDefault(size = 10)Pageable pageable){
+        Page<Category> result = categoryService.findAllCategories(pageable);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/categories/{id}", method = RequestMethod.GET)
+    public Object getCategory(@PathVariable(value = "id") String id){
+        Category category = categoryService.findCategory(id);
+        if(category == null){
+            return new ResponseEntity<Company>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(category, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/categories/{id}", method = RequestMethod.PUT)
+    public Object updateCategory(@PathVariable(value = "id") String id, @RequestBody Category category){
+        Category updatedCategory = categoryService.updateCategory(category);
+        if(category == null){
+            return new ResponseEntity<Company>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/categories/{id}", method = RequestMethod.DELETE)
+    public void deleteCategory(@PathVariable(value = "id") String id){
+        categoryService.deleteCategory(id);
+    }
+
+    @RequestMapping(value = "/categories", method = RequestMethod.POST)
+    public Object createCategory(@RequestBody Category category){
+        Category newCategory = categoryService.saveCategory(category);
+        return new ResponseEntity<>(newCategory, HttpStatus.OK);
     }
 
 }

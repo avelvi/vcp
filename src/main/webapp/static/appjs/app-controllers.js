@@ -301,3 +301,55 @@ controllers.controller('CompanyCreationController', ['$scope', '$location', 'Com
     }
 
 }]);
+
+
+controllers.controller('CategoriesListController', ['$scope', '$location', 'CategoriesService', function ($scope, $location, CategoriesService){
+    $scope.editCategory = function(id){
+        $location.path('/admin/categories/edit/' + id);
+    }
+
+    $scope.deleteCategory = function(id){
+        CategoriesService.deleteCategory(id).then(function(){
+            CategoriesService.getAllCategories().then(function(data){
+                $scope.categories = data;
+            })
+        });
+    }
+
+    CategoriesService.getAllCategories().then(function(data){
+        $scope.categories = data;
+    });
+
+    $scope.createCategory = function(){
+        $location.path('/admin/categories/create')
+    }
+
+}]);
+
+controllers.controller('CategoryDetailsController', ['$scope', '$routeParams', '$location', 'CategoryDetailsService', function ($scope, $routeParams, $location, CategoryDetailsService){
+
+    $scope.updateCategory = function(){
+        CategoryDetailsService.updateCategory($scope.category).then(function(data){
+            $location.path('/admin/categories');
+        });
+
+    }
+
+    $scope.cancel = function(){
+        $location.path('/admin/categories')
+    }
+    CategoryDetailsService.getCategory($routeParams.id).then(function(data){
+        $scope.category = data;
+    });
+}]);
+
+controllers.controller('CategoryCreationController', ['$scope', '$location', 'CategoryCreationService', function ($scope, $location, CategoryCreationService){
+
+    $scope.createNewCategory = function(){
+        CategoryCreationService.createNewCategory($scope.category).then(function(data){
+            $location.path('/admin/categories');
+        });
+
+    }
+
+}]);

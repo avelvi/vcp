@@ -139,12 +139,12 @@ app.factory('UsersService', ['$http', function($http){
 app.factory('UserService', ['$http', function($http){
     return {
         getUser: function(id){
-            return $http.get('/admin/user/' + id).then(function(response) {
+            return $http.get('/admin/users/' + id).then(function(response) {
                 return response.data;
             })
         },
         updateUser: function(user){
-            return $http.put('/admin/user/' + id, user).then(function(response) {
+            return $http.put('/admin/users/' + user.id, user).then(function(response) {
                 return response.data;
             })
         }
@@ -220,3 +220,43 @@ services.factory("CompanyCreationService", function($http) {
     }
 });
 
+
+services.factory("CategoriesService", function($http) {
+    return {
+        getAllCategories: function (){
+            return $http.get('/admin/categories').then(function(respponse){
+                return respponse.data;
+            })
+        },
+        deleteCategory: function(id){
+            return $http.delete('/admin/categories/' + id).then(function(){
+
+            });
+        }
+    }
+});
+
+app.factory('CategoryDetailsService', ['$http', function($http){
+    return {
+        getCategory: function(id){
+            return $http.get('/admin/categories/' + id).then(function(response) {
+                return response.data;
+            })
+        },
+        updateCategory: function(category){
+            return $http.put('/admin/categories/' + category.id, category).then(function(response) {
+                return response.data;
+            })
+        }
+    }
+}]);
+
+services.factory("CategoryCreationService", function($http) {
+    return {
+        createNewCategory: function (company){
+            return $http.post('/admin/categories', company).then(function(respponse){
+                return respponse.data;
+            })
+        }
+    }
+});
