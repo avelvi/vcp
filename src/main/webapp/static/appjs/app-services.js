@@ -179,3 +179,44 @@ services.factory("VideosService", function($http) {
         }
     }
 });
+
+services.factory("CompaniesService", function($http) {
+    return {
+        getAllCompanies: function (){
+            return $http.get('/admin/companies').then(function(respponse){
+                return respponse.data;
+            })
+        },
+        deleteCompany: function(id){
+            return $http.delete('/admin/companies/' + id).then(function(){
+
+            });
+        }
+    }
+});
+
+app.factory('CompanyDetailsService', ['$http', function($http){
+    return {
+        getCompany: function(id){
+            return $http.get('/admin/companies/' + id).then(function(response) {
+                return response.data;
+            })
+        },
+        updateCompany: function(company){
+            return $http.put('/admin/companies/' + company.id, company).then(function(response) {
+                return response.data;
+            })
+        }
+    }
+}]);
+
+services.factory("CompanyCreationService", function($http) {
+    return {
+        createNewCompany: function (company){
+            return $http.post('/admin/companies', company).then(function(respponse){
+                return respponse.data;
+            })
+        }
+    }
+});
+

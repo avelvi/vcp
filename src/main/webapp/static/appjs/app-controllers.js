@@ -114,36 +114,36 @@ controllers.controller('SignUpController', function ($rootScope, $scope, SignUpS
     }
 })
 
-controllers.controller('TokensController', function ($scope, UsersService, TokensService, $q) {
-
-    var browsers = ["Firefox", 'Chrome', 'Trident']
-
-    $q.all([
-        UsersService.getAll().$promise,
-        TokensService.getAll().$promise
-    ]).then(function (data) {
-        var users = data[0];
-        var tokens = data[1];
-
-        tokens.forEach(function (token) {
-            users.forEach(function (user) {
-                if (token.userLogin === user.login) {
-                    token.firstName = user.firstName;
-                    token.familyName = user.familyName;
-                    browsers.forEach(function (browser) {
-                        if (token.userAgent.indexOf(browser) > -1) {
-                            token.browser = browser;
-                        }
-                    });
-                }
-            });
-        });
-
-        $scope.tokens = tokens;
-    });
-
-
-})
+//controllers.controller('TokensController', function ($scope, UsersService, TokensService, $q) {
+//
+//    var browsers = ["Firefox", 'Chrome', 'Trident']
+//
+//    $q.all([
+//        UsersService.getAll().$promise,
+//        TokensService.getAll().$promise
+//    ]).then(function (data) {
+//        var users = data[0];
+//        var tokens = data[1];
+//
+//        tokens.forEach(function (token) {
+//            users.forEach(function (user) {
+//                if (token.userLogin === user.login) {
+//                    token.firstName = user.firstName;
+//                    token.familyName = user.familyName;
+//                    browsers.forEach(function (browser) {
+//                        if (token.userAgent.indexOf(browser) > -1) {
+//                            token.browser = browser;
+//                        }
+//                    });
+//                }
+//            });
+//        });
+//
+//        $scope.tokens = tokens;
+//    });
+//
+//
+//})
 
 controllers.controller('LogoutController', function (AuthSharedService) {
     AuthSharedService.logout();
@@ -250,3 +250,54 @@ controllers.controller('VideoDetailsController', ['$scope', '$routeParams', '$lo
     });
 }])
 
+
+controllers.controller('CompaniesListController', ['$scope', '$location', 'CompaniesService', function ($scope, $location, CompaniesService){
+    $scope.editCompany = function(id){
+        $location.path('/admin/companies/edit/' + id);
+    }
+
+    $scope.deleteCompany = function(id){
+        CompaniesService.deleteCompany(id).then(function(){
+            CompaniesService.getAllCompanies().then(function(data){
+                $scope.companies = data;
+            })
+        });
+    }
+
+    CompaniesService.getAllCompanies().then(function(data){
+        $scope.companies = data;
+    });
+
+    $scope.createCompany = function(){
+        $location.path('/admin/companies/create')
+    }
+
+}]);
+
+controllers.controller('CompanyDetailsController', ['$scope', '$routeParams', '$location', 'CompanyDetailsService', function ($scope, $routeParams, $location, CompanyDetailsService){
+
+    $scope.updateCompany = function(){
+        CompanyDetailsService.updateCompany($scope.company).then(function(data){
+            $location.path('/admin/companies');
+        });
+
+    }
+
+    $scope.cancel = function(){
+        $location.path('/admin/companies')
+    }
+    CompanyDetailsService.getCompany($routeParams.id).then(function(data){
+        $scope.company = data;
+    });
+}]);
+
+controllers.controller('CompanyCreationController', ['$scope', '$location', 'CompanyCreationService', function ($scope, $location, CompanyCreationService){
+
+    $scope.createNewCompany = function(){
+        CompanyCreationService.createNewCompany($scope.company).then(function(data){
+            $location.path('/admin/companies');
+        });
+
+    }
+
+}]);
