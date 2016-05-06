@@ -69,7 +69,7 @@ app.config(['$routeProvider', 'USER_ROLES',
                 authorizedRoles: [USER_ROLES.admin]
             }
         }).when("/admin/users", {
-            templateUrl: "partials/admin/users_list.html",
+            templateUrl: "partials/admin/users.html",
             controller: "UsersListController",
             access: {
                 loginRequired: true,
@@ -90,7 +90,7 @@ app.config(['$routeProvider', 'USER_ROLES',
                 authorizedRoles: [USER_ROLES.admin]
             }
         }).when("/admin/user/:id", {
-            templateUrl: "partials/admin/user_info.html",
+            templateUrl: "partials/admin/user_details.html",
             controller: "UserDetailsController",
             access: {
                 loginRequired: true,

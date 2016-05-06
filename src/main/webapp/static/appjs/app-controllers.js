@@ -181,7 +181,7 @@ controllers.controller('UsersListController', ['$scope', '$location', 'UsersServ
 
 }]);
 
-controllers.controller('UserDetailsController', ['$scope', '$routeParams', '$location', 'UserService', function ($scope, $routeParams, $location, UserService){
+controllers.controller('UserDetailsController', ['$scope', '$routeParams', '$location', 'UserService', 'CompaniesService', function ($scope, $routeParams, $location, UserService, CompaniesService){
 
     $scope.updateUser = function(){
         UserService.updateUser($scope.user).then(function(data){
@@ -196,6 +196,12 @@ controllers.controller('UserDetailsController', ['$scope', '$routeParams', '$loc
     UserService.getUser($routeParams.id).then(function(data){
         $scope.user = data;
     });
+
+    CompaniesService.getAllCompanies().then(function(data){
+        $scope.companies = data
+    })
+
+
 }]);
 
 controllers.controller('VideosController', ['$scope', '$routeParams', '$location', 'VideosService', function($scope, $routeParams, $location, VideosService){

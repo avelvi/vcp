@@ -37,6 +37,9 @@
                             Email
                         </div></th>
                         <th><div class="th">
+                            Company
+                        </div></th>
+                        <th><div class="th">
 
                         </div></th>
 
@@ -48,6 +51,7 @@
                         <td class="ng-binding">{{user.surname}}</td>
                         <td class="ng-binding">{{user.login}}</td>
                         <td class="ng-binding">{{user.email}}</td>
+                        <td class="ng-binding">{{user.company.name}}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" ng-click="showVideos(user.id)">
                                 View Videos</button>

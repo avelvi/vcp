@@ -1,10 +1,7 @@
 package com.aivlev.vcp.controller;
 
 import com.aivlev.vcp.model.*;
-import com.aivlev.vcp.service.AdminService;
-import com.aivlev.vcp.service.CategoryService;
-import com.aivlev.vcp.service.CompanyService;
-import com.aivlev.vcp.service.VideoService;
+import com.aivlev.vcp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +19,9 @@ public class AdminController {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     VideoService videoService;
@@ -46,6 +46,11 @@ public class AdminController {
         }
         user.setPassword(null);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
+    public void updateUser(@PathVariable(value = "id") String id, @RequestBody User user){
+        userService.save(user);
     }
 
     @RequestMapping(value = "/videos", method = RequestMethod.GET)

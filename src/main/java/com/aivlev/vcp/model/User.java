@@ -28,6 +28,8 @@ public class User implements Serializable{
     private String password;
     private Set<Authority> authorities;
     private String avatar;
+    @DBRef(lazy = true)
+    private Company company;
 
     public User(){
         super();
@@ -35,7 +37,7 @@ public class User implements Serializable{
 
     public User(String name, String surname, String login, String email, String password,
 //                Set<Authority> authorities,
-                String avatar) {
+                String avatar, Company company) {
         super();
         this.name = name;
         this.surname = surname;
@@ -44,6 +46,7 @@ public class User implements Serializable{
         this.password = password;
 //        this.authorities = authorities;
         this.avatar = avatar;
+        this.company = company;
     }
 
     public String getId() {
@@ -110,6 +113,14 @@ public class User implements Serializable{
         this.avatar = avatar;
     }
 
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
     @Override
     public String toString() {
         return String.format("User [" +
@@ -119,6 +130,5 @@ public class User implements Serializable{
                 "login=%s " +
                 "authorities=%s]", id, name, surname, login, authorities, avatar);
     }
-
 
 }

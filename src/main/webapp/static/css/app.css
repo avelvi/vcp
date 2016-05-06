@@ -443,3 +443,7 @@ table.my-table tr td:last-child {
     white-space: nowrap;
     width: 1px;
 }
+
+form.details{
+    padding: 20px;
+}
