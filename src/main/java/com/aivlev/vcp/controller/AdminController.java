@@ -50,7 +50,7 @@ public class AdminController {
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
     public void updateUser(@PathVariable(value = "id") String id, @RequestBody User user){
-        userService.save(user);
+        userService.save(id, user);
     }
 
     @RequestMapping(value = "/videos", method = RequestMethod.GET)

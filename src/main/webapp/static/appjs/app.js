@@ -9,6 +9,12 @@ app.constant('USER_ROLES', {
     user: 'user'
 });
 
+app.constant('ENTRIES_PER_PAGE', {
+    5: 5,
+    10: 10,
+    20: 20
+});
+
 app.config(['$routeProvider', 'USER_ROLES',
     function($routeProvider, USER_ROLES){
         $routeProvider.when('/home', {
@@ -75,6 +81,13 @@ app.config(['$routeProvider', 'USER_ROLES',
                 loginRequired: true,
                 authorizedRoles: [USER_ROLES.admin]
             }
+        }).when("/admin/users/:id", {
+            templateUrl: "partials/admin/user_details.html",
+            controller: "UserDetailsController",
+            access: {
+                loginRequired: true,
+                authorizedRoles: [USER_ROLES.admin]
+            }
         }).when("/admin/users/:id/videos", {
             templateUrl: "partials/public/videos.html",
             controller: "VideosController",
@@ -82,16 +95,16 @@ app.config(['$routeProvider', 'USER_ROLES',
                 loginRequired: true,
                 authorizedRoles: [USER_ROLES.admin]
             }
-        }).when("/admin/editVideo/:id", {
-            templateUrl: "partials/public/video_details.html",
-            controller: "VideoDetailsController",
+        }).when("/admin/videos", {
+            templateUrl: "partials/admin/videos.html",
+            controller: "VideosListController",
             access: {
                 loginRequired: true,
                 authorizedRoles: [USER_ROLES.admin]
             }
-        }).when("/admin/user/:id", {
-            templateUrl: "partials/admin/user_details.html",
-            controller: "UserDetailsController",
+        }).when("/admin/editVideo/:id", {
+            templateUrl: "partials/public/video_details.html",
+            controller: "VideoDetailsController",
             access: {
                 loginRequired: true,
                 authorizedRoles: [USER_ROLES.admin]
@@ -155,6 +168,31 @@ app.config(['$routeProvider', 'USER_ROLES',
     }
 
 ]);
+
+
+app.filter('pages', function () {
+    return function (input, currentPage, totalPages, range) {
+        currentPage = parseInt(currentPage);
+        totalPages = parseInt(totalPages);
+        range = parseInt(range);
+
+        var minPage = (currentPage - range < 0) ? 0 : (currentPage - range > (totalPages - (range * 2))) ? totalPages - (range * 2) : currentPage - range;
+        var maxPage = (currentPage + range > totalPages) ? totalPages : (currentPage + range < range * 2) ? range * 2 : currentPage + range;
+
+        if(minPage < 0){
+            minPage = 0;
+        }
+        if(maxPage > totalPages){
+            maxPage = totalPages;
+        }
+
+        for(var i = minPage; i < maxPage; i++) {
+            input.push(i);
+        }
+
+        return input;
+    };
+});
 
 app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER_ROLES, $q, $timeout) {
 

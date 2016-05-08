@@ -63,7 +63,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user) {
+    public void save(String id, User user) {
+
+        User userFromDB = userRepository.findOne(id);
+        if(userFromDB != null){
+            user.setPassword(userFromDB.getPassword());
+        }
         userRepository.save(user);
     }
 

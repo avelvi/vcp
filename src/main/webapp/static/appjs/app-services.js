@@ -176,6 +176,22 @@ services.factory("VideosService", function($http) {
             }).then(function(response) {
                 return response.data;
             });
+        },
+        getAllVideos: function (){
+            return $http.get('/videos').then(function(respponse){
+                return respponse.data;
+            })
+        },
+        getAllVideosForAdmin: function(page, size){
+           return $http.get('/videos', {
+               params: {
+                   page: page,
+                   size: size
+               }
+           }).then(function(response) {
+               return response.data;
+           });
+
         }
     }
 });

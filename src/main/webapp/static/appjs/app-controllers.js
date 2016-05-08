@@ -38,7 +38,7 @@ controllers.controller('HomeController', ['$scope', '$location', 'VideoService',
 controllers.controller('NavController', ['$scope', '$location', 'AuthSharedService', function($scope, $location, AuthSharedService){
 
     $scope.isShowNavBar = function(){
-        var excludeUrls = ["/signin", "/signup", "/error"];
+        var excludeUrls = ["/signin", "/signup", "/error", "/loading"];
         var path = $location.path();
         for (var i = 0; i < excludeUrls.length; i++) {
             var excludeUrl = excludeUrls[i];
@@ -168,7 +168,7 @@ controllers.controller('ErrorController', function ($scope, $routeParams) {
 
 controllers.controller('UsersListController', ['$scope', '$location', 'UsersService', function ($scope, $location, UsersService){
     $scope.editUser = function(id){
-        $location.path('/admin/user/' + id);
+        $location.path('/admin/users/' + id);
     }
 
     $scope.showVideos = function(id){
@@ -359,3 +359,28 @@ controllers.controller('CategoryCreationController', ['$scope', '$location', 'Ca
     }
 
 }]);
+
+controllers.controller('VideosListController', ['$scope', '$location', 'ENTRIES_PER_PAGE', 'VideosService', function ($scope, $location, ENTRIES_PER_PAGE, VideosService){
+
+    $scope.entriesPerPage = ENTRIES_PER_PAGE;
+    var search = $location.search();
+    var page = search.page||0;
+    var size = search.size||5;
+    VideosService.getAllVideosForAdmin(page, size).then(function(data){
+        $scope.videos = data;
+        $scope.size = $scope.videos.size;
+    });
+
+    $scope.onNumPerPageChange = function(size){
+        this.goToPage(0, size);
+    }
+
+    $scope.goToPage = function(page, size){
+        VideosService.getAllVideosForAdmin(page, size).then(function(data){
+            $scope.videos = data;
+            $scope.size = size;
+        });
+    }
+
+}]);
+

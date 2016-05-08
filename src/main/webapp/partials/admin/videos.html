@@ -1,0 +1,86 @@
+<div id="content" class="content-container">
+    <div class="col-md-12">
+        <div class="page page-table" >
+            <div class="panel panel-default table-dynamic">
+                <div class="panel-heading"><strong><span class="ti-user"></span> List of videos</strong></div>
+
+                <div class="table-filters">
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-6">
+                            <form class="ng-pristine ng-valid">
+                                <input type="text" placeholder="Search..." class="form-control ng-pristine ng-untouched ng-valid" ng-model="searchText" aria-invalid="false">
+                            </form>
+                        </div>
+                        <div class="col-sm-3 col-xs-6 filter-result-info">
+                                <span class="ng-binding">
+                                    Showing {{filtered.length}}
+                                    <span ng-if="filtered.length > 1"> entries</span>
+                                    <span ng-if="filtered.length < 2"> entry</span>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-bordered table-striped table-responsive my-table">
+                    <thead>
+                    <tr>
+                        <th><div class="th">
+                            Title
+                        </div></th>
+                        <th><div class="th">
+                            Description
+                        </div></th>
+                        <th><div class="th">
+                            Created Date
+                        </div></th>
+                        <th><div class="th">
+                            Author
+                        </div></th>
+                        <th><div class="th">
+
+                        </div></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="video in videos.content | filter:searchText as filtered"  style="vertical-align: middle">
+                        <td class="ng-binding">{{video.title}}</td>
+                        <td class="ng-binding">{{video.description}}</td>
+                        <td class="ng-binding">{{video.createdDate | date : 'yyyy-MM-dd'}}</td>
+                        <td class="ng-binding"><a ng-href="#/admin/users/{{video.owner.id}}">{{video.owner.name}}</a></td>
+                        <td>
+                            <button class="btn btn-success btn-sm" ng-click="editUser(user.id)">
+                                Edit</button>
+                            <button class="btn btn-danger btn-sm" ng-click="deleteUser(user.id)">
+                                Delete</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <footer class="table-footer">
+                    <div class="row">
+                        <div class="col-md-6 page-num-info">
+                            <span>Show
+                                <select ng-model="size" ng-options="num for num in entriesPerPage" data-ng-change="onNumPerPageChange(size)"  aria-invalid="false">
+                                </select>
+                                entries per page
+                            </span>
+
+
+                        </div>
+                        <div class="col-md-6 text-right pagination-container">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default" ng-class="{disabled: videos.first}" ng-click="goToPage(0, size)">&laquo;</button>
+                                <button type="button" class="btn btn-default" ng-class="{disabled: videos.first}" ng-click="goToPage(videos.number - 1, size)">Prev</button>
+                                <button ng-repeat="n in [] | pages: videos.number:videos.totalPages:2" ng-class="{active: n === videos.number}" type="button" class="btn btn-default" ng-click="goToPage(n, size)">{{n + 1}}</button>
+                                <button type="button" class="btn btn-default" ng-class="{disabled: videos.last}" ng-click="goToPage(videos.number + 1, size)">Next</button>
+                                <button type="button" class="btn btn-default" ng-class="{disabled: videos.last}" ng-click="goToPage(videos.totalPages - 1, size)">&raquo;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>

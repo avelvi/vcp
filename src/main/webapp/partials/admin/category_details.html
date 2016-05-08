@@ -1,14 +1,16 @@
 <div class="container">
-    <h1>Edit Category Details</h1>
+    <div class="panel panel-default table-dynamic">
+    <div class="panel-heading"><strong><span class="ti-user"></span> Category Details</strong></div>
 
-    <form role="form">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Category Name" ng-model="category.name">
-        </div>
-        <button class="btn btn-success btn-sm" ng-click="updateCategory()">
-            Save</button>
-        <button class="btn btn-danger btn-sm" ng-click="cancel()">
-            Cancel</button>
-    </form>
+        <form role="form" class="details">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Category Name" ng-model="category.name">
+            </div>
+            <button class="btn btn-success btn-sm" ng-click="updateCategory()">
+                Save</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">
+                Cancel</button>
+        </form>
+    </div>
 </div>
