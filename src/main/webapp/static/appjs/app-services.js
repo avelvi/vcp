@@ -128,8 +128,13 @@ services.factory('SignUpService', ['$rootScope', '$http', '$resource', '$locatio
 
 app.factory('UsersService', ['$http', function($http){
     return {
-        getAllUsers: function (){
-            return $http.get('/admin/users').then(function(respponse){
+        getAllUsers: function (page, size){
+            return $http.get('/admin/users', {
+                params: {
+                    page: page,
+                    size: size
+                }
+            }).then(function(respponse){
                 return respponse.data;
             })
         }
@@ -198,8 +203,13 @@ services.factory("VideosService", function($http) {
 
 services.factory("CompaniesService", function($http) {
     return {
-        getAllCompanies: function (){
-            return $http.get('/admin/companies').then(function(respponse){
+        getAllCompanies: function (page, size){
+            return $http.get('/admin/companies', {
+                params: {
+                    page: page,
+                    size: size
+                }
+            }).then(function(respponse){
                 return respponse.data;
             })
         },
@@ -239,8 +249,13 @@ services.factory("CompanyCreationService", function($http) {
 
 services.factory("CategoriesService", function($http) {
     return {
-        getAllCategories: function (){
-            return $http.get('/admin/categories').then(function(respponse){
+        getAllCategories: function (page, size){
+            return $http.get('/admin/categories', {
+                params: {
+                    page: page,
+                    size: size
+                }
+            }).then(function(respponse){
                 return respponse.data;
             })
         },

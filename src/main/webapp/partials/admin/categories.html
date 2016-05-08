@@ -57,13 +57,24 @@
                 </table>
                 <footer class="table-footer">
                     <div class="row">
-                        <!--<div class="col-md-6 page-num-info">-->
-                        <!--<span>-->
-                        <!--Show-->
-                        <!--<select data-ng-model="numPerPage" data-ng-options="num for num in numPerPageOpt" data-ng-change="onNumPerPageChange()" class="ng-pristine ng-untouched ng-valid" aria-invalid="false"><option label="3" value="number:3">3</option><option label="5" value="number:5">5</option><option label="10" value="number:10" selected="selected">10</option><option label="20" value="number:20">20</option></select>-->
-                        <!--entries per page-->
-                        <!--</span>-->
-                        <!--</div>-->
+                        <div class="col-md-6 page-num-info">
+                            <span>Show
+                                <select ng-model="size" ng-options="num for num in entriesPerPage" data-ng-change="onNumPerPageChange(size)"  aria-invalid="false">
+                                </select>
+                                entries per page
+                            </span>
+
+
+                        </div>
+                        <div class="col-md-6 text-right pagination-container" ng-show="categories.totalPages > 1">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default" ng-disabled="categories.first" ng-click="goToPage(0, size)">&laquo;</button>
+                                <button type="button" class="btn btn-default" ng-disabled="categories.first" ng-click="goToPage(categories.number - 1, size)">Prev</button>
+                                <button ng-repeat="n in [] | pages: categories.number:categories.totalPages:2" ng-class="{active: n === categories.number}" type="button" class="btn btn-default" ng-click="goToPage(n, size)">{{n + 1}}</button>
+                                <button type="button" class="btn btn-default" ng-disabled="categories.last" ng-click="goToPage(categories.number + 1, size)">Next</button>
+                                <button type="button" class="btn btn-default" ng-disabled="categories.last" ng-click="goToPage(categories.totalPages - 1, size)">&raquo;</button>
+                            </div>
+                        </div>
                     </div>
                 </footer>
             </div>

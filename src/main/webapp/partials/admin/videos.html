@@ -68,13 +68,13 @@
 
 
                         </div>
-                        <div class="col-md-6 text-right pagination-container">
+                        <div class="col-md-6 text-right pagination-container" ng-show="videos.totalPages > 1">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-default" ng-class="{disabled: videos.first}" ng-click="goToPage(0, size)">&laquo;</button>
-                                <button type="button" class="btn btn-default" ng-class="{disabled: videos.first}" ng-click="goToPage(videos.number - 1, size)">Prev</button>
+                                <button type="button" class="btn btn-default" ng-disabled="videos.first" ng-click="goToPage(0, size)">&laquo;</button>
+                                <button type="button" class="btn btn-default" ng-disabled="videos.first" ng-click="goToPage(videos.number - 1, size)">Prev</button>
                                 <button ng-repeat="n in [] | pages: videos.number:videos.totalPages:2" ng-class="{active: n === videos.number}" type="button" class="btn btn-default" ng-click="goToPage(n, size)">{{n + 1}}</button>
-                                <button type="button" class="btn btn-default" ng-class="{disabled: videos.last}" ng-click="goToPage(videos.number + 1, size)">Next</button>
-                                <button type="button" class="btn btn-default" ng-class="{disabled: videos.last}" ng-click="goToPage(videos.totalPages - 1, size)">&raquo;</button>
+                                <button type="button" class="btn btn-default" ng-disabled="videos.last" ng-click="goToPage(videos.number + 1, size)">Next</button>
+                                <button type="button" class="btn btn-default" ng-disabled="videos.last" ng-click="goToPage(videos.totalPages - 1, size)">&raquo;</button>
                             </div>
                         </div>
                     </div>

@@ -166,7 +166,30 @@ controllers.controller('ErrorController', function ($scope, $routeParams) {
 
 });
 
-controllers.controller('UsersListController', ['$scope', '$location', 'UsersService', function ($scope, $location, UsersService){
+controllers.controller('UsersListController', ['$scope', '$location', 'ENTRIES_PER_PAGE', 'UsersService', function ($scope, $location, ENTRIES_PER_PAGE, UsersService){
+
+    $scope.entriesPerPage = ENTRIES_PER_PAGE;
+    var search = $location.search();
+    var page = search.page||0;
+    var size = search.size||5;
+
+    UsersService.getAllUsers(page, size).then(function(data){
+        $scope.users = data;
+        $scope.size = size;
+    });
+
+    $scope.onNumPerPageChange = function(size){
+        this.goToPage(0, size);
+    }
+
+    $scope.goToPage = function(page, size){
+        UsersService.getAllUsers(page, size).then(function(data){
+            $scope.users = data;
+            $scope.size = size;
+        });
+    }
+
+
     $scope.editUser = function(id){
         $location.path('/admin/users/' + id);
     }
@@ -175,9 +198,7 @@ controllers.controller('UsersListController', ['$scope', '$location', 'UsersServ
         $location.path('/admin/users/' + id + '/videos')
     }
 
-    UsersService.getAllUsers().then(function(data){
-         $scope.users = data;
-    });
+
 
 }]);
 
@@ -257,7 +278,31 @@ controllers.controller('VideoDetailsController', ['$scope', '$routeParams', '$lo
 }])
 
 
-controllers.controller('CompaniesListController', ['$scope', '$location', 'CompaniesService', function ($scope, $location, CompaniesService){
+controllers.controller('CompaniesListController', ['$scope', '$location', 'ENTRIES_PER_PAGE', 'CompaniesService', function ($scope, $location, ENTRIES_PER_PAGE, CompaniesService){
+
+    $scope.entriesPerPage = ENTRIES_PER_PAGE;
+    var search = $location.search();
+    var page = search.page||0;
+    var size = search.size||5;
+
+    CompaniesService.getAllCompanies(page, size).then(function(data){
+        $scope.companies = data;
+        $scope.size = size;
+    });
+
+    $scope.onNumPerPageChange = function(size){
+        this.goToPage(0, size);
+    }
+
+    $scope.goToPage = function(page, size){
+        CompaniesService.getAllCompanies(page, size).then(function(data){
+            $scope.companies = data;
+            $scope.size = size;
+        });
+    }
+
+
+
     $scope.editCompany = function(id){
         $location.path('/admin/companies/edit/' + id);
     }
@@ -269,10 +314,6 @@ controllers.controller('CompaniesListController', ['$scope', '$location', 'Compa
             })
         });
     }
-
-    CompaniesService.getAllCompanies().then(function(data){
-        $scope.companies = data;
-    });
 
     $scope.createCompany = function(){
         $location.path('/admin/companies/create')
@@ -309,7 +350,29 @@ controllers.controller('CompanyCreationController', ['$scope', '$location', 'Com
 }]);
 
 
-controllers.controller('CategoriesListController', ['$scope', '$location', 'CategoriesService', function ($scope, $location, CategoriesService){
+controllers.controller('CategoriesListController', ['$scope', '$location', 'ENTRIES_PER_PAGE', 'CategoriesService', function ($scope, $location, ENTRIES_PER_PAGE, CategoriesService){
+
+    $scope.entriesPerPage = ENTRIES_PER_PAGE;
+    var search = $location.search();
+    var page = search.page||0;
+    var size = search.size||5;
+
+    CategoriesService.getAllCategories(page, size).then(function(data){
+        $scope.categories = data;
+        $scope.size = size;
+    });
+
+    $scope.onNumPerPageChange = function(size){
+        this.goToPage(0, size);
+    }
+
+    $scope.goToPage = function(page, size){
+        CategoriesService.getAllCategories(page, size).then(function(data){
+            $scope.categories = data;
+            $scope.size = size;
+        });
+    }
+
     $scope.editCategory = function(id){
         $location.path('/admin/categories/edit/' + id);
     }
@@ -321,10 +384,6 @@ controllers.controller('CategoriesListController', ['$scope', '$location', 'Cate
             })
         });
     }
-
-    CategoriesService.getAllCategories().then(function(data){
-        $scope.categories = data;
-    });
 
     $scope.createCategory = function(){
         $location.path('/admin/categories/create')
@@ -366,9 +425,10 @@ controllers.controller('VideosListController', ['$scope', '$location', 'ENTRIES_
     var search = $location.search();
     var page = search.page||0;
     var size = search.size||5;
+
     VideosService.getAllVideosForAdmin(page, size).then(function(data){
         $scope.videos = data;
-        $scope.size = $scope.videos.size;
+        $scope.size = size;
     });
 
     $scope.onNumPerPageChange = function(size){

@@ -10,6 +10,7 @@ app.constant('USER_ROLES', {
 });
 
 app.constant('ENTRIES_PER_PAGE', {
+    1: 1,
     5: 5,
     10: 10,
     20: 20
