@@ -212,12 +212,6 @@ app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER
         }
     });
 
-    //$rootScope.$on('$routeChangeSuccess', function (scope, next, current) {
-    //    $rootScope.$evalAsync(function () {
-    //        $.material.init();
-    //    });
-    //});
-
     // Call when the the client is confirmed
     $rootScope.$on('event:auth-loginConfirmed', function (event, data) {
         console.log('login confirmed start ' + data);

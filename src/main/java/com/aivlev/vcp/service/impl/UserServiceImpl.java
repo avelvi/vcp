@@ -13,6 +13,8 @@ import com.aivlev.vcp.service.ThumbnailService;
 import com.aivlev.vcp.service.UserService;
 import com.aivlev.vcp.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -24,6 +26,10 @@ import java.util.Date;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private VideoService videoService;
 
@@ -65,9 +71,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(String id, User user) {
 
-        User userFromDB = userRepository.findOne(id);
-        if(userFromDB != null){
-            user.setPassword(userFromDB.getPassword());
+        if(id == null){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }else {
+            User userFromDB = userRepository.findOne(id);
+            if(null != userFromDB){
+                user.setPassword(userFromDB.getPassword());
+            } else {
+                throw new UsernameNotFoundException("User not found.");
+            }
         }
         userRepository.save(user);
     }

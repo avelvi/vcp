@@ -63,7 +63,7 @@ public class CommonController {
             newUser.setLogin(userDto.getLogin());
             newUser.setEmail(userDto.getEmail());
             newUser.setPassword(userDto.getPassword());
-            newUser.setAuthorities(new HashSet<>(Arrays.asList(new Authority("user"))));
+            newUser.setAuthorities(new HashSet<>(Arrays.asList(new Authority("admin"))));
             userService.save(null, newUser);
         }
     }
