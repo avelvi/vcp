@@ -91,11 +91,11 @@ controllers.controller('SearchResultsController', function($scope, $location, Vi
 });
 
 controllers.controller('LoginController', function ($rootScope, $scope, AuthSharedService) {
-    $scope.rememberMe = true;
+    $scope.rememberMe = false;
     $scope.doLogin = function () {
         $rootScope.authenticationError = false;
         AuthSharedService.login(
-            $scope.username,
+            $scope.login,
             $scope.password,
             $scope.rememberMe
         );
@@ -105,14 +105,28 @@ controllers.controller('LoginController', function ($rootScope, $scope, AuthShar
 controllers.controller('SignUpController', function ($rootScope, $scope, SignUpService) {
     //$scope.rememberMe = true;
     $scope.doRegistration = function () {
-        //$rootScope.authenticationError = false;
-        SignUpService.register(
-            $scope.username,
-            $scope.email,
-            $scope.password
-        );
+        if($scope.password !== $scope.repeat_password){
+            $rootScope.registrationError = true;
+            $rootScope.registrationErrorMessage = 'Password don\'t match';
+        } else {
+            $rootScope.registrationError = false;
+            SignUpService.register(
+                $scope.name,
+                $scope.surname,
+                $scope.login,
+                $scope.email,
+                $scope.password
+            );
+        }
+
     }
 })
+
+controllers.controller('ActivationController' , ['$scope', '$routeParams', function ($scope, $routeParams) {
+
+
+    $scope.code = $routeParams.code;
+}]);
 
 //controllers.controller('TokensController', function ($scope, UsersService, TokensService, $q) {
 //
@@ -214,9 +228,13 @@ controllers.controller('UserDetailsController', ['$scope', '$routeParams', '$loc
     $scope.cancel = function(){
         $location.path('/admin')
     }
-    UserService.getUser($routeParams.id).then(function(data){
-        $scope.user = data;
-    });
+    UserService.getUser($routeParams.id).then(
+        function onsuccess(data){
+            $scope.user = data;
+        },
+        function onerror(xhr){
+            $location.path("/error/" + xhr.status)
+        });
 
     CompaniesService.getAllCompanies().then(function(data){
         $scope.companies = data

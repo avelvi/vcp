@@ -56,10 +56,10 @@ services.service('Session', function () {
 services.factory('AuthSharedService', ['$rootScope', '$http', '$resource', '$location', '$timeout', 'authService', 'Session',
     function ($rootScope, $http, $resource, $location, $timeout, authService, Session) {
     return {
-        login: function (userName, password, rememberMe) {
+        login: function (login, password, rememberMe) {
             var config = {
                 params: {
-                    username: userName,
+                    login: login,
                     password: password,
                     rememberme: rememberMe
                 },
@@ -112,9 +112,11 @@ services.factory('AuthSharedService', ['$rootScope', '$http', '$resource', '$loc
 services.factory('SignUpService', ['$rootScope', '$http', '$resource', '$location',
     function ($rootScope, $http, $resource, $location) {
         return {
-            register: function (userName, email, password) {
+            register: function (name, surname, login, email, password) {
                 var userData = {
-                    login: userName,
+                    name: name,
+                    surname: surname,
+                    login: login,
                     email: email,
                     password: password
                 }

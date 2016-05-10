@@ -56,15 +56,6 @@ public class CommonController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public void register(@RequestBody UserDto userDto){
 
-        User user = userService.findByLogin(userDto.getLogin());
-
-        if(null == user){
-            User newUser = new User();
-            newUser.setLogin(userDto.getLogin());
-            newUser.setEmail(userDto.getEmail());
-            newUser.setPassword(userDto.getPassword());
-            newUser.setAuthorities(new HashSet<>(Arrays.asList(new Authority("admin"))));
-            userService.save(null, newUser);
-        }
+        userService.registerUser(userDto);
     }
 }

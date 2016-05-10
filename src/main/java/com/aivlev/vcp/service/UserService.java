@@ -1,5 +1,6 @@
 package com.aivlev.vcp.service;
 
+import com.aivlev.vcp.dto.UserDto;
 import com.aivlev.vcp.model.ResponseHolder;
 import com.aivlev.vcp.model.UploadForm;
 import com.aivlev.vcp.model.User;
@@ -18,4 +19,6 @@ public interface UserService {
     User findByLogin(String login);
 
     void save(String id, User user);
+
+    void registerUser(UserDto userDto);
 }

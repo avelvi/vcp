@@ -81,13 +81,13 @@ public class TestGenerator {
         return Arrays.asList(
                 new User("Tim", "Surname 1", "login1", "test1@test.ua", "12345",
 //                        Role.ADMIN,
-                        "https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg", null),
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg", null, true),
                 new User("Ron", "Surname 2", "login2", "test2@test.ua", "12345",
 //                        Role.USER,
-                        "https://s3.amazonaws.com/uifaces/faces/twitter/k/128.jpg", null),
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/k/128.jpg", null, true),
                 new User("Alex", "Surname 3", "login3", "test3@test.ua", "12345",
 //                        Role.USER,
-                        "https://s3.amazonaws.com/uifaces/faces/twitter/marcosmoralez/128.jpg", null));
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/marcosmoralez/128.jpg", null, true));
     }
 
     private static List<Video> buildVideo(List<User> users) throws IOException, JCodecException {

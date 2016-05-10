@@ -26,27 +26,29 @@ public class User implements Serializable{
     @Indexed(unique = true, name = "user_email")
     private String email;
     private String password;
+    @DBRef(lazy = true)
     private Set<Authority> authorities;
     private String avatar;
     @DBRef(lazy = true)
     private Company company;
+    private boolean isActive;
 
     public User(){
         super();
     }
 
     public User(String name, String surname, String login, String email, String password,
-//                Set<Authority> authorities,
-                String avatar, Company company) {
+                String avatar, Company company, boolean isActive) {
         super();
         this.name = name;
         this.surname = surname;
         this.login = login;
         this.email = email;
         this.password = password;
-//        this.authorities = authorities;
         this.avatar = avatar;
         this.company = company;
+        this.isActive = isActive;
+
     }
 
     public String getId() {
@@ -119,6 +121,14 @@ public class User implements Serializable{
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     @Override

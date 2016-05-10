@@ -123,13 +123,13 @@ public class TestDataService {
         return new ArrayList<>(Arrays.asList(
                 new User("Tim", "Surname 1", "login1", "test1@test.ua", "12345",
 //                        new HashSet<Authority>(Arrays.asList("admin")),
-                        "https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg", null),
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg", null, true),
                 new User("Ron", "Surname 2", "login2", "test2@test.ua", "12345",
 //                        Role.USER,
-                        "https://s3.amazonaws.com/uifaces/faces/twitter/k/128.jpg", null),
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/k/128.jpg", null, true),
                 new User("Alex", "Surname 3", "login3", "test3@test.ua", "12345",
 //                        Role.USER,
-                        "https://s3.amazonaws.com/uifaces/faces/twitter/marcosmoralez/128.jpg", null)));
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/marcosmoralez/128.jpg", null, true)));
     }
 
     private List<User> createUsers(List<Authority> authorities) {
@@ -149,7 +149,7 @@ public class TestDataService {
                     }
                 }
             }
-            mongoTemplate.insert(user);
+            userService.save(null, user);
             i++;
         }
         LOGGER.info("Created {} test users", users.size());
@@ -171,7 +171,7 @@ public class TestDataService {
         Random r = new Random();
         try {
             tempFiles = getTempVideoFilesDownloadedFromInternet();
-            for(int i = 0; i < 25; i++) {
+            for(int i = 0; i < 50; i++) {
                 User owner = accounts.get(r.nextInt(accounts.size()));
                 userService.uploadVideo(owner, new UploadForm("Title " + i, "Description " + i, new CopyTempFile(tempFiles.get(r.nextInt(tempFiles.size())))));
                 count++;

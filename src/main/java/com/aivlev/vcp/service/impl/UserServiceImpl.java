@@ -1,25 +1,23 @@
 package com.aivlev.vcp.service.impl;
 
 import com.aivlev.vcp.aop.UploadVideoTempStorage;
-import com.aivlev.vcp.model.ResponseHolder;
-import com.aivlev.vcp.model.UploadForm;
-import com.aivlev.vcp.model.User;
-import com.aivlev.vcp.model.Video;
+import com.aivlev.vcp.dto.UserDto;
+import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.repository.storage.UserRepository;
 import com.aivlev.vcp.repository.storage.VideoRepository;
 import com.aivlev.vcp.repository.search.VideoSearchRepository;
-import com.aivlev.vcp.service.ImageService;
-import com.aivlev.vcp.service.ThumbnailService;
-import com.aivlev.vcp.service.UserService;
-import com.aivlev.vcp.service.VideoService;
+import com.aivlev.vcp.service.*;
+import com.aivlev.vcp.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  * Created by aivlev on 4/26/16.
@@ -29,6 +27,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthorityService authorityService;
 
     @Autowired
     private VideoService videoService;
@@ -41,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    NotificationService notificationService;
 
     @Autowired
     private VideoRepository videoRepository;
@@ -82,6 +86,22 @@ public class UserServiceImpl implements UserService {
             }
         }
         userRepository.save(user);
+    }
+
+    @Override
+    public void registerUser(UserDto userDto) {
+        User user = userRepository.findByLogin(userDto.getLogin());
+
+        if(null == user){
+            User newUser = UserDto.convertToModel(userDto);
+            newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+            HashSet<Authority> authorities = authorityService.findByName("user");
+            newUser.setAuthorities(authorities);
+            newUser.setIsActive(false);
+            userRepository.save(newUser);
+            String code = JWTUtils.generateActivationCode(newUser);
+            notificationService.sendActivationLink(newUser, code);
+        }
     }
 
 

@@ -48,6 +48,13 @@ app.config(['$routeProvider', 'USER_ROLES',
                 loginRequired: false,
                 authorizedRoles: [USER_ROLES.all]
             }
+        }).when('/activate/code/:code', {
+            templateUrl: 'partials/public/activation.html',
+            controller: 'ActivationController',
+            access: {
+                loginRequired: false,
+                authorizedRoles: [USER_ROLES.all]
+            }
         }).when('/home/search', {
             templateUrl: 'partials/public/searchResults.html',
             controller:'SearchResultsController',
@@ -200,6 +207,7 @@ app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER
     $rootScope.$on('$routeChangeStart', function (event, next) {
 
         $rootScope.authenticationError = false;
+        $rootScope.registrationError = false;
 
         if(next.originalPath === "/signin" && $rootScope.authenticated) {
             event.preventDefault();
