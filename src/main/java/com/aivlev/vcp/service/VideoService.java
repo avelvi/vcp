@@ -15,11 +15,17 @@ import java.nio.file.Path;
  */
 public interface VideoService {
 
-    ResponseHolder<Video> findOne(String id);
+    Video findOne(String id);
 
     @Nonnull
     String saveVideo (@Nonnull Path tempFilePath) throws ProcessMediaContentException;
 
     @Nonnull
     ResponseHolder<Page<Video>> findAllVideosByOwnerId(@Nonnull String ownerId, @Nonnull Pageable pageable);
+
+    Page<Video> findAll(Pageable pageable);
+
+    void deleteVideo(boolean isAdmin, String userName, String id);
+
+    Video updateVideo(Video video);
 }

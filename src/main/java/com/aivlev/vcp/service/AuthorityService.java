@@ -1,6 +1,8 @@
 package com.aivlev.vcp.service;
 
 import com.aivlev.vcp.model.Authority;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.HashSet;
 
@@ -9,4 +11,6 @@ import java.util.HashSet;
  */
 public interface AuthorityService {
     HashSet<Authority> findByName(String name);
+
+    Page<Authority> findAllAuthorities(Pageable pageable);
 }

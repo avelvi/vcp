@@ -1,5 +1,6 @@
 package com.aivlev.vcp.service.impl;
 
+import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.repository.storage.UserRepository;
 import com.aivlev.vcp.service.AdminService;
@@ -24,6 +25,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public User findUser(String id) {
-        return userRepository.findOne(id);
+        User user = userRepository.findOne(id);
+        if(user != null){
+            user.setPassword("");
+            return user;
+        } else {
+            throw new ModelNotFoundException("User not found");
+        }
     }
 }

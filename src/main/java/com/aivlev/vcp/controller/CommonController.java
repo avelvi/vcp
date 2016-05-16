@@ -35,24 +35,6 @@ public class CommonController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/videos", method = RequestMethod.GET)
-    public Object getAllVideos(@PageableDefault(size = 9)Pageable pageable){
-        ResponseHolder<Page<Video>> result = commonService.findAllVideos(pageable);
-        return new ResponseEntity<>(result.getResponse(), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
-    public Object getVideo(@PathVariable(value = "id") String id) {
-        ResponseHolder<Video> result = videoService.findOne(id);
-        return new ResponseEntity<>(result.getResponse(), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/videos/search", method = RequestMethod.GET)
-    public Object findVideos(@RequestParam("query") String query, @PageableDefault(size = 9) Pageable pageable) {
-        ResponseHolder<Page<Video>> result = commonService.findAllVideosBySearchQuery(query, pageable);
-        return new ResponseEntity<>(result.getResponse(), HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public void register(@RequestBody UserDto userDto){
 

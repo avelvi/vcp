@@ -1,5 +1,7 @@
 package com.aivlev.vcp.service.impl;
 
+import com.aivlev.vcp.exception.DuplicateEntityException;
+import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.Company;
 import com.aivlev.vcp.repository.storage.CompanyRepository;
 import com.aivlev.vcp.service.CompanyService;
@@ -23,22 +25,37 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company saveCompany(Company company) {
-        return companyRepository.save(company);
-    }
-
-    @Override
     public Company findCompany(String id) {
-        return companyRepository.findOne(id);
+        Company company = companyRepository.findOne(id);
+        if(null != company) {
+            return company;
+        } else {
+            throw new ModelNotFoundException("Company not found");
+        }
     }
 
     @Override
-    public Company updateCompany(Company company) {
-        return companyRepository.save(company);
+    public void createOrUpdate(String id, Company company) {
+        if(null != id){
+            Company companyFromDB = companyRepository.findOne(id);
+            if(companyFromDB == null){
+                throw new ModelNotFoundException("Company not found");
+            }
+        }
+        try {
+            companyRepository.save(company);
+        } catch (Exception ex){
+            throw new DuplicateEntityException("Company is exists");
+        }
     }
 
     @Override
     public void deleteCompany(String id) {
-        companyRepository.delete(id);
+        Company company = companyRepository.findOne(id);
+        if(null != company) {
+            companyRepository.delete(id);
+        } else {
+            throw new ModelNotFoundException("Company not found");
+        }
     }
 }

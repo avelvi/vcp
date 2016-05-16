@@ -10,11 +10,9 @@ import org.springframework.data.domain.Pageable;
 public interface CompanyService {
     Page<Company> findAllCompanies(Pageable pageable);
 
-    Company saveCompany(Company company);
-
     Company findCompany(String id);
 
-    Company updateCompany(Company company);
+    void createOrUpdate(String id, Company company);
 
     void deleteCompany(String id);
 }

@@ -12,11 +12,9 @@ public interface CategoryService {
 
     Page<Category> findAllCategories(Pageable pageable);
 
-    Category saveCategory(Category category);
-
     Category findCategory(String id);
 
-    Category updateCategory(Category category);
+    void createOrUpdate(String id, Category category);
 
     void deleteCategory(String id);
 
