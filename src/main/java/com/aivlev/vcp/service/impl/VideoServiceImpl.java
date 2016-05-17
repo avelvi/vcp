@@ -5,15 +5,22 @@ import com.aivlev.vcp.exception.ProcessMediaContentException;
 import com.aivlev.vcp.model.ResponseHolder;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.model.Video;
+import com.aivlev.vcp.repository.search.VideoSearchRepository;
 import com.aivlev.vcp.repository.storage.VideoRepository;
 import com.aivlev.vcp.service.UserService;
 import com.aivlev.vcp.service.VideoService;
+import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
@@ -35,6 +42,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     VideoRepository videoRepository;
+
+    @Autowired
+    VideoSearchRepository videoSearchRepository;
 
     @Autowired
     UserService userService;
@@ -59,8 +69,8 @@ public class VideoServiceImpl implements VideoService {
 
     @Nonnull
     @Override
-    public ResponseHolder<Page<Video>> findAllVideosByOwnerId(@Nonnull String ownerId, @Nonnull Pageable pageable) {
-        return new ResponseHolder<>(videoRepository.findByOwnerId(ownerId, pageable));
+    public Page<Video> findAllVideosByOwnerId(@Nonnull String ownerId, @Nonnull Pageable pageable) {
+        return videoRepository.findByOwnerId(ownerId, pageable);
     }
 
     @Override
@@ -90,6 +100,12 @@ public class VideoServiceImpl implements VideoService {
         return videoRepository.save(video);
     }
 
+    @Override
+    public Page<Video> findAllVideosBySearchQuery(String searchQuery, Pageable pageable) {
+        SearchQuery sq = createSearchQuery(searchQuery, pageable);
+        return videoSearchRepository.search(sq);
+    }
+
     private String saveVideoInternal(Path tempFilePath) throws IOException {
         String uniqueVideoFileName = generateUniqueVideoFileName();
         Path videoFilePath = Paths.get(mediaDir + "/video/" + uniqueVideoFileName);
@@ -99,6 +115,22 @@ public class VideoServiceImpl implements VideoService {
 
     private String generateUniqueVideoFileName() {
         return UUID.randomUUID()+".mp4";
+    }
+
+    private SearchQuery createSearchQuery(String searchQuery, Pageable pageable) {
+        SearchQuery sq = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.multiMatchQuery(searchQuery)
+                        .field("title")
+                        .field("owner.name")
+                        .field("owner.surname")
+                        .field("owner.company.name")
+                        .field("category.name")
+                        .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
+                        .fuzziness(Fuzziness.TWO)
+                        .operator(MatchQueryBuilder.Operator.OR))
+                .build();
+        sq.setPageable(pageable);
+        return sq;
     }
 
 

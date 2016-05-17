@@ -5,12 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by aivlev on 5/9/16.
  */
 public interface AuthorityService {
-    HashSet<Authority> findByName(String name);
+    Authority findByName(String name);
 
-    Page<Authority> findAllAuthorities(Pageable pageable);
+    List<Authority> findAllAuthorities(Pageable pageable);
 }

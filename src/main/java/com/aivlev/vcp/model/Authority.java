@@ -1,6 +1,7 @@
 package com.aivlev.vcp.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -11,6 +12,7 @@ public class Authority {
 
     @Id
     private String id;
+    @Indexed(unique = true, name = "authority_name")
     private String name;
 
     public Authority() {

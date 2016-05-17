@@ -1,6 +1,7 @@
 package com.aivlev.vcp.aop;
 
 import com.aivlev.vcp.exception.AccessDeniedException;
+import com.aivlev.vcp.exception.ActivationCodeExpiredException;
 import com.aivlev.vcp.exception.DuplicateEntityException;
 import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.*;
@@ -38,5 +39,12 @@ public class GenericExceptionHandler {
         com.aivlev.vcp.model.Error error = new Error("Not Found Error", ex.getMessage());
         Response response = new Response(HttpStatus.NOT_FOUND.value(), ex.getMessage(), error);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ActivationCodeExpiredException.class)
+    public ResponseEntity<Response> modelNotFoundExceptionHandler(ActivationCodeExpiredException ex, HttpServletRequest request) {
+        com.aivlev.vcp.model.Error error = new Error("Code Expired Error", ex.getMessage());
+        Response response = new Response(HttpStatus.GONE.value(), ex.getMessage(), error);
+        return new ResponseEntity<>(response, HttpStatus.GONE);
     }
 }

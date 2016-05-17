@@ -18,14 +18,19 @@ appAuth.controller('AuthController', ['$scope', '$rootScope', '$location', 'Auth
         } else {
             $rootScope.registrationError = false;
             AuthSharedService.register(
-                $scope.name,
-                $scope.surname,
-                $scope.login,
-                $scope.email,
-                $scope.password
+                    $scope.name,
+                    $scope.surname,
+                    $scope.login,
+                    $scope.email,
+                    $scope.password
             );
-            $location.path("/signin")
+
         }
 
     }
 }]);
+
+appAuth.controller('ActivationController', ['$scope', '$routeParams', 'AuthSharedService', function ($scope, $routeParams, AuthSharedService) {
+    var code = $routeParams.code;
+    AuthSharedService.activate(code);
+}])

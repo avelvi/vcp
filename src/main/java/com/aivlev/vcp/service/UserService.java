@@ -33,4 +33,6 @@ public interface UserService {
     void deleteUser(String id);
 
     void updateUser(String id, User user);
+
+    void activateUser(String code);
 }

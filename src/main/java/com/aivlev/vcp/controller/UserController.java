@@ -54,13 +54,12 @@ public class UserController {
     public void deleteUser(@PathVariable(value = "id") String id){
         userService.deleteUser(id);
     }
-//    @RequestMapping(value = "/{id}/videos", method = RequestMethod.GET)
-//    public Object getUserVideos(@PathVariable(value = "id") String id,
-//                                @PageableDefault(size = 9)Pageable pageable){
-//        Page<Video> result = userService.findVideos(id, pageable);
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
 
-
+    @RequestMapping(value = "/{id}/videos", method = RequestMethod.GET)
+    public Object getUserVideos(@PathVariable(value = "id") String id,
+                                @PageableDefault(size = 12)Pageable pageable){
+        Page<Video> result = userService.findVideos(id, pageable);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 }

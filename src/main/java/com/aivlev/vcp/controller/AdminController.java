@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Created by aivlev on 4/29/16.
  */
@@ -23,7 +25,7 @@ public class AdminController {
 
     @RequestMapping(value = "/authorities", method = RequestMethod.GET)
     public Object getAuthorities(@PageableDefault(size = 5)Pageable pageable){
-        Page<Authority> authorities = authorityService.findAllAuthorities(pageable);
+        List<Authority> authorities = authorityService.findAllAuthorities(pageable);
         return new ResponseEntity<>(authorities, HttpStatus.OK);
     }
 

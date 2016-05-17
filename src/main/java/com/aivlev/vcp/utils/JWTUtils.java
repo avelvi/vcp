@@ -1,9 +1,7 @@
 package com.aivlev.vcp.utils;
 
 import com.aivlev.vcp.model.User;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.TextCodec;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -28,7 +26,7 @@ public class JWTUtils {
         Key signingKey = new SecretKeySpec(secretKeyBytes, signatureAlgorithm.getJcaName());
 
         JwtBuilder builder = Jwts.builder()
-                .setId(user.getEmail())
+                .setId(user.getLogin())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + EXPIRED_DELTA_TIME))
                 .signWith(signatureAlgorithm, signingKey);
@@ -36,6 +34,19 @@ public class JWTUtils {
         //Builds the JWT and serializes it to a compact, URL-safe string
         String code = builder.compact();
         return code;
+    }
+
+    public static Claims getClaims(String code){
+        Claims claims = null;
+
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(TextCodec.BASE64.encode(SECRET_KEY).getBytes())
+                    .parseClaimsJws(code).getBody();
+        } catch (JwtException ex){
+
+        }
+        return claims;
     }
 
 }

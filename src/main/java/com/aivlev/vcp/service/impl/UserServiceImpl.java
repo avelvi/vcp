@@ -3,6 +3,8 @@ package com.aivlev.vcp.service.impl;
 import com.aivlev.vcp.aop.UploadVideoTempStorage;
 import com.aivlev.vcp.dto.UserDto;
 import com.aivlev.vcp.exception.AccessDeniedException;
+import com.aivlev.vcp.exception.ActivationCodeExpiredException;
+import com.aivlev.vcp.exception.DuplicateEntityException;
 import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.repository.storage.UserRepository;
@@ -10,6 +12,7 @@ import com.aivlev.vcp.repository.storage.VideoRepository;
 import com.aivlev.vcp.repository.search.VideoSearchRepository;
 import com.aivlev.vcp.service.*;
 import com.aivlev.vcp.utils.JWTUtils;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Created by aivlev on 4/26/16.
@@ -98,12 +99,17 @@ public class UserServiceImpl implements UserService {
         if(null == user){
             User newUser = UserDto.convertToModel(userDto);
             newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-            HashSet<Authority> authorities = authorityService.findByName("user");
-            newUser.setAuthorities(authorities);
+            Authority authority = authorityService.findByName("user");
+            newUser.setAuthorities(new HashSet<>(Arrays.asList(authority)));
             newUser.setIsActive(false);
             userRepository.save(newUser);
             String code = JWTUtils.generateActivationCode(newUser);
             notificationService.sendActivationLink(newUser, code);
+        } else {
+            if(user.getLogin().equalsIgnoreCase(userDto.getLogin())){
+                throw new DuplicateEntityException("User with the same login exists");
+            }
+            throw new DuplicateEntityException("User with the same email exists");
         }
     }
 
@@ -154,6 +160,30 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         } else {
             throw new ModelNotFoundException("User not found");
+        }
+    }
+
+    @Override
+    public void activateUser(String code) {
+        Claims claims = JWTUtils.getClaims(code);
+        if(null != claims){
+            String login = claims.getId();
+            User user = userRepository.findByLogin(login);
+            if(null != user){
+                if(!user.isActive()){
+                    Calendar expiredDate = Calendar.getInstance();
+                    expiredDate.setTime(claims.getExpiration());
+                    Calendar now = Calendar.getInstance();
+                    if(now.before(expiredDate)){
+                        user.setIsActive(true);
+                        userRepository.save(user);
+                    } else {
+                        throw new ActivationCodeExpiredException("Activation code was expired");
+                    }
+                }
+            } else {
+                throw new ModelNotFoundException("User not found");
+            }
         }
     }
 

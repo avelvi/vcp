@@ -37,7 +37,10 @@ appAuth.factory('AuthSharedService', ['$rootScope', '$http', '$resource', '$loca
                     email: email,
                     password: password
                 }
-                $http.post('/register', userData);
+                $http.post('/register', userData)
+                    .success(function(data, status){
+                        $location.path('/registration');
+                    });
             },
             login: function (login, password, rememberMe) {
                 var config = {
@@ -54,6 +57,7 @@ appAuth.factory('AuthSharedService', ['$rootScope', '$http', '$resource', '$loca
 
                     }).error(function (data, status, headers, config) {
                         $rootScope.authenticationError = true;
+                        $rootScope.authenticationErrorMessage = data.error.message
                         Session.invalidate();
                     });
             },
@@ -88,6 +92,12 @@ appAuth.factory('AuthSharedService', ['$rootScope', '$http', '$resource', '$loca
                     }
                 });
                 return isAuthorized;
+            },
+            activate: function(code){
+                $http.get('/activate/code/' + code)
+                    .then(function (response) {
+                        $location.path("/signin");
+                    });
             }
 
         };

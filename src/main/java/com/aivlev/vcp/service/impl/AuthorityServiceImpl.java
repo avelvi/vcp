@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by aivlev on 5/9/16.
@@ -20,12 +21,12 @@ public class AuthorityServiceImpl implements AuthorityService {
     AuthorityRepository authorityRepository;
 
     @Override
-    public HashSet<Authority> findByName(String name) {
+    public Authority findByName(String name) {
         return authorityRepository.findByName(name);
     }
 
     @Override
-    public Page<Authority> findAllAuthorities(Pageable pageable) {
-        return authorityRepository.findAll(pageable);
+    public List<Authority> findAllAuthorities(Pageable pageable) {
+        return (List) authorityRepository.findAll();
     }
 }
