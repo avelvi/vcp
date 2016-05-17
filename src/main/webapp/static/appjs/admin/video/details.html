@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="panel panel-default table-dynamic">
+        <div class="panel-heading"><strong><span class="ti-user"></span> Video Details</strong></div>
+
+        <form role="form" name="videoForm" class="details">
+            <div class="form-group" name="videoForm" class="details">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" placeholder="Video Title" data-ng-model="video.title" required="required">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" placeholder=" Video Description" data-ng-model="video.description" required="required">
+            </div>
+            <button class="btn btn-success btn-sm" ng-click="updateVideo()" ng-disabled="!videoForm.$valid">
+                Update</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">
+                Cancel</button>
+        </form>
+    </div>
+</div>

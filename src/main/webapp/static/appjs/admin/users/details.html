@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="panel panel-default table-dynamic">
+        <div class="panel-heading"><strong><span class="ti-user"></span> User details</strong></div>
+
+        <form role="form" name="userForm" class="details">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" class="form-control" id="login" placeholder="Enter Login" data-ng-model="user.login">
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Name" data-ng-model="user.name">
+            </div>
+            <div class="form-group">
+                <label for="surname">Surname</label>
+                <input type="text" class="form-control" id="surname" placeholder="Surname" data-ng-model="user.surname">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" data-ng-model="user.email">
+            </div>
+            <div class="form-group">
+                <label for="authorities">Authorities</label>
+                <select class="form-control" id="authorities" ng-model="user.authorities" ng-options="authority.name for authority in authorities.content track by authority.id ">
+                    <option label="None" value="">None</option>
+                </select>
+            </div>
+            <button class="btn btn-success btn-sm" ng-click="saveUser()" ng-disabled="!userForm.$valid">
+                Update</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">
+                Cancel</button>
+        </form>
+    </div>
+</div>

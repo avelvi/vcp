@@ -1,0 +1,56 @@
+<div id="content" class="content-container">
+    <div class="page-signin ">
+
+        <div class="signin-header">
+            <section class="logo text-center">
+                <h1><a ng-href="#/videos">Video Content Portal</a></h1>
+            </section>
+        </div>
+        <div class="signin-body">
+            <div class="container">
+                <div class="form-container">
+                <span ng-show="authenticationError" class="help-block">
+                                    Please check your credentials and try again.
+                                </span>
+
+                    <form class="form-horizontal" name="signinForm">
+                        <fieldset>
+                            <div class="form-group" ng-class="{'has-error-login is-focused' : authenticationError}">
+                                <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="ti-user"></span>
+                                </span>
+                                    <input type="text" class="form-control input-lg" placeholder="Login" id="login" data-ng-model="login" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="ti-lock"></span>
+                                </span>
+                                    <input type="password" class="form-control input-lg" placeholder="Password" id="password" data-ng-model="password" required="required">
+                                </div>
+                            </div>
+
+                            <div class="divider divider-xl"></div>
+                            <div class="form-group">
+                                <button class="btn btn-lg btn-primary btn-block" ng-click="doLogin()" ng-disabled="!signinForm.$valid">
+                                    Log in
+                                    <div class="ripple-wrapper"></div></button>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                    <div class="divider"></div>
+                    <section class="additional-info">
+                        <p class="text-right">
+                            <a href="#/signup">Sign up</a>
+                        </p>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

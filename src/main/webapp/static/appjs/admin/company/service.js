@@ -1,10 +1,7 @@
-
 'use strict';
 
-var services = angular.module('app-services', ['ngResource']);
-
-services.factory('VideoService', ['$resource', function($resource){
-    var data = $resource('/videos/:id', {id: '@id'},
+appCompany.factory('CompanyService', ['$resource', function($resource){
+    var data = $resource('/companies/:id', {id: '@id'},
         {
             query: {
                 method: 'GET',
@@ -16,5 +13,3 @@ services.factory('VideoService', ['$resource', function($resource){
         });
     return data;
 }]);
-
-

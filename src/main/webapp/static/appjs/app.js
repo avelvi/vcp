@@ -1,167 +1,31 @@
 
 'use strict';
 
-var app = angular.module('app', ['ngResource', 'ngRoute', 'ui.router', 'ui.bootstrap', 'http-auth-interceptor', 'app-filters', 'app-controllers', 'app-services']);
+var app = angular.module('app', ['ngResource', 'ngRoute', 'ui.router', 'ui.bootstrap', 'http-auth-interceptor',
+    'app-controllers', 'app-services', 'app.constants', 'app.company',
+    'app.category', 'app.auth', 'app.users', 'app.profile',
+    'app.adminHome', 'app.adminVideo', 'app.video', 'app.navBar',
+    'app.error', 'app.search'
+]);
 
-app.constant('USER_ROLES', {
-    all: '*',
-    admin: 'admin',
-    user: 'user'
-});
+angular.module('app.constants', [])
+    .constant('USER_ROLES', {
+        all: '*',
+        admin: 'admin',
+        user: 'user'
+    })
+    .constant('ENTRIES_PER_PAGE', {
+        1: 1,
+        5: 5,
+        10: 10,
+        20: 20
+    });
 
-app.constant('ENTRIES_PER_PAGE', {
-    1: 1,
-    5: 5,
-    10: 10,
-    20: 20
-});
-
-app.config(['$routeProvider', 'USER_ROLES',
-    function($routeProvider, USER_ROLES){
-        $routeProvider.when('/home', {
-            templateUrl: 'partials/public/home.html',
-            controller: 'HomeController',
-            access: {
-                loginRequired: false,
-                authorizedRoles: [USER_ROLES.all]
-            }
-        }).when('/', {
-            redirectTo: '/home'
-        }).when('/video/:videoId', {
-            templateUrl: 'partials/public/video.html',
-            controller: 'VideoController',
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when('/signin', {
-            templateUrl: 'partials/public/signin.html',
-            controller: 'LoginController',
-            access: {
-                loginRequired: false,
-                authorizedRoles: [USER_ROLES.all]
-            }
-        }).when('/signup', {
-            templateUrl: 'partials/public/signup.html',
-            controller: 'SignUpController',
-            access: {
-                loginRequired: false,
-                authorizedRoles: [USER_ROLES.all]
-            }
-        }).when('/activate/code/:code', {
-            templateUrl: 'partials/public/activation.html',
-            controller: 'ActivationController',
-            access: {
-                loginRequired: false,
-                authorizedRoles: [USER_ROLES.all]
-            }
-        }).when('/home/search', {
-            templateUrl: 'partials/public/searchResults.html',
-            controller:'SearchResultsController',
-            access: {
-                loginRequired: false,
-                authorizedRoles: [USER_ROLES.all]
-            }
-        }).when('/loading', {
+app.config(['$routeProvider', '$httpProvider', 'USER_ROLES',
+    function($routeProvider, $httpProvider, USER_ROLES){
+        $routeProvider
+            .when('/loading', {
             templateUrl: 'partials/public/loading.html',
-            access: {
-                loginRequired: false,
-                authorizedRoles: [USER_ROLES.all]
-            }
-        }).when("/logout", {
-            template: "",
-            controller: "LogoutController",
-            access: {
-                loginRequired: false,
-                authorizedRoles: [USER_ROLES.all]
-            }
-        }).when("/admin", {
-            templateUrl: "partials/admin/admin.html",
-            controller: "UsersListController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/users", {
-            templateUrl: "partials/admin/users.html",
-            controller: "UsersListController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/users/:id", {
-            templateUrl: "partials/admin/user_details.html",
-            controller: "UserDetailsController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/users/:id/videos", {
-            templateUrl: "partials/public/videos.html",
-            controller: "VideosController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/videos", {
-            templateUrl: "partials/admin/videos.html",
-            controller: "VideosListController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/editVideo/:id", {
-            templateUrl: "partials/public/video_details.html",
-            controller: "VideoDetailsController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/categories", {
-            templateUrl: "partials/admin/categories.html",
-            controller: "CategoriesListController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/categories/edit/:id", {
-            templateUrl: "partials/admin/category_details.html",
-            controller: "CategoryDetailsController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/categories/create", {
-            templateUrl: "partials/admin/category_creation.html",
-            controller: "CategoryCreationController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/companies", {
-            templateUrl: "partials/admin/companies.html",
-            controller: "CompaniesListController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/companies/edit/:id", {
-            templateUrl: "partials/admin/company_details.html",
-            controller: "CompanyDetailsController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/admin/companies/create", {
-            templateUrl: "partials/admin/company_creation.html",
-            controller: "CompanyCreationController",
-            access: {
-                loginRequired: true,
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        }).when("/error/:code", {
-            templateUrl: "partials/public/error.html",
-            controller: "ErrorController",
             access: {
                 loginRequired: false,
                 authorizedRoles: [USER_ROLES.all]
@@ -177,37 +41,20 @@ app.config(['$routeProvider', 'USER_ROLES',
 
 ]);
 
-
-app.filter('pages', function () {
-    return function (input, currentPage, totalPages, range) {
-        currentPage = parseInt(currentPage);
-        totalPages = parseInt(totalPages);
-        range = parseInt(range);
-
-        var minPage = (currentPage - range < 0) ? 0 : (currentPage - range > (totalPages - (range * 2))) ? totalPages - (range * 2) : currentPage - range;
-        var maxPage = (currentPage + range > totalPages) ? totalPages : (currentPage + range < range * 2) ? range * 2 : currentPage + range;
-
-        if(minPage < 0){
-            minPage = 0;
-        }
-        if(maxPage > totalPages){
-            maxPage = totalPages;
-        }
-
-        for(var i = minPage; i < maxPage; i++) {
-            input.push(i);
-        }
-
-        return input;
-    };
-});
-
 app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER_ROLES, $q, $timeout) {
 
-    $rootScope.$on('$routeChangeStart', function (event, next) {
+    $rootScope.$on('$routeChangeStart', function (event, next, previous) {
+
+        $rootScope.history = [];
 
         $rootScope.authenticationError = false;
         $rootScope.registrationError = false;
+        if(previous){
+            if($rootScope.history.length > 1){
+                $rootScope.history.pop()
+            }
+            $rootScope.history.push(previous.originalPath);
+        }
 
         if(next.originalPath === "/signin" && $rootScope.authenticated) {
             event.preventDefault();
@@ -224,7 +71,7 @@ app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER
     $rootScope.$on('event:auth-loginConfirmed', function (event, data) {
         console.log('login confirmed start ' + data);
         $rootScope.loadingAccount = false;
-        var nextLocation = ($rootScope.requestedUrl ? $rootScope.requestedUrl : "/home");
+        var nextLocation = ($rootScope.requestedUrl ? $rootScope.requestedUrl : "/videos");
         var delay = ($location.path() === "/loading" ? 1500 : 0);
 
         $timeout(function () {
@@ -258,8 +105,14 @@ app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER
 
     // Call when the user logs out
     $rootScope.$on('event:auth-loginCancelled', function () {
-        $location.path('/home').replace();
+        $location.path('/videos').replace();
     });
+
+
+    $rootScope.$on('event:app-error', function(rejection, responseBody){
+        $rootScope.message = responseBody.data.message;
+        $location.path('/error/' + responseBody.status).replace();
+    })
 
     // Get already authenticated user account
     AuthSharedService.getAccount();

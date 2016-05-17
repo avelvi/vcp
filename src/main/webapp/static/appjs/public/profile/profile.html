@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="panel panel-default table-dynamic">
+        <div class="panel-heading"><strong><span class="ti-user"></span> {{user.name}} {{user.surname}}</strong></div>
+    </div>
+        <h4>
+            Videos
+        </h4>
+        <hr class="section" />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3"  ng-repeat="video in videos.content">
+                        <div class="thumbnail">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <video ng-src="{{video.videoUrl}}" ng-attr-poster="{{video.thumbnails[0]}}" controls="controls"></video>
+                            </div>
+                            <div class="caption">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h4 class="media-heading"><a ng-href="#/videos/{{video.id}}">{{video.title}}</a></h4>
+                                        <h6 class="created_date">{{video.createdDate | date : 'yyyy-MM-dd'}}</h6>
+                                        <h5 class="media-heading">{{video.owner.name}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-sm" ng-click="editVideo(video.id)">
+                                Edit</button>
+                            <button class="btn btn-danger btn-sm" ng-click="deleteVideo(video.id)">
+                                Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
