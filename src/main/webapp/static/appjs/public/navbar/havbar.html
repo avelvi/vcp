@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="javascript:void(0)">Video Content Portal</a>
+            <a class="navbar-brand" href="#/videos">Video Content Portal</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -32,6 +32,12 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <ul ng-show="isAuthorized('user')" class="nav navbar-nav navbar-right">
+                    <li>
+                        <button class="btn btn-default upload-video" ng-click="uploadForm()">
+                            <span class="ti-upload"></span>
+                            Upload Video
+                        </button>
+                    </li>
                     <li class="dropdown profile">
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             <img class="img-circle img30_30" ng-src="{{account.avatar}}"/>

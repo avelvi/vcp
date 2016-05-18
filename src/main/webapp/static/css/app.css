@@ -405,7 +405,7 @@ h6.created_date {
     border-radius: 0px;
 }
 
-.ti-search {
+.ti-search, .ti-upload {
     color: #7e0000 !important;
 }
 
@@ -447,3 +447,18 @@ table.my-table tr td:last-child {
 form.details{
     padding: 20px;
 }
+
+.upload-video {
+    margin-top: 8px;
+    color: #777;
+    font-weight: 300;
+}
+
+.custom-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    padding: 0px;
+}
+

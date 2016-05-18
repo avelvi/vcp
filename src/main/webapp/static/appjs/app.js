@@ -1,11 +1,11 @@
 
 'use strict';
 
-var app = angular.module('app', ['ngResource', 'ngRoute', 'ui.router', 'ui.bootstrap', 'http-auth-interceptor',
+var app = angular.module('app', ['ngResource', 'ngRoute', 'ngFileUpload', 'ui.router', 'ui.bootstrap', 'http-auth-interceptor',
     'app-controllers', 'app-services', 'app.constants', 'app.company',
     'app.category', 'app.auth', 'app.users', 'app.profile',
     'app.adminHome', 'app.adminVideo', 'app.video', 'app.navBar',
-    'app.error', 'app.search'
+    'app.error', 'app.search', 'app.upload', 'angular-loading-bar'
 ]);
 
 angular.module('app.constants', [])

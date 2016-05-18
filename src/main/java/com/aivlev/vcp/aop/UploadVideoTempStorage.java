@@ -28,9 +28,9 @@ public class UploadVideoTempStorage {
         return tempUploadedVideoPathStorage.get();
     }
 
-    @Around("execution(* com.aivlev.vcp.service.impl.UserServiceImpl.uploadVideo(..))")
+    @Around("execution(* com.aivlev.vcp.service.impl.VideoProcessorServiceImpl.processVideo(..))")
     public Object advice(ProceedingJoinPoint pjp) throws Throwable {
-        UploadForm form = (UploadForm) pjp.getArgs()[1];
+        UploadForm form = (UploadForm) pjp.getArgs()[0];
         Path tempUploadedVideoPath = null;
         try {
             tempUploadedVideoPath = Files.createTempFile("upload", ".video");

@@ -15,8 +15,10 @@ appUsers.factory('UsersService', ['$resource', function($resource){
                 method: 'GET',
                 isArray: false
             }
+
         });
     return data;
+
 }]);
 
 appUsers.factory('AuthorityService', ['$http', function($http){

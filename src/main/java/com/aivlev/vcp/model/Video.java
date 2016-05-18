@@ -47,6 +47,10 @@ public class Video {
         this(null, null, createdDate, videoUrl, thumbnails, null);
     }
 
+    public Video(String title, String description, String createdDate, String videoUrl, List<String> thumbnails) {
+        this(title, description, createdDate, videoUrl, thumbnails, null);
+    }
+
     public String getId() {
         return id;
     }

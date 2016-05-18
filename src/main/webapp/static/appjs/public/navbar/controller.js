@@ -33,4 +33,8 @@ appNavBar.controller('NavController', ['$scope', '$location', 'Session', 'AuthSh
     $scope.viewProfile = function(){
         $location.path('/profile/' + Session.id)
     }
+
+    $scope.uploadForm = function(){
+        $location.path("/upload")
+    }
 }]);

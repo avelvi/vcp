@@ -1,0 +1,32 @@
+<div class="container custom-progress" ng-show="loading">
+    <div class="progress-bar progress-bar-success" role="progressbar" ng-style="{width: (percentValue < 100 ? percentValue : 100) + '%'}"></div>
+</div>
+<div class="container">
+     <div class="panel panel-default table-dynamic">
+        <div class="panel-heading"><strong><span class="ti-upload"></span> Upload Video</strong></div>
+
+        <form role="form" name="uploadForm" class="details">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" placeholder="Enter Title" data-ng-model="title" required="required">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" placeholder="Enter Description" data-ng-model="description" required="required">
+            </div>
+
+            <div class="form-group">
+                <label for="file">Click or Drop file for upload</label>
+                <input ng-readonly="true" type="text" class="form-control" id="file" placeholder="{{file.name}}" data-ng-model="file"
+                       ngf-select="" ngf-drop="" data-ng-model="file" ngf-drag-over-class="'dragover'"
+                       ngf-allow-dir="true" accept="video/*" ngf-pattern="'video/*'" name="file" required="required">
+            </div>
+
+
+            <button class="btn btn-success btn-sm" ng-click="upload()" ng-disabled="!uploadForm.$valid">
+                Update</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">
+                Cancel</button>
+        </form>
+    </div>
+</div>

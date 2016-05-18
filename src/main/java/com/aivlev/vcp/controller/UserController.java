@@ -1,5 +1,6 @@
 package com.aivlev.vcp.controller;
 
+import com.aivlev.vcp.model.UploadForm;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.model.Video;
 import com.aivlev.vcp.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by aivlev on 5/1/16.
@@ -61,5 +63,17 @@ public class UserController {
         Page<Video> result = userService.findVideos(id, pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAuthority('user')")
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public void uploadVideo(@AuthenticationPrincipal UserDetails userDetails,
+                            @RequestParam("file") MultipartFile file,
+                            @RequestParam("title") String title,
+                            @RequestParam("description") String description){
+        UploadForm uploadForm = new UploadForm(title, description, file);
+        userService.uploadVideo(userDetails.getUsername(), uploadForm);
+    }
+
+
 
 }

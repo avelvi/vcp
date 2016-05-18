@@ -173,7 +173,7 @@ public class TestDataService {
             tempFiles = getTempVideoFilesDownloadedFromInternet();
             for(int i = 0; i < 50; i++) {
                 User owner = accounts.get(r.nextInt(accounts.size()));
-                userService.uploadVideo(owner, new UploadForm("Title " + i, "Description " + i, new CopyTempFile(tempFiles.get(r.nextInt(tempFiles.size())))));
+                userService.uploadVideo(owner.getLogin(), new UploadForm("Title " + i, "Description " + i, new CopyTempFile(tempFiles.get(r.nextInt(tempFiles.size())))));
                 count++;
             }
         } catch (IOException e) {

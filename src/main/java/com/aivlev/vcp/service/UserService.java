@@ -15,8 +15,8 @@ import javax.annotation.Nonnull;
  */
 public interface UserService {
 
-    @Nonnull
-    ResponseHolder<Video> uploadVideo (@Nonnull User user, @Nonnull UploadForm form);
+
+    void uploadVideo (String login, UploadForm form);
 
     User findByLogin(String login);
 

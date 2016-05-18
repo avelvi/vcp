@@ -37,15 +37,6 @@ public class UserServiceImpl implements UserService {
     private AuthorityService authorityService;
 
     @Autowired
-    private VideoService videoService;
-
-    @Autowired
-    private ThumbnailService thumbnailService;
-
-    @Autowired
-    private ImageService imageService;
-
-    @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -58,18 +49,21 @@ public class UserServiceImpl implements UserService {
     private VideoSearchRepository videoSearchRepository;
 
     @Autowired
-    private UploadVideoTempStorage uploadVideoTempStorage;
+    VideoProcessorService videoProcessorService;
+
 
     @Override
-    public ResponseHolder<Video> uploadVideo(User user, UploadForm form) {
-        Path tempUploadedVideoPath = uploadVideoTempStorage.getTempUploadedVideoPath();
-        String videoUrl = videoService.saveVideo(tempUploadedVideoPath);
-        byte[] thumbnailImageData = thumbnailService.createThumbnail(tempUploadedVideoPath);
-        String thumbnailImageUrl = imageService.saveImageData(thumbnailImageData);
-        Video video = new Video(form.getTitle(), form.getDescription(), String.valueOf(new Date().getTime()), videoUrl, Collections.singletonList(thumbnailImageUrl), user);
-        videoRepository.save(video);
-        videoSearchRepository.save(video);
-        return new ResponseHolder<>(video);
+    public void uploadVideo(String login, UploadForm form) {
+        User user = userRepository.findByLogin(login);
+        if(null != user){
+            Video video = videoProcessorService.processVideo(form);
+            video.setOwner(user);
+            videoRepository.save(video);
+            videoSearchRepository.save(video);
+        } else {
+            throw new ModelNotFoundException("User not found");
+        }
+
     }
 
     @Override
