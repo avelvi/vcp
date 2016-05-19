@@ -1,8 +1,8 @@
 package com.aivlev.vcp.service.impl;
 
 import com.aivlev.vcp.exception.AccessDeniedException;
+import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.exception.ProcessMediaContentException;
-import com.aivlev.vcp.model.ResponseHolder;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.model.Video;
 import com.aivlev.vcp.repository.search.VideoSearchRepository;
@@ -96,8 +96,28 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Video updateVideo(Video video) {
-        return videoRepository.save(video);
+    public void updateVideo(boolean isAdmin, String login, String id, Video video) {
+        User user = userService.findByLogin(login);
+        if(null != user){
+            Video videoFromDB = videoRepository.findOne(id);
+            if(null != videoFromDB && videoFromDB.getId().equals(video.getId())){
+                videoFromDB.setTitle(video.getTitle());
+                videoFromDB.setDescription(video.getDescription());
+                if(isAdmin){
+                    videoRepository.save(video);
+                    videoSearchRepository.save(video);
+                } else {
+                    if(video.getOwner().getId().equals(user.getId())){
+                        videoRepository.save(video);
+                        videoSearchRepository.save(video);
+                    } else {
+                        throw new AccessDeniedException("Sorry, but you don't have permissions.");
+                    }
+                }
+            } else {
+                throw new ModelNotFoundException("Video not found");
+            }
+        }
     }
 
     @Override

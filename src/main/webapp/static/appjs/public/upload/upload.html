@@ -14,6 +14,12 @@
                 <label for="description">Description</label>
                 <input type="text" class="form-control" id="description" placeholder="Enter Description" data-ng-model="description" required="required">
             </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select class="form-control" id="category" ng-model="category" ng-options="category.name for category in categories.content track by category.id " required="required">
+                    <option label="None" value="">None</option>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="file">Click or Drop file for upload</label>
@@ -21,10 +27,8 @@
                        ngf-select="" ngf-drop="" data-ng-model="file" ngf-drag-over-class="'dragover'"
                        ngf-allow-dir="true" accept="video/*" ngf-pattern="'video/*'" name="file" required="required">
             </div>
-
-
             <button class="btn btn-success btn-sm" ng-click="upload()" ng-disabled="!uploadForm.$valid">
-                Update</button>
+                Upload</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">
                 Cancel</button>
         </form>

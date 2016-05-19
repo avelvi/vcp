@@ -28,12 +28,14 @@ public class Video {
     private List<String> thumbnails;
     @DBRef(lazy = true)
     private User owner;
+    @DBRef(lazy = true)
+    private Category category;
 
     public Video() {
         super();
     }
 
-    public Video(String title, String description, String createdDate, String videoUrl, List<String> thumbnails, User owner) {
+    public Video(String title, String description, String createdDate, String videoUrl, List<String> thumbnails, User owner, Category category) {
         super();
         this.title = title;
         this.description = description;
@@ -41,14 +43,15 @@ public class Video {
         this.videoUrl = videoUrl;
         this.thumbnails = thumbnails;
         this.owner = owner;
+        this.category = category;
     }
 
     public Video(String createdDate, String videoUrl, List<String> thumbnails) {
-        this(null, null, createdDate, videoUrl, thumbnails, null);
+        this(null, null, createdDate, videoUrl, thumbnails, null, null);
     }
 
     public Video(String title, String description, String createdDate, String videoUrl, List<String> thumbnails) {
-        this(title, description, createdDate, videoUrl, thumbnails, null);
+        this(title, description, createdDate, videoUrl, thumbnails, null, null);
     }
 
     public String getId() {
@@ -105,6 +108,14 @@ public class Video {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override

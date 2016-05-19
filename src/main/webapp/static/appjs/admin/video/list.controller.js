@@ -21,7 +21,8 @@ appAdminVideo.controller('AdminVideoController', ['$scope', '$location', 'ENTRIE
     }
 
     $scope.deleteVideo = function(id){
-        VideoService.delete({id: id})
-        $scope.videos = VideoService.query({page: page, size: size});
+        VideoService.delete({id: id}).$promise.then(function(){
+            $scope.videos = VideoService.query({page: page, size: size});
+        })
     }
 }]);

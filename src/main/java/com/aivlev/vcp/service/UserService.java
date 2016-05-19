@@ -1,10 +1,7 @@
 package com.aivlev.vcp.service;
 
 import com.aivlev.vcp.dto.UserDto;
-import com.aivlev.vcp.model.ResponseHolder;
-import com.aivlev.vcp.model.UploadForm;
-import com.aivlev.vcp.model.User;
-import com.aivlev.vcp.model.Video;
+import com.aivlev.vcp.model.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,7 +13,7 @@ import javax.annotation.Nonnull;
 public interface UserService {
 
 
-    void uploadVideo (String login, UploadForm form);
+    void uploadVideo(String login, UploadForm form, Category category);
 
     User findByLogin(String login);
 

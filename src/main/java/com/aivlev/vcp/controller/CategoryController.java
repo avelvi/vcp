@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/categories")
-@PreAuthorize("hasAuthority('admin')")
 public class CategoryController {
 
     @Autowired
@@ -29,22 +28,26 @@ public class CategoryController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Object getCategory(@PathVariable(value = "id") String id){
         Category category = categoryService.findCategory(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void updateCategory(@PathVariable(value = "id") String id, @RequestBody Category category){
         categoryService.createOrUpdate(id, category);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(method = RequestMethod.POST)
     public void createCategory(@RequestBody Category category){
         categoryService.createOrUpdate(null, category);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteCategory(@PathVariable(value = "id") String id){
         categoryService.deleteCategory(id);

@@ -1,6 +1,5 @@
 package com.aivlev.vcp.service.impl;
 
-import com.aivlev.vcp.aop.UploadVideoTempStorage;
 import com.aivlev.vcp.dto.UserDto;
 import com.aivlev.vcp.exception.AccessDeniedException;
 import com.aivlev.vcp.exception.ActivationCodeExpiredException;
@@ -16,12 +15,9 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -53,11 +49,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void uploadVideo(String login, UploadForm form) {
+    public void uploadVideo(String login, UploadForm form, Category category) {
         User user = userRepository.findByLogin(login);
         if(null != user){
             Video video = videoProcessorService.processVideo(form);
             video.setOwner(user);
+            video.setCategory(category);
             videoRepository.save(video);
             videoSearchRepository.save(video);
         } else {

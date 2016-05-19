@@ -1,24 +1,27 @@
 
 
-appUpload.controller('UploadController', ['$scope', '$http', '$location', 'Upload', function ($scope, $http,    $location,  Upload) {
+appUpload.controller('UploadController', ['$scope', '$http', '$location', 'CategoryService', 'Upload',
+    function ($scope, $http, $location, CategoryService, Upload) {
     $scope.loading = false;
+    $scope.categories = CategoryService.query();
     $scope.upload = function(){
 
         Upload.upload({
             url: '/users/upload',
             fields: {
                 title: $scope.title,
-                description: $scope.description
+                description: $scope.description,
+                categoryId: $scope.category.id,
+                categoryName: $scope.category.name
         },
             file: $scope.file
         }).progress(function (evt) {
             $scope.loading = true;
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             $scope.percentValue = progressPercentage;
-            console.log('progress: ' + progressPercentage + '/100');
         }).success(function (data, status, headers, config) {
             $scope.loading = false;
-            console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+            $scope.cancel()
         });
 
     }
@@ -27,6 +30,7 @@ appUpload.controller('UploadController', ['$scope', '$http', '$location', 'Uploa
         $scope.title = null;
         $scope.description = null;
         $scope.file = null;
+        $scope.category = null
     }
 
 }]);

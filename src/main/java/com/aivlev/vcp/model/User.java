@@ -13,6 +13,7 @@ import java.util.Set;
  */
 
 @Document
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 public class User implements Serializable{
 
     private static final long serialVersionUID = -4891639544969424612L;

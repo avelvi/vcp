@@ -1,5 +1,6 @@
 package com.aivlev.vcp.controller;
 
+import com.aivlev.vcp.model.Category;
 import com.aivlev.vcp.model.UploadForm;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.model.Video;
@@ -22,9 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping(value = "/users")
-public class UserController {
-
-    private static final String ADMIN_ROLE = "admin";
+public class UserController extends GenericController{
 
     @Autowired
     UserService userService;
@@ -39,9 +38,8 @@ public class UserController {
     @PreAuthorize("hasAuthority('user')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Object getUser(@PathVariable(value = "id") String id,
-                          @AuthenticationPrincipal UserDetails userDetails,
-                          SecurityContextHolderAwareRequestWrapper requestWrapper){
-        User user = userService.findUser(requestWrapper.isUserInRole(ADMIN_ROLE), userDetails.getUsername(), id);
+                          @AuthenticationPrincipal UserDetails userDetails){
+        User user = userService.findUser(isAdmin(userDetails), userDetails.getUsername(), id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -69,9 +67,13 @@ public class UserController {
     public void uploadVideo(@AuthenticationPrincipal UserDetails userDetails,
                             @RequestParam("file") MultipartFile file,
                             @RequestParam("title") String title,
-                            @RequestParam("description") String description){
+                            @RequestParam("description") String description,
+                            @RequestParam("categoryId") String id,
+                            @RequestParam("categoryName") String name
+                            ){
+        Category category = new Category(id, name);
         UploadForm uploadForm = new UploadForm(title, description, file);
-        userService.uploadVideo(userDetails.getUsername(), uploadForm);
+        userService.uploadVideo(userDetails.getUsername(), uploadForm, category);
     }
 
 

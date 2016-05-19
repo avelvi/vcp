@@ -10,17 +10,21 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Created by aivlev on 5/13/16.
  */
 @RestController
 @RequestMapping(value = "/videos")
-public class VideoController {
+public class VideoController extends GenericController{
 
     @Autowired
     VideoService videoService;
@@ -46,18 +50,15 @@ public class VideoController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteVideo(
             @PathVariable(value = "id") String id,
-            @AuthenticationPrincipal UserDetails userDetails,
-            SecurityContextHolderAwareRequestWrapper requestWrapper){
-        videoService.deleteVideo(requestWrapper.isUserInRole("admin"), userDetails.getUsername(), id);
+            @AuthenticationPrincipal UserDetails userDetails){
+        videoService.deleteVideo(isAdmin(userDetails), userDetails.getUsername(), id);
     }
 
     @PreAuthorize("hasAuthority('user')")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public Object updateVideo(@PathVariable(value = "id") String id, @RequestBody Video video){
-        Video videoFromDB = videoService.updateVideo(video);
-        if(video == null){
-            return new ResponseEntity<Video>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(videoFromDB, HttpStatus.OK);
+    public void updateVideo(@PathVariable(value = "id") String id,
+                              @RequestBody Video video,
+                              @AuthenticationPrincipal UserDetails userDetails){
+        videoService.updateVideo(isAdmin(userDetails), userDetails.getUsername(), id, video);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Created by aivlev on 5/5/16.
  */
 @Document
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "company")
 public class Company {
 
     @Id

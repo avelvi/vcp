@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Created by aivlev on 5/6/16.
  */
 @Document
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "category")
 public class Category {
 
     @Id
@@ -21,6 +22,12 @@ public class Category {
 
     public Category(String name) {
         super();
+        this.name = name;
+    }
+
+    public Category(String id, String name) {
+        super();
+        this.id = id;
         this.name = name;
     }
 

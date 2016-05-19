@@ -27,7 +27,7 @@ public interface VideoService {
 
     void deleteVideo(boolean isAdmin, String userName, String id);
 
-    Video updateVideo(Video video);
+    void updateVideo(boolean isAdmin, String login, String id, Video video);
 
     Page<Video> findAllVideosBySearchQuery(String searchQuery, Pageable pageable);
 }

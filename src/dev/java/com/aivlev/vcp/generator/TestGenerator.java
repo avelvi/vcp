@@ -103,7 +103,7 @@ public class TestGenerator {
             }
 
             List<String> thumbnails = createThumbnails(destVideo);
-            videos.add(new Video("Title" + i, "Description" + i, String.valueOf(new Date().getTime()), "/media/video/" + uid, thumbnails, users.get(RANDOM.nextInt(users.size()))));
+            videos.add(new Video("Title" + i, "Description" + i, String.valueOf(new Date().getTime()), "/media/video/" + uid, thumbnails, users.get(RANDOM.nextInt(users.size())), null));
             LOGGER.info("Video {} processed", destVideo.getName());
             i++;
         }
