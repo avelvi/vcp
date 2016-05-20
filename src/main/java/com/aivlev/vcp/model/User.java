@@ -33,6 +33,7 @@ public class User implements Serializable{
     @DBRef(lazy = true)
     private Company company;
     private boolean isActive;
+    private String recoveryCode;
 
     public User(){
         super();
@@ -130,6 +131,14 @@ public class User implements Serializable{
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getRecoveryCode() {
+        return recoveryCode;
+    }
+
+    public void setRecoveryCode(String recoveryCode) {
+        this.recoveryCode = recoveryCode;
     }
 
     @Override

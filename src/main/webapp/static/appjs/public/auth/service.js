@@ -98,6 +98,22 @@ appAuth.factory('AuthSharedService', ['$rootScope', '$http', '$resource', '$loca
                     .then(function (response) {
                         $location.path("/signin");
                     });
+            },
+            sendRestoreEmail: function(email){
+                $http.post('/restore/' + email, '').then(
+                    function success(a,b,c,d){
+                        return a;
+                    });
+            },
+            validate : function(code){
+                $http.get('/validate/code/' + code)
+            },
+            changePassword: function(code, password){
+                var data = {
+                    code: code,
+                    password: password
+                };
+                $http.post('/updatePassword', data)
             }
 
         };

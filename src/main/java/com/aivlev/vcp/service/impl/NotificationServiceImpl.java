@@ -1,5 +1,6 @@
 package com.aivlev.vcp.service.impl;
 
+import com.aivlev.vcp.model.NotificationReason;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.service.NotificationService;
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +27,17 @@ public class NotificationServiceImpl implements NotificationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotificationServiceImpl.class);
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
+    private static final String RECOVERY_CONTENT = "You received this email because you forgot " +
+            "password from \"Video Content Portal\". " +
+            "For reset your old password please click on the link below <\n>";
+
+    private static final String ACTIVATION_CONTENT = "You received this email because you began " +
+            "use \"Video Content Portal\". " +
+            "For further use please activate your account by clicking on the link below <\n>";
+
+    private static final String RECOVERY_PATH = "/#/recovery/code/";
+    private static final String ACTIVATION_PATH = "/#/activate/code/";
+
     @Autowired
     private JavaMailSender javaMailSender;
 
@@ -47,19 +59,28 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendActivationLink(User user, String activationCode) {
-        LOGGER.debug("Activation code: {} for account {}", activationCode, user.getId());
+    public void sendNotification(User user, String code, String reason) {
         String email = user.getEmail();
         if (StringUtils.isNotBlank(email)) {
-            String subject = "VCP - Activation code ";
-            String content = "You received this email because you began use \"Video Content Portal\". " +
-                    "For further use please activate your account by clicking on the link below <\n>" +
-                    baseUrl + "/#/activate/code/" + activationCode;
+            String subject = "VCP";
+            String content = buildContent(reason, code);
             String fullName = user.getName() + " " + user.getSurname();
             executorService.submit(new EmailItem(subject, content, email, fullName, tryCount));
         } else {
             LOGGER.error("Can't send email to username=" + user.getId() + ": email not found!");
         }
+    }
+
+    private String buildContent(String reason, String code){
+        boolean isActivation = reason.equals(NotificationReason.ACTIVATION.name());
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(isActivation ? ACTIVATION_CONTENT : RECOVERY_CONTENT);
+        sb.append(baseUrl);
+        sb.append(isActivation ? ACTIVATION_PATH : RECOVERY_PATH);
+        sb.append(code);
+        return sb.toString();
+
     }
 
     private class EmailItem implements Runnable {

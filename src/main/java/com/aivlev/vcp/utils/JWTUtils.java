@@ -17,7 +17,7 @@ public class JWTUtils {
     private static final long EXPIRED_DELTA_TIME = 24 * 60 * 60 * 1000l;
     private static final String SECRET_KEY = "video content portal";
 
-    public static String generateActivationCode(User user){
+    public static String generateCode(User user){
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         Date now = new Date();

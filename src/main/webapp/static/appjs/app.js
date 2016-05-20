@@ -9,17 +9,17 @@ var app = angular.module('app', ['ngResource', 'ngRoute', 'ngFileUpload', 'ui.ro
 ]);
 
 angular.module('app.constants', [])
-    .constant('USER_ROLES', {
+    .constant('USER_ROLES', Object.freeze({
         all: '*',
         admin: 'admin',
         user: 'user'
-    })
-    .constant('ENTRIES_PER_PAGE', {
+    }))
+    .constant('ENTRIES_PER_PAGE', Object.freeze({
         1: 1,
         5: 5,
         10: 10,
         20: 20
-    });
+    }));
 
 app.config(['$routeProvider', '$httpProvider', 'USER_ROLES',
     function($routeProvider, $httpProvider, USER_ROLES){

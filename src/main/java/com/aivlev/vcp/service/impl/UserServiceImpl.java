@@ -1,10 +1,7 @@
 package com.aivlev.vcp.service.impl;
 
 import com.aivlev.vcp.dto.UserDto;
-import com.aivlev.vcp.exception.AccessDeniedException;
-import com.aivlev.vcp.exception.ActivationCodeExpiredException;
-import com.aivlev.vcp.exception.DuplicateEntityException;
-import com.aivlev.vcp.exception.ModelNotFoundException;
+import com.aivlev.vcp.exception.*;
 import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.repository.storage.UserRepository;
 import com.aivlev.vcp.repository.storage.VideoRepository;
@@ -69,6 +66,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     public void save(String id, User user) {
         if(id == null){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -84,6 +86,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
     public void registerUser(UserDto userDto) {
         User user = userRepository.findByLogin(userDto.getLogin());
 
@@ -94,8 +101,8 @@ public class UserServiceImpl implements UserService {
             newUser.setAuthorities(new HashSet<>(Arrays.asList(authority)));
             newUser.setIsActive(false);
             userRepository.save(newUser);
-            String code = JWTUtils.generateActivationCode(newUser);
-            notificationService.sendActivationLink(newUser, code);
+            String code = JWTUtils.generateCode(newUser);
+            notificationService.sendNotification(newUser, code, NotificationReason.ACTIVATION.name());
         } else {
             if(user.getLogin().equalsIgnoreCase(userDto.getLogin())){
                 throw new DuplicateEntityException("User with the same login exists");
@@ -169,14 +176,14 @@ public class UserServiceImpl implements UserService {
                         user.setIsActive(true);
                         userRepository.save(user);
                     } else {
-                        throw new ActivationCodeExpiredException("Activation code was expired");
+                        throw new CodeExpiredException("Activation code was expired");
                     }
                 }
             } else {
                 throw new ModelNotFoundException("User not found");
             }
+        } else {
+            throw new CodeNotFoundException("Recovery password code not found");
         }
     }
-
-
 }

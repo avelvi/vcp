@@ -1,9 +1,6 @@
 package com.aivlev.vcp.aop;
 
-import com.aivlev.vcp.exception.AccessDeniedException;
-import com.aivlev.vcp.exception.ActivationCodeExpiredException;
-import com.aivlev.vcp.exception.DuplicateEntityException;
-import com.aivlev.vcp.exception.ModelNotFoundException;
+import com.aivlev.vcp.exception.*;
 import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.model.Error;
 import org.springframework.http.HttpStatus;
@@ -28,23 +25,29 @@ public class GenericExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateEntityException.class)
-    public ResponseEntity<Response> duplicateEntityExceptionHandler(DuplicateEntityException ex, HttpServletRequest request) {
+    public ResponseEntity<Response> duplicateEntityExceptionHandler(DuplicateEntityException ex) {
         com.aivlev.vcp.model.Error error = new Error("Duplication Error", ex.getMessage());
         Response response = new Response(HttpStatus.CONFLICT.value(), ex.getMessage(), error);
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ModelNotFoundException.class)
-    public ResponseEntity<Response> modelNotFoundExceptionHandler(ModelNotFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<Response> modelNotFoundExceptionHandler(ModelNotFoundException ex) {
         com.aivlev.vcp.model.Error error = new Error("Not Found Error", ex.getMessage());
         Response response = new Response(HttpStatus.NOT_FOUND.value(), ex.getMessage(), error);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ActivationCodeExpiredException.class)
-    public ResponseEntity<Response> modelNotFoundExceptionHandler(ActivationCodeExpiredException ex, HttpServletRequest request) {
+    @ExceptionHandler(CodeExpiredException.class)
+    public ResponseEntity<Response> modelNotFoundExceptionHandler(CodeExpiredException ex) {
         com.aivlev.vcp.model.Error error = new Error("Code Expired Error", ex.getMessage());
         Response response = new Response(HttpStatus.GONE.value(), ex.getMessage(), error);
         return new ResponseEntity<>(response, HttpStatus.GONE);
+    }
+    @ExceptionHandler(CodeNotFoundException.class)
+    public ResponseEntity<Response> codeNotFoundExceptionHandler(CodeNotFoundException ex) {
+        com.aivlev.vcp.model.Error error = new Error("Code Expired Error", ex.getMessage());
+        Response response = new Response(HttpStatus.NOT_FOUND.value(), ex.getMessage(), error);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

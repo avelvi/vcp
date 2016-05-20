@@ -1,4 +1,4 @@
-
+'use strict';
 
 appAuth.controller('AuthController', ['$scope', '$rootScope', '$location', 'AuthSharedService', function ($scope, $rootScope, $location, AuthSharedService) {
     $scope.rememberMe = false;

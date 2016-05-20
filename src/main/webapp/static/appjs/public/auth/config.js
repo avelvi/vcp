@@ -25,12 +25,31 @@ var appAuth = angular.module('app.auth', ['ngRoute', 'app.constants'])
                         loginRequired: false,
                         authorizedRoles: [USER_ROLES.all]
                     }
+                }).when('/forgot-password', {
+                    templateUrl: 'static/appjs/public/auth/forgot-password.html',
+                    controller: 'ForgotController',
+                    access: {
+                        loginRequired: false,
+                        authorizedRoles: [USER_ROLES.all]
+                    }
                 }).when('/activate/code/:code', {
                     templateUrl: 'partials/public/activation.html',
                     controller: 'ActivationController',
                     access: {
                         loginRequired: false,
                         authorizedRoles: [USER_ROLES.all]
+                    }
+                }).when('/recovery/code/:code', {
+                    templateUrl: 'static/appjs/public/auth/recovery.html',
+                    controller: 'RecoveryController',
+                    access: {
+                        loginRequired: false,
+                        authorizedRoles: [USER_ROLES.all]
+                    },
+                    resolve: {
+                        factory: function($route, AuthSharedService){
+                            AuthSharedService.validate($route.current.params.code)
+                        }
                     }
                 })
         }

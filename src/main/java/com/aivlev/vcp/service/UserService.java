@@ -17,7 +17,11 @@ public interface UserService {
 
     User findByLogin(String login);
 
+    User findByEmail(String email);
+
     void save(String id, User user);
+
+    void save(User user);
 
     void registerUser(UserDto userDto);
 
@@ -32,4 +36,5 @@ public interface UserService {
     void updateUser(String id, User user);
 
     void activateUser(String code);
+
 }
