@@ -38,12 +38,12 @@
                             Upload Video
                         </button>
                     </li>
-                    <li class="dropdown profile">
-                        <a class="dropdown-toggle" data-toggle="dropdown">
+                    <li class="dropdown profile" uib-dropdown>
+                        <a uib-dropdown-toggle>
                             <img class="img-circle img30_30" ng-src="{{account.avatar}}"/>
                             {{account.login}}<span class="caret"></span>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="uib-dropdown-menu">
                             <li><a href="#/admin" ng-show="isAuthorized('admin')"><i class="ti-settings"></i> Admin Panel</a></li>
                             <li><a href ng-click="viewProfile()"><i class="ti-user"></i> My Profile</a></li>
                             <li class="divider"></li>

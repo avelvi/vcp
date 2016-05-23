@@ -1,6 +1,7 @@
 'use strict';
 
-appCompany.controller('CompanyController', ['$scope', '$location', 'ENTRIES_PER_PAGE', 'CompanyService', function($scope, $location, ENTRIES_PER_PAGE, CompanyService){
+appCompany.controller('CompanyController', ['$scope', '$location', '$controller', 'ENTRIES_PER_PAGE', 'CompanyService',
+    function($scope, $location, $controller, ENTRIES_PER_PAGE, CompanyService){
     $scope.entriesPerPage = ENTRIES_PER_PAGE;
     var search = $location.search();
     var page = search.page||0;
@@ -21,8 +22,18 @@ appCompany.controller('CompanyController', ['$scope', '$location', 'ENTRIES_PER_
     }
 
     $scope.deleteCompany = function(id){
-        CompanyService.delete({id: id})
-        $scope.companies = CompanyService.query({page: page, size: size});
+        $controller('ModalController', {$scope: $scope})
+        CompanyService.delete({id: id}).$promise.then(
+            function onsuccess(){
+                $scope.open("success", "Company was deleted");
+                $scope.companies = CompanyService.query({page: page, size: size});
+            },
+            function onerror(response){
+                $scope.open("error", response.data.message);
+                $scope.companies = CompanyService.query({page: page, size: size});
+            }
+        )
+
     }
 
     $scope.createCompany = function(){

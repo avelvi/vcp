@@ -1,6 +1,7 @@
 'use strict';
 
-appCategory.controller('CategoryController', ['$scope', '$location', 'ENTRIES_PER_PAGE', 'CategoryService', function($scope, $location, ENTRIES_PER_PAGE, CategoryService){
+appCategory.controller('CategoryController', ['$scope', '$location', '$controller', 'ENTRIES_PER_PAGE', 'CategoryService',
+    function($scope, $location, $controller, ENTRIES_PER_PAGE, CategoryService){
     $scope.entriesPerPage = ENTRIES_PER_PAGE;
     var search = $location.search();
     var page = search.page||0;
@@ -21,8 +22,17 @@ appCategory.controller('CategoryController', ['$scope', '$location', 'ENTRIES_PE
     }
 
     $scope.deleteCategory = function(id){
-        CategoryService.delete({id: id})
-        $scope.categories = CategoryService.query({page: page, size: size});
+        $controller('ModalController', {$scope: $scope})
+        CategoryService.delete({id: id}).$promise.then(
+            function onsuccess(){
+                $scope.open("success", "Category was deleted");
+                $scope.categories = CategoryService.query({page: page, size: size});
+            },
+            function onerror(response){
+                $scope.open("error", response.data.message);
+                $scope.categories = CategoryService.query({page: page, size: size});
+            }
+        )
     }
 
     $scope.createCategory = function(){

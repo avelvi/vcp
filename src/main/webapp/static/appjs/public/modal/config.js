@@ -1,0 +1,1 @@
+var appModal = angular.module('app.modal', []);

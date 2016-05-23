@@ -5,7 +5,7 @@ var app = angular.module('app', ['ngResource', 'ngRoute', 'ngFileUpload', 'ui.ro
     'app-controllers', 'app-services', 'app.constants', 'app.company',
     'app.category', 'app.auth', 'app.users', 'app.profile',
     'app.adminHome', 'app.adminVideo', 'app.video', 'app.navBar',
-    'app.error', 'app.search', 'app.upload'
+    'app.error', 'app.search', 'app.upload', 'app.forgot', 'app.modal'
 ]);
 
 angular.module('app.constants', [])
@@ -107,12 +107,6 @@ app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER
     $rootScope.$on('event:auth-loginCancelled', function () {
         $location.path('/videos').replace();
     });
-
-
-    $rootScope.$on('event:app-error', function(rejection, responseBody){
-        $rootScope.message = responseBody.data.message;
-        $location.path('/error/' + responseBody.status).replace();
-    })
 
     // Get already authenticated user account
     AuthSharedService.getAccount();
