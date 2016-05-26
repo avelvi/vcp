@@ -18,6 +18,13 @@ var appUsers = angular.module('app.users', ['ngRoute', 'app.constants'])
                         loginRequired: true,
                         authorizedRoles: [USER_ROLES.admin]
                     }
+                }).when('/admin/users/:id/videos', {
+                    templateUrl: 'static/appjs/admin/users/user.video.list.html',
+                    controller: 'UserVideosController',
+                    access: {
+                        loginRequired: true,
+                        authorizedRoles: [USER_ROLES.admin]
+                    }
                 })
         }
     ]);

@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="page page-table" >
             <div class="panel panel-default table-dynamic">
-                <div class="panel-heading"><strong><span class="glyphicon glyphicon-list"></span> List of videos</strong></div>
+                <div class="panel-heading"><strong><span class="ti-user"></span> {{user.name}} {{user.surname}} videos</strong></div>
 
                 <div class="table-filters">
                     <div class="row">
@@ -34,9 +34,6 @@
                             Created Date
                         </div></th>
                         <th><div class="th">
-                            Author
-                        </div></th>
-                        <th><div class="th">
 
                         </div></th>
 
@@ -47,7 +44,6 @@
                         <td class="ng-binding">{{video.title}}</td>
                         <td class="ng-binding">{{video.description}}</td>
                         <td class="ng-binding">{{video.createdDate | date : 'yyyy-MM-dd'}}</td>
-                        <td class="ng-binding"><a ng-href="#/admin/users/{{video.owner.id}}">{{video.owner.name}}</a></td>
                         <td>
                             <button class="btn btn-success btn-sm" ng-click="editVideo(video.id)">
                                 Edit</button>

@@ -43,18 +43,29 @@ app.config(['$routeProvider', '$httpProvider', 'USER_ROLES',
 
 app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER_ROLES, $q, $timeout) {
 
+    $rootScope.history = [];
     $rootScope.$on('$routeChangeStart', function (event, next, previous) {
-
-        $rootScope.history = [];
-
         $rootScope.authenticationError = false;
         $rootScope.registrationError = false;
         if(previous){
             if($rootScope.history.length > 1){
-                $rootScope.history.pop()
+                $rootScope.history.shift();
             }
-            $rootScope.history.push(previous.originalPath);
+            if(previous.originalPath && previous.originalPath.indexOf('/error/') === -1){
+                var path = previous.originalPath;
+                for(var property in previous.pathParams){
+                    if (previous.pathParams.hasOwnProperty(property))
+                    {
+                        var regEx = new RegExp(":" + property);
+                        path = path.replace(regEx, previous.pathParams[property].toString());
+                    }
+                }
+                $rootScope.history.push(path);
+            }
         }
+
+
+        console.log($rootScope.history)
 
         if(next.originalPath === "/signin" && $rootScope.authenticated) {
             event.preventDefault();
@@ -100,6 +111,13 @@ app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER
     $rootScope.$on('event:auth-forbidden', function (rejection) {
         $rootScope.$evalAsync(function () {
             $location.path('/error/403').replace();
+        });
+    });
+
+    // Call when the 403 response is returned by the server
+    $rootScope.$on('event:not-found', function (rejection) {
+        $rootScope.$evalAsync(function () {
+            $location.path('/error/404').replace();
         });
     });
 

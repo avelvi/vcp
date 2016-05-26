@@ -27,7 +27,16 @@ appNavBar.controller('NavController', ['$scope', '$location', 'Session', 'AuthSh
     }
 
     $scope.isActive = function(viewLocation){
-        return viewLocation === $location.path();
+        if(viewLocation === $location.path()){
+            return true;
+        } else {
+            if(viewLocation === '/admin'){
+                return false;
+            } else {
+                return viewLocation === ($location.path().substr(0, viewLocation.length));
+            }
+
+        }
     }
 
     $scope.viewProfile = function(){

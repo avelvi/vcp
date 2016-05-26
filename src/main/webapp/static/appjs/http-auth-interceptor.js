@@ -63,6 +63,9 @@
                                 case 403:
                                     $rootScope.$broadcast('event:auth-forbidden', rejection);
                                     break;
+                                case 404:
+                                    $rootScope.$broadcast('event:not-found', rejection);
+                                    break;
                             }
                         }
                         // otherwise, default behaviour

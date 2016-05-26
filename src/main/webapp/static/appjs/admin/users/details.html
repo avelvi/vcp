@@ -3,30 +3,50 @@
         <div class="panel-heading"><strong><span class="ti-user"></span> User details</strong></div>
 
         <form role="form" name="userForm" class="details">
-            <div class="form-group">
+            <div class="form-group" ng-show="isNew">
                 <label for="login">Login</label>
-                <input type="text" class="form-control" id="login" placeholder="Enter Login" data-ng-model="user.login">
+                <input type="text" class="form-control" id="login" placeholder="Enter Login" data-ng-model="user.login" ng-required="isNew">
             </div>
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Name" data-ng-model="user.name">
+                <input type="text" class="form-control" id="name" placeholder="Name" data-ng-model="user.name" required="required">
             </div>
             <div class="form-group">
                 <label for="surname">Surname</label>
-                <input type="text" class="form-control" id="surname" placeholder="Surname" data-ng-model="user.surname">
+                <input type="text" class="form-control" id="surname" placeholder="Surname" data-ng-model="user.surname" required="required">
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-show="isNew">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Email" data-ng-model="user.email">
+                <input type="email" class="form-control" id="email" placeholder="Email" data-ng-model="user.email" ng-required="isNew">
+            </div>
+            <div class="form-group" ng-show="isNew">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" data-ng-model="user.password" ng-required="isNew">
+            </div>
+            <div class="form-group" ng-show="isNew">
+                <label for="repeat_password">Repeat Password</label>
+                <input type="password" class="form-control" id="repeat_password" placeholder="Repeat password" data-ng-model="repeat_password" ng-required="isNew">
             </div>
             <div class="form-group">
-                <label for="authorities">Authorities</label>
-                <select class="form-control" id="authorities" ng-model="user.authorities" ng-options="authority.name for authority in authorities.content track by authority.id ">
+                <label for="company">Company</label>
+                <select class="form-control" id="company" data-ng-model="user.company"
+                        ng-options="company.name for company in companies track by company.id" srequired="required">
                     <option label="None" value="">None</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="authorities">Authority</label>
+                <select class="form-control" id="authorities" data-ng-model="selectedAuthority"
+                        ng-options="authority.name for authority in authorities track by authority.id" data-ng-change="change(selectedAuthority)" required="required">
+                    <option label="None" value="">None</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="isActive">Is Active</label>
+                <input type="checkbox" class="form-control" id="isActive" placeholder="Email" data-ng-model="user.active">
+            </div>
             <button class="btn btn-success btn-sm" ng-click="saveUser()" ng-disabled="!userForm.$valid">
-                Update</button>
+                Save</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">
                 Cancel</button>
         </form>

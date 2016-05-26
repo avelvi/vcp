@@ -19,4 +19,8 @@
             </div>
         </div>
     </div>
+    <div class="text-center" style="margin-bottom: 20px;">
+        <button ng-click="loadMore()" class="btn btn-primary" ng-hide="videos.last || loading">Load more</button>
+        <img alt="Loading  Content" class="img-responsive center-block" ng-show="loading" ng-src="/static/images/ajax-loader.gif" />
+    </div>
 </div>

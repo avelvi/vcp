@@ -1,6 +1,7 @@
 'use strict';
 
-appUsers.controller('UsersController', ['$scope', '$location', 'ENTRIES_PER_PAGE', 'UsersService', function($scope, $location, ENTRIES_PER_PAGE, UsersService){
+appUsers.controller('UsersController', ['$scope', '$location', '$controller', 'ENTRIES_PER_PAGE', 'UsersService',
+    function($scope, $location, $controller, ENTRIES_PER_PAGE, UsersService){
     $scope.entriesPerPage = ENTRIES_PER_PAGE;
     var search = $location.search();
     var page = search.page||0;
@@ -21,8 +22,21 @@ appUsers.controller('UsersController', ['$scope', '$location', 'ENTRIES_PER_PAGE
     }
 
     $scope.deleteUser = function(id){
-        UsersService.delete({id: id})
-        $scope.users = UsersService.query({page: page, size: size});
+        $controller('ModalController', {$scope: $scope})
+        UsersService.delete({id: id}).$promise.then(
+            function onsuccess(){
+                $scope.open("success", "User was deleted");
+                $scope.users = UsersService.query({page: page, size: size});
+            },
+            function onerror(response){
+                $scope.open("error", response.data.message);
+                $scope.users = UsersService.query({page: page, size: size});
+            }
+        )
+    }
+
+    $scope.showVideos = function(userId){
+        $location.path('/admin/users/' + userId + '/videos');
     }
 
     $scope.createUser = function(){
