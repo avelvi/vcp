@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by aivlev on 4/19/16.
@@ -28,11 +28,11 @@ public class User implements Serializable{
     private String email;
     private String password;
     @DBRef(lazy = true)
-    private Set<Authority> authorities;
+    private List<Authority> authorities;
     private String avatar;
     @DBRef(lazy = true)
     private Company company;
-    private boolean isActive;
+    private boolean active;
     private String recoveryCode;
 
     public User(){
@@ -40,7 +40,7 @@ public class User implements Serializable{
     }
 
     public User(String name, String surname, String login, String email, String password,
-                String avatar, Company company, boolean isActive) {
+                String avatar, Company company, boolean active) {
         super();
         this.name = name;
         this.surname = surname;
@@ -49,7 +49,7 @@ public class User implements Serializable{
         this.password = password;
         this.avatar = avatar;
         this.company = company;
-        this.isActive = isActive;
+        this.active = active;
 
     }
 
@@ -101,11 +101,11 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public Set<Authority> getAuthorities() {
+    public List<Authority> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
+    public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
 
@@ -126,11 +126,11 @@ public class User implements Serializable{
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getRecoveryCode() {

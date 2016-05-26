@@ -4,11 +4,8 @@ import com.aivlev.vcp.model.Authority;
 import com.aivlev.vcp.repository.storage.AuthorityRepository;
 import com.aivlev.vcp.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -26,7 +23,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public List<Authority> findAllAuthorities(Pageable pageable) {
-        return (List) authorityRepository.findAll();
+    public List<Authority> findAll() {
+        return authorityRepository.findAll();
     }
 }

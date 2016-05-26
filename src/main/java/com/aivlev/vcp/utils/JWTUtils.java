@@ -3,7 +3,6 @@ package com.aivlev.vcp.utils;
 import com.aivlev.vcp.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.TextCodec;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;

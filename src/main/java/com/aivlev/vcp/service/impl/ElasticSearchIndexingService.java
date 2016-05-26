@@ -1,8 +1,8 @@
 package com.aivlev.vcp.service.impl;
 
 import com.aivlev.vcp.model.Video;
-import com.aivlev.vcp.repository.storage.VideoRepository;
 import com.aivlev.vcp.repository.search.VideoSearchRepository;
+import com.aivlev.vcp.repository.storage.VideoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

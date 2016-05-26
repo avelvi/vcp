@@ -1,6 +1,5 @@
 package com.aivlev.vcp.service.impl;
 
-import com.aivlev.vcp.exception.ApplicationException;
 import com.aivlev.vcp.exception.ProcessMediaContentException;
 import com.aivlev.vcp.service.ThumbnailService;
 import org.jcodec.api.FrameGrab;
@@ -10,19 +9,14 @@ import org.jcodec.common.model.Picture;
 import org.jcodec.scale.AWTUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by aivlev on 4/20/16.

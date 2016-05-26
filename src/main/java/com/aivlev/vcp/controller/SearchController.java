@@ -1,7 +1,6 @@
 package com.aivlev.vcp.controller;
 
 import com.aivlev.vcp.model.Video;
-import com.aivlev.vcp.repository.search.VideoSearchRepository;
 import com.aivlev.vcp.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,11 +1,11 @@
 package com.aivlev.vcp.service;
 
-import com.aivlev.vcp.dto.UserDto;
-import com.aivlev.vcp.model.*;
+import com.aivlev.vcp.model.Category;
+import com.aivlev.vcp.model.UploadForm;
+import com.aivlev.vcp.model.User;
+import com.aivlev.vcp.model.Video;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import javax.annotation.Nonnull;
 
 /**
  * Created by aivlev on 4/26/16.
@@ -23,7 +23,7 @@ public interface UserService {
 
     void save(User user);
 
-    void registerUser(UserDto userDto);
+    void registerUser(User user, boolean isRegistrationForm);
 
     User findUser(boolean isAdmin, String login, String id);
 
@@ -36,5 +36,4 @@ public interface UserService {
     void updateUser(String id, User user);
 
     void activateUser(String code);
-
 }

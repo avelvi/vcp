@@ -1,7 +1,6 @@
 package com.aivlev.vcp.controller;
 
 import com.aivlev.vcp.dto.ResetPasswordDto;
-import com.aivlev.vcp.dto.UserDto;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.security.SecurityUtils;
 import com.aivlev.vcp.service.ForgotPasswordService;
@@ -35,9 +34,9 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public void register(@RequestBody UserDto userDto){
+    public void register(@RequestBody User user){
 
-        userService.registerUser(userDto);
+        userService.registerUser(user, true);
     }
 
     @RequestMapping(value = "/activate/code/{code:.+}", method = RequestMethod.GET)

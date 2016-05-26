@@ -1,14 +1,13 @@
 package com.aivlev.vcp.controller;
 
-import com.aivlev.vcp.model.*;
-import com.aivlev.vcp.service.*;
+import com.aivlev.vcp.model.Authority;
+import com.aivlev.vcp.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -24,9 +23,9 @@ public class AdminController {
 
 
     @RequestMapping(value = "/authorities", method = RequestMethod.GET)
-    public Object getAuthorities(@PageableDefault(size = 5)Pageable pageable){
-        List<Authority> authorities = authorityService.findAllAuthorities(pageable);
-        return new ResponseEntity<>(authorities, HttpStatus.OK);
+    public Object getAuthoritiesNames(){
+        List<Authority> result = authorityService.findAll();
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }

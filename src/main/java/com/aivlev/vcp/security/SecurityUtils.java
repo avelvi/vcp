@@ -1,7 +1,7 @@
 package com.aivlev.vcp.security;
 
-import com.aivlev.vcp.model.Response;
 import com.aivlev.vcp.model.Error;
+import com.aivlev.vcp.model.Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

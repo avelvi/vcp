@@ -4,7 +4,6 @@ import com.aivlev.vcp.exception.ProcessMediaContentException;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
-import java.util.List;
 
 /**
  * Created by aivlev on 4/20/16.

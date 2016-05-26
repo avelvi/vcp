@@ -54,7 +54,11 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public Video findOne(String id) {
-        return videoRepository.findOne(id);
+        Video video = videoRepository.findOne(id);
+        if(null == video){
+            throw new ModelNotFoundException("Video not found");
+        }
+        return video;
     }
 
     @Override
@@ -81,18 +85,23 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public void deleteVideo(boolean isAdmin, String userName, String id) {
         User user = userService.findByLogin(userName);
-        if(null != user){
-            if(isAdmin){
-                videoRepository.delete(id);
-            } else {
-                Video video = videoRepository.findOne(id);
-                if(video.getOwner().getId().equals(user.getId())){
+        Video video = videoRepository.findOne(id);
+        if(null != video){
+            if(null != user){
+                if(isAdmin){
                     videoRepository.delete(id);
                 } else {
-                    throw new AccessDeniedException("Sorry, but you don't have permissions.");
+                    if(video.getOwner().getId().equals(user.getId())){
+                        videoRepository.delete(id);
+                    } else {
+                        throw new AccessDeniedException("Sorry, but you don't have permissions.");
+                    }
                 }
             }
+        }else {
+            throw new ModelNotFoundException("Video not found");
         }
+
     }
 
     @Override

@@ -1,12 +1,14 @@
 package com.aivlev.vcp.service.impl;
 
-import com.aivlev.vcp.dto.UserDto;
 import com.aivlev.vcp.exception.*;
 import com.aivlev.vcp.model.*;
+import com.aivlev.vcp.repository.search.VideoSearchRepository;
 import com.aivlev.vcp.repository.storage.UserRepository;
 import com.aivlev.vcp.repository.storage.VideoRepository;
-import com.aivlev.vcp.repository.search.VideoSearchRepository;
-import com.aivlev.vcp.service.*;
+import com.aivlev.vcp.service.AuthorityService;
+import com.aivlev.vcp.service.NotificationService;
+import com.aivlev.vcp.service.UserService;
+import com.aivlev.vcp.service.VideoProcessorService;
 import com.aivlev.vcp.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  * Created by aivlev on 4/26/16.
@@ -91,23 +94,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(UserDto userDto) {
-        User user = userRepository.findByLogin(userDto.getLogin());
-
-        if(null == user){
-            User newUser = UserDto.convertToModel(userDto);
-            newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-            Authority authority = authorityService.findByName("user");
-            newUser.setAuthorities(new HashSet<>(Arrays.asList(authority)));
-            newUser.setIsActive(false);
-            userRepository.save(newUser);
-            String code = JWTUtils.generateCode(newUser);
-            notificationService.sendNotification(newUser, code, NotificationReason.ACTIVATION.name());
-        } else {
-            if(user.getLogin().equalsIgnoreCase(userDto.getLogin())){
-                throw new DuplicateEntityException("User with the same login exists");
+    public void registerUser(User user, boolean isRegistrationForm) {
+        User userFromDb = userRepository.findByLogin(user.getLogin());
+        if(null == userFromDb){
+            userFromDb = userRepository.findByEmail(user.getEmail());
+            if(null != userFromDb){
+                throw new DuplicateEntityException("User with the same email exists");
             }
-            throw new DuplicateEntityException("User with the same email exists");
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            String code = JWTUtils.generateCode(user);
+            if(isRegistrationForm){
+                Authority authority = authorityService.findByName("user");
+                user.setAuthorities(Arrays.asList(authority));
+                user.setActive(false);
+                notificationService.sendNotification(user, code, NotificationReason.ACTIVATION.name());
+            }
+            if(!user.isActive()){
+                notificationService.sendNotification(user, code, NotificationReason.ACTIVATION.name());
+            }
+            userRepository.save(user);
+        } else {
+            throw new DuplicateEntityException("User with the same login exists");
         }
     }
 
@@ -126,6 +133,8 @@ public class UserServiceImpl implements UserService {
         }
         if(null != user){
             user.setPassword("");
+        } else {
+            throw new ModelNotFoundException("User not found");
         }
         return user;
     }
@@ -153,7 +162,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(String id, User user) {
         User userFromDB = userRepository.findOne(id);
-        if(null != user){
+        if(null != userFromDB){
+            if(!userFromDB.getEmail().equalsIgnoreCase(user.getEmail())) {
+                User tempUser = userRepository.findByEmail(user.getEmail());
+                if (null != tempUser) {
+                    throw new DuplicateEntityException("User with the same email exists");
+                }
+            }
+            if(!userFromDB.getLogin().equalsIgnoreCase(user.getLogin())){
+                User tempUser = userRepository.findByLogin(user.getLogin());
+                if(null != tempUser){
+                    throw new DuplicateEntityException("User with the same login exists");
+                }
+            }
             user.setPassword(userFromDB.getPassword());
             userRepository.save(user);
         } else {
@@ -173,7 +194,7 @@ public class UserServiceImpl implements UserService {
                     expiredDate.setTime(claims.getExpiration());
                     Calendar now = Calendar.getInstance();
                     if(now.before(expiredDate)){
-                        user.setIsActive(true);
+                        user.setActive(true);
                         userRepository.save(user);
                     } else {
                         throw new CodeExpiredException("Activation code was expired");

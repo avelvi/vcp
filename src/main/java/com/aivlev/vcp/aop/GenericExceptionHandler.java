@@ -1,8 +1,8 @@
 package com.aivlev.vcp.aop;
 
 import com.aivlev.vcp.exception.*;
-import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.model.Error;
+import com.aivlev.vcp.model.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

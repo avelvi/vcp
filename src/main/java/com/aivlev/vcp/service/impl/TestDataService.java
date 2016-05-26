@@ -4,7 +4,10 @@ package com.aivlev.vcp.service.impl;
  * Created by aivlev on 4/20/16.
  */
 
-import com.aivlev.vcp.model.*;
+import com.aivlev.vcp.model.Authority;
+import com.aivlev.vcp.model.UploadForm;
+import com.aivlev.vcp.model.User;
+import com.aivlev.vcp.model.Video;
 import com.aivlev.vcp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,17 +137,16 @@ public class TestDataService {
 
     private List<User> createUsers(List<Authority> authorities) {
         List<User> users = getUsers();
-        Set<Authority> authoritySet = new HashSet<>(authorities);
         int i = 0;
         for (User user : users) {
             if(i == 2){
-                user.setAuthorities(authoritySet);
+                user.setAuthorities(authorities);
             } else {
-                Iterator<Authority> it = authoritySet.iterator();
+                Iterator<Authority> it = authorities.iterator();
                 while (it.hasNext()){
                     Authority authority = it.next();
                     if(authority.getName().equals("user")){
-                        user.setAuthorities(new HashSet<>(Arrays.asList(authority)));
+                        user.setAuthorities(Arrays.asList(authority));
                         break;
                     }
                 }

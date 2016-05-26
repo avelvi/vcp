@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +32,12 @@ public class UserController extends GenericController{
     public Object getAllUsers(@PageableDefault(size = 5)Pageable pageable){
         Page<User> result = userService.findAllUsers(pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('admin')")
+    @RequestMapping(method = RequestMethod.POST)
+    public void createUser(@RequestBody User user){
+        userService.registerUser(user, false);
     }
 
     @PreAuthorize("hasAuthority('user')")
