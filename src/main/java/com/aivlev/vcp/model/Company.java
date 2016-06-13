@@ -31,6 +31,11 @@ public class Company {
         this.phone = phone;
     }
 
+    public Company(String id, String name, String address, String email, String phone) {
+        this(name, address, email, phone);
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

@@ -1,5 +1,6 @@
 package com.aivlev.vcp.service.impl;
 
+import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.Authority;
 import com.aivlev.vcp.repository.storage.AuthorityRepository;
 import com.aivlev.vcp.service.AuthorityService;
@@ -15,11 +16,14 @@ import java.util.List;
 public class AuthorityServiceImpl implements AuthorityService {
 
     @Autowired
-    AuthorityRepository authorityRepository;
+    private AuthorityRepository authorityRepository;
 
     @Override
     public Authority findByName(String name) {
-        return authorityRepository.findByName(name);
+        Authority authority = authorityRepository.findByName(name);
+        if(authority == null){
+            throw new ModelNotFoundException("Authority not found");
+        } else return authority;
     }
 
     @Override

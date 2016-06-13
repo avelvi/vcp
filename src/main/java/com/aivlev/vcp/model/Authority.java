@@ -20,7 +20,7 @@ public class Authority {
     }
 
     public Authority(String name) {
-        super();
+        this();
         this.name = name;
     }
 

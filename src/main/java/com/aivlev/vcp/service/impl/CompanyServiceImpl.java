@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.beans.Transient;
 
 /**
  * Created by aivlev on 5/5/16.
@@ -17,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
-    CompanyRepository companyRepository;
+    private CompanyRepository companyRepository;
 
     @Override
     public Page<Company> findAllCompanies(Pageable pageable) {
@@ -27,7 +30,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company findCompany(String id) {
         Company company = companyRepository.findOne(id);
-        if(null != company) {
+        if(company != null) {
             return company;
         } else {
             throw new ModelNotFoundException("Company not found");
@@ -35,24 +38,29 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @Transactional
     public void createOrUpdate(String id, Company company) {
-        if(null != id){
+        if(id != null){
             Company companyFromDB = companyRepository.findOne(id);
             if(companyFromDB == null){
                 throw new ModelNotFoundException("Company not found");
+            } else {
+                try {
+                    companyRepository.save(company);
+                } catch (Exception ex){
+                    throw new DuplicateEntityException("Company with the same name is exists");
+                }
             }
-        }
-        try {
+        } else {
             companyRepository.save(company);
-        } catch (Exception ex){
-            throw new DuplicateEntityException("Company is exists");
         }
     }
 
     @Override
+    @Transactional
     public void deleteCompany(String id) {
         Company company = companyRepository.findOne(id);
-        if(null != company) {
+        if(company != null) {
             companyRepository.delete(id);
         } else {
             throw new ModelNotFoundException("Company not found");

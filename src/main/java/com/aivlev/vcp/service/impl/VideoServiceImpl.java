@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -41,13 +42,13 @@ public class VideoServiceImpl implements VideoService {
     private static final Logger LOGGER = LoggerFactory.getLogger(VideoServiceImpl.class);
 
     @Autowired
-    VideoRepository videoRepository;
+    private VideoRepository videoRepository;
 
     @Autowired
-    VideoSearchRepository videoSearchRepository;
+    private VideoSearchRepository videoSearchRepository;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Value("${media.dir}")
     private String mediaDir;
@@ -55,7 +56,7 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public Video findOne(String id) {
         Video video = videoRepository.findOne(id);
-        if(null == video){
+        if(video == null){
             throw new ModelNotFoundException("Video not found");
         }
         return video;
@@ -83,19 +84,18 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
+    @Transactional
     public void deleteVideo(boolean isAdmin, String userName, String id) {
-        User user = userService.findByLogin(userName);
         Video video = videoRepository.findOne(id);
-        if(null != video){
-            if(null != user){
-                if(isAdmin){
+        if(video != null){
+            if(isAdmin){
+                videoRepository.delete(id);
+            } else {
+                User user = userService.findByLogin(userName);
+                if(video.getOwner().getId().equals(user.getId())){
                     videoRepository.delete(id);
                 } else {
-                    if(video.getOwner().getId().equals(user.getId())){
-                        videoRepository.delete(id);
-                    } else {
-                        throw new AccessDeniedException("Sorry, but you don't have permissions.");
-                    }
+                    throw new AccessDeniedException("Sorry, but you don't have permissions");
                 }
             }
         }else {
@@ -105,27 +105,26 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
+    @Transactional
     public void updateVideo(boolean isAdmin, String login, String id, Video video) {
-        User user = userService.findByLogin(login);
-        if(null != user){
-            Video videoFromDB = videoRepository.findOne(id);
-            if(null != videoFromDB && videoFromDB.getId().equals(video.getId())){
-                videoFromDB.setTitle(video.getTitle());
-                videoFromDB.setDescription(video.getDescription());
-                if(isAdmin){
+        Video videoFromDB = videoRepository.findOne(id);
+        if(videoFromDB != null && videoFromDB.getId().equals(video.getId())){
+            videoFromDB.setTitle(video.getTitle());
+            videoFromDB.setDescription(video.getDescription());
+            if(isAdmin){
+                videoRepository.save(video);
+                videoSearchRepository.save(video);
+            } else {
+                User user = userService.findByLogin(login);
+                if(video.getOwner().getId().equals(user.getId())){
                     videoRepository.save(video);
                     videoSearchRepository.save(video);
                 } else {
-                    if(video.getOwner().getId().equals(user.getId())){
-                        videoRepository.save(video);
-                        videoSearchRepository.save(video);
-                    } else {
-                        throw new AccessDeniedException("Sorry, but you don't have permissions.");
-                    }
+                    throw new AccessDeniedException("Sorry, but you don't have permissions.");
                 }
-            } else {
-                throw new ModelNotFoundException("Video not found");
             }
+        } else {
+            throw new ModelNotFoundException("Video not found");
         }
     }
 

@@ -24,54 +24,42 @@ import java.util.Calendar;
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    NotificationService notificationService;
-
-
+    private NotificationService notificationService;
 
     @Override
     public void sendRecoveryEmail(String email) {
         User user = userService.findByEmail(email);
-
-        if(null != user){
-            String code = JWTUtils.generateCode(user);
-            notificationService.sendNotification(user, code, NotificationReason.RECOVERY.name());
-            user.setRecoveryCode(code);
-            userService.save(user);
-        } else {
-            throw new ModelNotFoundException("User not found");
-        }
+        String code = JWTUtils.generateCode(user);
+        notificationService.sendNotification(user, code, NotificationReason.RECOVERY.name());
+        user.setRecoveryCode(code);
+        userService.save(user.getId(), user);
     }
 
     @Override
     public void updatePassword(ResetPasswordDto resetPasswordDto) {
         Claims claims = JWTUtils.getClaims(resetPasswordDto.getCode());
-        if(null != claims){
+        if(claims != null){
             String login = claims.getId();
             User user = userService.findByLogin(login);
-            if(null != user){
-                if(null != user.getRecoveryCode() && user.getRecoveryCode().equals(resetPasswordDto.getCode())){
-                    Calendar expiredDate = Calendar.getInstance();
-                    expiredDate.setTime(claims.getExpiration());
-                    Calendar now = Calendar.getInstance();
-                    if(now.before(expiredDate)){
-                        user.setPassword(passwordEncoder.encode(resetPasswordDto.getPassword()));
-                        user.setRecoveryCode(null);
-                        userService.save(user);
-                    } else {
-                        throw new CodeExpiredException("Recover code was expired");
-                    }
+            if(user.getRecoveryCode() != null && user.getRecoveryCode().equals(resetPasswordDto.getCode())){
+                Calendar expiredDate = Calendar.getInstance();
+                expiredDate.setTime(claims.getExpiration());
+                Calendar now = Calendar.getInstance();
+                if(now.before(expiredDate)){
+                    user.setPassword(passwordEncoder.encode(resetPasswordDto.getPassword()));
+                    user.setRecoveryCode(null);
+                    userService.save(user.getId(), user);
                 } else {
-                    throw new CodeNotFoundException("Recovery password code not found");
+                    throw new CodeExpiredException("Recover code was expired");
                 }
-
             } else {
-                throw new ModelNotFoundException("User not found");
+                throw new CodeNotFoundException("Recovery password code not found");
             }
         } else {
             throw new CodeNotFoundException("Recovery password code not found");
@@ -81,22 +69,18 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
     @Override
     public void validateCode(String code) {
         Claims claims = JWTUtils.getClaims(code);
-        if(null != claims){
+        if(claims != null){
             String login = claims.getId();
             User user = userService.findByLogin(login);
-            if(null != user){
-                if(null != user.getRecoveryCode() && user.getRecoveryCode().equals(code)){
-                    Calendar expiredDate = Calendar.getInstance();
-                    expiredDate.setTime(claims.getExpiration());
-                    Calendar now = Calendar.getInstance();
-                    if(now.after(expiredDate)){
-                        throw new CodeExpiredException("Recovery password code was expired");
-                    }
-                } else {
-                    throw new CodeNotFoundException("Recovery password code not found");
+            if(user.getRecoveryCode() != null && user.getRecoveryCode().equals(code)){
+                Calendar expiredDate = Calendar.getInstance();
+                expiredDate.setTime(claims.getExpiration());
+                Calendar now = Calendar.getInstance();
+                if(now.after(expiredDate)){
+                    throw new CodeExpiredException("Recovery password code was expired");
                 }
             } else {
-                throw new ModelNotFoundException("User not found");
+                throw new CodeNotFoundException("Recovery password code not found");
             }
         } else {
             throw new CodeNotFoundException("Recovery password code not found");

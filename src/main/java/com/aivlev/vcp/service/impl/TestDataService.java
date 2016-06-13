@@ -112,6 +112,7 @@ public class TestDataService {
     private void clearCollections() {
         mongoTemplate.remove(new Query(), User.class);
         mongoTemplate.remove(new Query(), Video.class);
+        mongoTemplate.remove(new Query(), Authority.class);
     }
 
     private List<Authority> getAuthorities() {
@@ -125,13 +126,10 @@ public class TestDataService {
 
         return new ArrayList<>(Arrays.asList(
                 new User("Tim", "Surname 1", "login1", "test1@test.ua", "12345",
-//                        new HashSet<Authority>(Arrays.asList("admin")),
                         "https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg", null, true),
                 new User("Ron", "Surname 2", "login2", "test2@test.ua", "12345",
-//                        Role.USER,
                         "https://s3.amazonaws.com/uifaces/faces/twitter/k/128.jpg", null, true),
                 new User("Alex", "Surname 3", "login3", "test3@test.ua", "12345",
-//                        Role.USER,
                         "https://s3.amazonaws.com/uifaces/faces/twitter/marcosmoralez/128.jpg", null, true)));
     }
 

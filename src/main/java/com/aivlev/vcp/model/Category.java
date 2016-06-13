@@ -1,5 +1,7 @@
 package com.aivlev.vcp.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,14 +23,13 @@ public class Category {
     }
 
     public Category(String name) {
-        super();
+        this();
         this.name = name;
     }
 
     public Category(String id, String name) {
-        super();
+        this(name);
         this.id = id;
-        this.name = name;
     }
 
     public String getId() {
@@ -45,5 +46,13 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

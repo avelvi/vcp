@@ -21,8 +21,6 @@ public interface UserService {
 
     void save(String id, User user);
 
-    void save(User user);
-
     void registerUser(User user, boolean isRegistrationForm);
 
     User findUser(boolean isAdmin, String login, String id);

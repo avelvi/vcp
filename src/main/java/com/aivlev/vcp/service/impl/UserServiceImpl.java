@@ -3,6 +3,7 @@ package com.aivlev.vcp.service.impl;
 import com.aivlev.vcp.exception.*;
 import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.repository.search.VideoSearchRepository;
+import com.aivlev.vcp.repository.storage.AuthorityRepository;
 import com.aivlev.vcp.repository.storage.UserRepository;
 import com.aivlev.vcp.repository.storage.VideoRepository;
 import com.aivlev.vcp.service.AuthorityService;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -27,16 +29,16 @@ import java.util.Calendar;
 public class UserServiceImpl implements UserService {
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AuthorityService authorityService;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    NotificationService notificationService;
+    private NotificationService notificationService;
 
     @Autowired
     private VideoRepository videoRepository;
@@ -45,13 +47,12 @@ public class UserServiceImpl implements UserService {
     private VideoSearchRepository videoSearchRepository;
 
     @Autowired
-    VideoProcessorService videoProcessorService;
-
+    private VideoProcessorService videoProcessorService;
 
     @Override
     public void uploadVideo(String login, UploadForm form, Category category) {
         User user = userRepository.findByLogin(login);
-        if(null != user){
+        if(user != null){
             Video video = videoProcessorService.processVideo(form);
             video.setOwner(user);
             video.setCategory(category);
@@ -65,40 +66,44 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByLogin(String login) {
-        return userRepository.findByLogin(login);
+        User user = userRepository.findByLogin(login);
+        if(user != null){
+            return user;
+        } else {
+            throw new ModelNotFoundException("User not found");
+        }
     }
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
+        if(user != null){
+            return user;
+        } else {
+            throw new ModelNotFoundException("User not found");
+        }
     }
 
     @Override
+    @Transactional
     public void save(String id, User user) {
         if(id == null){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }else {
+        } else {
             User userFromDB = userRepository.findOne(id);
-            if(null != userFromDB){
-                user.setPassword(userFromDB.getPassword());
-            } else {
-                throw new ModelNotFoundException("User not found.");
+            if(userFromDB == null){
+                throw new ModelNotFoundException("User not found");
             }
         }
         userRepository.save(user);
     }
 
     @Override
-    public void save(User user) {
-        userRepository.save(user);
-    }
-
-    @Override
     public void registerUser(User user, boolean isRegistrationForm) {
         User userFromDb = userRepository.findByLogin(user.getLogin());
-        if(null == userFromDb){
+        if(userFromDb == null){
             userFromDb = userRepository.findByEmail(user.getEmail());
-            if(null != userFromDb){
+            if(userFromDb != null){
                 throw new DuplicateEntityException("User with the same email exists");
             }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -124,14 +129,12 @@ public class UserServiceImpl implements UserService {
         if(isAdmin){
             user = userRepository.findOne(id);
         } else {
-            User loggedUser = userRepository.findByLogin(login);
-            if(loggedUser.getId().equals(id)){
-                user = userRepository.findOne(id);
-            } else {
+            user = userRepository.findByLogin(login);
+            if(user != null && !user.getId().equals(id)){
                 throw new AccessDeniedException("Sorry, but you don't have permissions.");
             }
         }
-        if(null != user){
+        if(user != null){
             user.setPassword("");
         } else {
             throw new ModelNotFoundException("User not found");
@@ -150,6 +153,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(String id) {
         User user = userRepository.findOne(id);
         if(user != null){
@@ -160,18 +164,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateUser(String id, User user) {
         User userFromDB = userRepository.findOne(id);
-        if(null != userFromDB){
+        if(userFromDB != null){
             if(!userFromDB.getEmail().equalsIgnoreCase(user.getEmail())) {
                 User tempUser = userRepository.findByEmail(user.getEmail());
-                if (null != tempUser) {
+                if (tempUser != null) {
                     throw new DuplicateEntityException("User with the same email exists");
                 }
             }
             if(!userFromDB.getLogin().equalsIgnoreCase(user.getLogin())){
                 User tempUser = userRepository.findByLogin(user.getLogin());
-                if(null != tempUser){
+                if(tempUser != null){
                     throw new DuplicateEntityException("User with the same login exists");
                 }
             }
@@ -185,10 +190,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void activateUser(String code) {
         Claims claims = JWTUtils.getClaims(code);
-        if(null != claims){
+        if(claims != null){
             String login = claims.getId();
             User user = userRepository.findByLogin(login);
-            if(null != user){
+            if(user != null){
                 if(!user.isActive()){
                     Calendar expiredDate = Calendar.getInstance();
                     expiredDate.setTime(claims.getExpiration());

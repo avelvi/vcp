@@ -19,6 +19,7 @@ import java.util.Date;
  */
 @Service
 public class VideoProcessorServiceImpl implements VideoProcessorService {
+
     @Autowired
     private UploadVideoTempStorage uploadVideoTempStorage;
 

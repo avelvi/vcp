@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Override
     public Page<Category> findAllCategories(Pageable pageable) {
@@ -28,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findCategory(String id) {
         Category category = categoryRepository.findOne(id);
-        if(null != category){
+        if(category != null){
             return category;
         } else {
             throw new ModelNotFoundException("Category not found");
@@ -36,25 +37,29 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void createOrUpdate(String id, Category category) {
-        if(null != id){
+        if(id != null){
             Category categoryFromDB = categoryRepository.findOne(id);
             if(categoryFromDB == null){
                 throw new ModelNotFoundException("Category not found");
+            } else {
+                try {
+                    categoryRepository.save(category);
+                } catch (Exception ex){
+                    throw new DuplicateEntityException("Category with the same name is exists");
+                }
             }
-        }
-        try {
+        } else {
             categoryRepository.save(category);
-        } catch (Exception ex){
-            throw new DuplicateEntityException("Category is exists");
         }
-
     }
 
     @Override
+    @Transactional
     public void deleteCategory(String id) {
         Category categoryFromDB = categoryRepository.findOne(id);
-        if(null != categoryFromDB){
+        if(categoryFromDB != null){
             categoryRepository.delete(id);
         } else {
             throw new ModelNotFoundException("Category not found");
