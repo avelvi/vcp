@@ -620,3 +620,12 @@ button.toast-close-button {
     }
 }
 
+.rememberme {
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+}
+
+.checkbox label{
+    color: #8c8c8c;
+}
