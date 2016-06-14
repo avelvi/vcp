@@ -1,5 +1,6 @@
 package com.aivlev.vcp.service;
 
+import com.aivlev.vcp.dto.UpdatePasswordDto;
 import com.aivlev.vcp.model.Category;
 import com.aivlev.vcp.model.UploadForm;
 import com.aivlev.vcp.model.User;
@@ -34,4 +35,6 @@ public interface UserService {
     void updateUser(String id, User user);
 
     void activateUser(String code);
+
+    void updatePassword(String id, UpdatePasswordDto updatePasswordDto, String userName);
 }

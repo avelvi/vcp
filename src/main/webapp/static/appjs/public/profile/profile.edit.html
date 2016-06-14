@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="panel panel-default table-dynamic">
+        <div class="panel-heading"><strong><span class="ti-user"></span> My Profile</strong></div>
+
+        <form role="form" name="userForm" class="details">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" class="form-control" id="login" placeholder="Enter Login" data-ng-model="user.login" ng-required="required">
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Name" data-ng-model="user.name" required="required">
+            </div>
+            <div class="form-group">
+                <label for="surname">Surname</label>
+                <input type="text" class="form-control" id="surname" placeholder="Surname" data-ng-model="user.surname" required="required">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" data-ng-model="user.email" ng-required="required">
+            </div>
+            <div class="form-group">
+                <label for="company">Company</label>
+                <select class="form-control" id="company" data-ng-model="user.company"
+                        ng-options="company.name for company in companies track by company.id">
+                    <option label="None" value="">None</option>
+                </select>
+            </div>
+            <button class="btn btn-success btn-sm" ng-click="saveUser()" ng-disabled="!userForm.$valid">
+                Save</button>
+            <button class="btn btn-warning btn-sm" ng-click="changePassword()">
+                Change Password</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">
+                Cancel</button>
+        </form>
+    </div>
+</div>

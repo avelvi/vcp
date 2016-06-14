@@ -13,7 +13,11 @@ appProfile.controller('ProfileController', ['$scope', '$routeParams', '$location
     }
 
     $scope.editVideo = function(id){
-        $location.path('/profile/' + $routeParams.id + '/video/' + id)
+        $location.path('/profile/' + $routeParams.id + '/video/' + id);
+    }
+
+    $scope.editProfile = function(id){
+        $location.path('/profile/' + $routeParams.id + '/edit');
     }
 
 }]);

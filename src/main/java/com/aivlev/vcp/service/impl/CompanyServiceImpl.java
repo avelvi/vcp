@@ -44,15 +44,12 @@ public class CompanyServiceImpl implements CompanyService {
             Company companyFromDB = companyRepository.findOne(id);
             if(companyFromDB == null){
                 throw new ModelNotFoundException("Company not found");
-            } else {
-                try {
-                    companyRepository.save(company);
-                } catch (Exception ex){
-                    throw new DuplicateEntityException("Company with the same name is exists");
-                }
             }
-        } else {
+        }
+        try {
             companyRepository.save(company);
+        } catch (Exception ex) {
+            throw new DuplicateEntityException("Company with the same name is exists");
         }
     }
 

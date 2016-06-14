@@ -2,6 +2,7 @@ package com.aivlev.vcp.service.impl;
 
 import com.aivlev.vcp.aop.UploadVideoTempStorage;
 import com.aivlev.vcp.config.TestMockConfig;
+import com.aivlev.vcp.dto.UpdatePasswordDto;
 import com.aivlev.vcp.exception.AccessDeniedException;
 import com.aivlev.vcp.exception.CodeNotFoundException;
 import com.aivlev.vcp.exception.DuplicateEntityException;
@@ -89,6 +90,9 @@ public class UserServiceImplTest {
 
     @Mock
     private Authority authority;
+
+    @Mock
+    private UpdatePasswordDto updatePasswordDto;
 
     @Before
     public void setUp() throws Exception {
@@ -314,6 +318,29 @@ public class UserServiceImplTest {
         when(userRepository.findByLogin(anyString())).thenReturn(null);
         when(userRepository.findByEmail(anyString())).thenReturn(user);
         userService.registerUser(user, true);
+        verify(userRepository, times(0)).save(user);
+    }
+
+    @Test
+    public void testUpdatePassword(){
+        when(userRepository.findOne(anyString())).thenReturn(user);
+        when(userRepository.findByLogin(anyString())).thenReturn(user);
+        when(user.getId()).thenReturn("id");
+        when(updatePasswordDto.getNewPassword()).thenReturn("password");
+        userService.updatePassword("id", updatePasswordDto, "login");
+        verify(userRepository, times(1)).save(user);
+    }
+
+    @Test(expected = ModelNotFoundException.class)
+    public void testUpdatePasswordWithModelNotFoundException(){
+        userService.updatePassword(null, updatePasswordDto, "login");
+        verify(userRepository, times(0)).save(user);
+    }
+    @Test(expected = AccessDeniedException.class)
+    public void testUpdatePasswordWithAccessDeniedException(){
+        when(userRepository.findOne(anyString())).thenReturn(user);
+        when(userRepository.findByLogin(anyString())).thenReturn(null);
+        userService.updatePassword("id", updatePasswordDto, "login");
         verify(userRepository, times(0)).save(user);
     }
 

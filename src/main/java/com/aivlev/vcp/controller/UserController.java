@@ -1,5 +1,6 @@
 package com.aivlev.vcp.controller;
 
+import com.aivlev.vcp.dto.UpdatePasswordDto;
 import com.aivlev.vcp.model.Category;
 import com.aivlev.vcp.model.UploadForm;
 import com.aivlev.vcp.model.User;
@@ -81,6 +82,10 @@ public class UserController extends GenericController{
         userService.uploadVideo(userDetails.getUsername(), uploadForm, category);
     }
 
-
-
+    @RequestMapping(value = "/{id}/updatePassword", method = RequestMethod.POST)
+    public void updatePassword(@PathVariable(value = "id") String id,
+                               @RequestBody UpdatePasswordDto updatePasswordDto,
+                               @AuthenticationPrincipal UserDetails userDetails){
+        userService.updatePassword(id, updatePasswordDto, userDetails.getUsername());
+    }
 }

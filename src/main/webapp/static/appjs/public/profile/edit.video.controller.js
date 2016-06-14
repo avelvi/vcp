@@ -1,7 +1,7 @@
 'use strict';
 
-appProfile.controller('ProfileEditVideoController', ['$scope', '$routeParams', '$location', '$controller', 'UsersService', 'VideoService',
-    function($scope, $routeParams, $location, $controller, UsersService, VideoService){
+appProfile.controller('ProfileEditVideoController', ['$scope', '$routeParams', '$location', '$controller', 'UsersService', 'VideoService', 'CategoryService',
+    function($scope, $routeParams, $location, $controller, UsersService, VideoService, CategoryService){
 
         $controller('ModalController', {$scope: $scope})
         VideoService.get({id: $routeParams.videoId}).$promise.then(
@@ -9,6 +9,10 @@ appProfile.controller('ProfileEditVideoController', ['$scope', '$routeParams', '
                 $scope.video = response;
             }
         );
+
+        CategoryService.query({page: 0, size: Number.MAX_VALUE}).$promise.then(function(data){
+            $scope.categories = data.content;
+        });
 
         $scope.update =  function(){
             VideoService.update({id: $routeParams.videoId}, $scope.video).$promise.then(

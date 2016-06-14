@@ -43,15 +43,12 @@ public class CategoryServiceImpl implements CategoryService {
             Category categoryFromDB = categoryRepository.findOne(id);
             if(categoryFromDB == null){
                 throw new ModelNotFoundException("Category not found");
-            } else {
-                try {
-                    categoryRepository.save(category);
-                } catch (Exception ex){
-                    throw new DuplicateEntityException("Category with the same name is exists");
-                }
             }
-        } else {
+        }
+        try {
             categoryRepository.save(category);
+        } catch (Exception ex) {
+            throw new DuplicateEntityException("Category with the same name is exists");
         }
     }
 

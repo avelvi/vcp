@@ -11,6 +11,20 @@ var appProfile = angular.module('app.profile', ['ngRoute', 'app.constants'])
                         loginRequired: true,
                         authorizedRoles: [USER_ROLES.user]
                     }
+                }).when('/profile/:id/edit', {
+                    templateUrl: 'static/appjs/public/profile/profile.edit.html',
+                    controller: 'ProfileEditController',
+                    access: {
+                        loginRequired: true,
+                        authorizedRoles: [USER_ROLES.user]
+                    }
+                }).when('/profile/:id/changePassword', {
+                    templateUrl: 'static/appjs/public/profile/change.password.html',
+                    controller: 'ProfileChangePasswordController',
+                    access: {
+                        loginRequired: true,
+                        authorizedRoles: [USER_ROLES.user]
+                    }
                 }).when('/profile/:id/video/:videoId', {
                     templateUrl: 'static/appjs/public/profile/edit.video.html',
                     controller: 'ProfileEditVideoController',

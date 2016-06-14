@@ -1,6 +1,16 @@
 <div class="container">
     <div class="panel panel-default table-dynamic">
-        <div class="panel-heading"><strong><span class="ti-user"></span> {{user.name}} {{user.surname}}</strong></div>
+        <div class="panel-heading clearfix">
+            <strong>
+                <span class="ti-user">
+
+                </span> {{user.name}} {{user.surname}}
+            </strong>
+            <div class="pull-right">
+                <button class="btn btn-primary btn-sm" ng-click="editProfile(user.id)">
+                    Edit Profile</button>
+            </div>
+        </div>
     </div>
         <h4>
             Videos

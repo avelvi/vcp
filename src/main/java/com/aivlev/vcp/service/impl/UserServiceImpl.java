@@ -1,5 +1,6 @@
 package com.aivlev.vcp.service.impl;
 
+import com.aivlev.vcp.dto.UpdatePasswordDto;
 import com.aivlev.vcp.exception.*;
 import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.repository.search.VideoSearchRepository;
@@ -211,5 +212,25 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new CodeNotFoundException("Recovery password code not found");
         }
+    }
+
+    @Override
+    @Transactional
+    public void updatePassword(String id, UpdatePasswordDto updatePasswordDto, String userName) {
+        if(id != null){
+            User user = userRepository.findOne(id);
+            if(user != null){
+                User userFromDB = userRepository.findByLogin(userName);
+                if(userFromDB != null && userFromDB.getId().equalsIgnoreCase(id)){
+                    user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+                    userRepository.save(user);
+                } else {
+                    throw new AccessDeniedException("Sorry, but you don't have permissions");
+                }
+            }
+        } else {
+            throw new ModelNotFoundException("User not found");
+        }
+
     }
 }

@@ -14,6 +14,10 @@ appUsers.factory('UsersService', ['$resource', function($resource){
                 url: '/users/:id/videos',
                 method: 'GET',
                 isArray: false
+            },
+            changePassword: {
+                url: '/users/:id/updatePassword',
+                method: 'POST'
             }
 
         });

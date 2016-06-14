@@ -11,6 +11,13 @@
                 <label for="description">Description</label>
                 <input type="text" class="form-control" id="description" placeholder=" Video Description" data-ng-model="video.description" required="required">
             </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select class="form-control" id="category" data-ng-model="video.category"
+                        ng-options="category.name for category in categories track by category.id" required="required">
+                    <option label="None" value="">None</option>
+                </select>
+            </div>
             <button class="btn btn-success btn-sm" ng-click="updateVideo()" ng-disabled="!videoForm.$valid">
                 Update</button>
             <button class="btn btn-danger btn-sm" ng-click="cancel()">
