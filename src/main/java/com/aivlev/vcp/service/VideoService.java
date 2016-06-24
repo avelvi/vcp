@@ -28,4 +28,7 @@ public interface VideoService {
     void updateVideo(boolean isAdmin, String login, String id, Video video);
 
     Page<Video> findAllVideosBySearchQuery(String searchQuery, Pageable pageable);
+
+    long count();
+
 }

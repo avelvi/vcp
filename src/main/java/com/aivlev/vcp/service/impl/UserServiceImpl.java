@@ -233,4 +233,19 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+    @Override
+    public long count() {
+        return userRepository.count();
+    }
+
+    @Override
+    public User findOne(String id) {
+        User user = userRepository.findOne(id);
+        if(user != null){
+            return user;
+        } else {
+            throw new ModelNotFoundException("User not found");
+        }
+    }
 }

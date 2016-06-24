@@ -29,6 +29,7 @@ public class Video {
     private User owner;
     @DBRef(lazy = true)
     private Category category;
+    private int views;
 
     public Video() {
         super();
@@ -115,6 +116,14 @@ public class Video {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 
     @Override

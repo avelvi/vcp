@@ -1,5 +1,6 @@
 package com.aivlev.vcp.service;
 
+import com.aivlev.vcp.dto.StatisticsDto;
 import com.aivlev.vcp.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,6 @@ public interface AdminService {
     Page<User> findAllUsers(Pageable pageable);
 
     User findUser(String id);
+
+    StatisticsDto getStatistics();
 }

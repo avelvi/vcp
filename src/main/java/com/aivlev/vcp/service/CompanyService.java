@@ -15,4 +15,7 @@ public interface CompanyService {
     void createOrUpdate(String id, Company company);
 
     void deleteCompany(String id);
+
+    long count();
+
 }

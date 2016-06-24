@@ -63,4 +63,9 @@ public class CompanyServiceImpl implements CompanyService {
             throw new ModelNotFoundException("Company not found");
         }
     }
+
+    @Override
+    public long count() {
+        return companyRepository.count();
+    }
 }

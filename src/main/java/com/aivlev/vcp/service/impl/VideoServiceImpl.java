@@ -134,6 +134,11 @@ public class VideoServiceImpl implements VideoService {
         return videoSearchRepository.search(sq);
     }
 
+    @Override
+    public long count() {
+        return videoRepository.count();
+    }
+
     private String saveVideoInternal(Path tempFilePath) throws IOException {
         String uniqueVideoFileName = generateUniqueVideoFileName();
         Path videoFilePath = Paths.get(mediaDir + "/video/" + uniqueVideoFileName);

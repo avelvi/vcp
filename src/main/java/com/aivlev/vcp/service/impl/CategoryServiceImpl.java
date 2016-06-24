@@ -62,4 +62,9 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ModelNotFoundException("Category not found");
         }
     }
+
+    @Override
+    public long count() {
+        return categoryRepository.count();
+    }
 }

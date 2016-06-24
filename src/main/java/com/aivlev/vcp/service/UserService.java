@@ -37,4 +37,8 @@ public interface UserService {
     void activateUser(String code);
 
     void updatePassword(String id, UpdatePasswordDto updatePasswordDto, String userName);
+
+    long count();
+
+    User findOne(String id);
 }

@@ -18,4 +18,5 @@ public interface CategoryService {
 
     void deleteCategory(String id);
 
+    long count();
 }
