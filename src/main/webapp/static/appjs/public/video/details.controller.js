@@ -4,4 +4,8 @@ appVideo.controller('VideoDetailsController', ['$scope', '$routeParams', '$locat
 
     $scope.video = VideoService.get({id: $routeParams.id});
 
+    $scope.countPlayedTime = function(){
+        console.log("playing");
+    }
+
 }]);

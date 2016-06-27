@@ -34,6 +34,9 @@
                             Created Date
                         </div></th>
                         <th><div class="th">
+                            Views
+                        </div></th>
+                        <th><div class="th">
                             Author
                         </div></th>
                         <th><div class="th">
@@ -47,6 +50,7 @@
                         <td class="ng-binding">{{video.title}}</td>
                         <td class="ng-binding">{{video.description}}</td>
                         <td class="ng-binding">{{video.createdDate | date : 'yyyy-MM-dd'}}</td>
+                        <td class="ng-binding">{{video.views}}</td>
                         <td class="ng-binding"><a ng-href="#/admin/users/{{video.owner.id}}/videos">{{video.owner.name}}</a></td>
                         <td>
                             <button class="btn btn-success btn-sm" ng-click="editVideo(video.id)">

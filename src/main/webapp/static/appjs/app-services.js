@@ -17,4 +17,18 @@ services.factory('VideoService', ['$resource', function($resource){
     return data;
 }]);
 
+services.factory('VideoStatisticService', ['$resource', function($resource){
+    var data = $resource('/statistic/:id', {id: '@id'},
+        {
+            query: {
+                method: 'GET',
+                isArray: false
+            },
+            updateVideoStatistic: {
+                method: 'PUT'
+            }
+        });
+    return data;
+}]);
+
 

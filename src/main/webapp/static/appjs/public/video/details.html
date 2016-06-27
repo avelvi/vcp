@@ -1,13 +1,14 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-12" >
+        <div class="col-md-12">
             <div class="thumbnail">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <video ng-src="{{video.videoUrl}}" ng-attr-poster="{{video.thumbnails[0]}}" controls="controls"></video>
+                    <video data-video="" id="{{video.id}}" ng-src="{{video.videoUrl}}" ng-attr-poster="{{video.thumbnails[0]}}" controls="controls"></video>
                 </div>
                 <div class="caption">
                     <div class="media">
                         <div class="media-body">
+                            <h6 class="created_date" ng-if="video.views">Views: {{video.views}}</h6>
                             <h4 class="media-heading">{{video.title}}</a></h4>
                             <h6 class="created_date">{{video.createdDate | date : 'yyyy-MM-dd'}}</h6>
                             <h5 class="media-heading">{{video.owner.name}}</h5>

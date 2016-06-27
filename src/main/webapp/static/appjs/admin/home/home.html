@@ -1,5 +1,63 @@
 <div class="container">
-    <div class="panel panel-default table-dynamic">
-        <div class="panel-heading"><strong><span class="ti-user"></span> {{title}}</strong></div>
+    <div class="col-md-12">
+        <div class="panel panel-default table-dynamic">
+            <div class="panel-heading"><strong><span class="ti-stats-up"></span> {{title}}</strong></div>
+            <table class="table table-bordered table-striped table-responsive my-table">
+                <thead>
+                <tr>
+                    <th><div class="th">
+                        Users
+                    </div></th>
+                    <th><div class="th">
+                        Videos
+                    </div></th>
+                    <th><div class="th">
+                        Categories
+                    </div></th>
+                    <th><div class="th">
+                        Companies
+                    </div></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr style="vertical-align: middle">
+                    <td class="ng-binding"><a ng-href="#/admin/users">{{statistics.usersCount}}</a></td>
+                    <td class="ng-binding"><a ng-href="#/admin/videos">{{statistics.videosCount}}</a></td>
+                    <td class="ng-binding"><a ng-href="#/admin/categories">{{statistics.categoriesCount}}</a></td>
+                    <td class="ng-binding"><a ng-href="#/admin/companies">{{statistics.companiesCount}}</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!--<div class="panel panel-default table-dynamic">-->
+            <!--<div class="panel-heading"><strong><span class="ti-stats-up"></span> Video Statistics</strong></div>-->
+            <!--<table class="table table-bordered table-striped table-responsive my-table">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th><div class="th">-->
+                        <!--Video Id-->
+                    <!--</div></th>-->
+                    <!--<th><div class="th">-->
+                        <!--Video Title-->
+                    <!--</div></th>-->
+                    <!--<th><div class="th">-->
+                        <!--Author-->
+                    <!--</div></th>-->
+                    <!--<th><div class="th">-->
+                        <!--Views-->
+                    <!--</div></th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                <!--<tr style="vertical-align: middle">-->
+                    <!--<td class="ng-binding">TBD</td>-->
+                    <!--<td class="ng-binding">TBD</td>-->
+                    <!--<td class="ng-binding">TBD</td>-->
+                    <!--<td class="ng-binding">TBD</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
     </div>
 </div>

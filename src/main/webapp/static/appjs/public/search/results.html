@@ -10,6 +10,7 @@
                 <div class="caption">
                     <div class="media">
                         <div class="media-body">
+                            <h6 class="created_date" ng-if="video.views">Views: {{video.views}}</h6>
                             <h4 class="media-heading"><a ng-href="#/videos/{{video.id}}">{{video.title}}</a></h4>
                             <h6 class="created_date">{{video.createdDate | date : 'yyyy-MM-dd'}}</h6>
                             <h5 class="media-heading">{{video.owner.name}}</h5>
