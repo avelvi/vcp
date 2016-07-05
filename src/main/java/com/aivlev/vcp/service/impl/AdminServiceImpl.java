@@ -5,6 +5,8 @@ import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.repository.storage.UserRepository;
 import com.aivlev.vcp.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AdminServiceImpl implements AdminService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminServiceImpl.class);
 
     @Autowired
     private UserService userService;
@@ -29,14 +32,17 @@ public class AdminServiceImpl implements AdminService {
     private CategoryService categoryService;
 
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public Page<User> findAllUsers(Pageable pageable) {
-        return userService.findAllUsers(pageable);
+        return userRepository.findAll(pageable);
     }
 
     @Override
     public User findUser(String id) {
-        User user = userService.findOne(id);
+        User user = userRepository.findOne(id);
         if(user != null){
             user.setPassword("");
             return user;
@@ -47,7 +53,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public StatisticsDto getStatistics() {
-
         StatisticsDto statisticsDto = new StatisticsDto();
         statisticsDto.setUsersCount(userService.count());
         statisticsDto.setVideosCount(videoService.count());

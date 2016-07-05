@@ -49,6 +49,7 @@ public class ForgotPasswordServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
+        reset(userRepository);
         MockitoAnnotations.initMocks(this);
     }
 
@@ -121,10 +122,5 @@ public class ForgotPasswordServiceImplTest {
     public void testUpdatePasswordWithCodeNotFoundException2(){
         when(resetPasswordDto.getCode()).thenReturn("code");
         forgotPasswordService.updatePassword(resetPasswordDto);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        reset(userRepository);
     }
 }

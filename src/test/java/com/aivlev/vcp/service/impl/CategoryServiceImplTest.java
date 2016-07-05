@@ -5,6 +5,7 @@ import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.Category;
 import com.aivlev.vcp.repository.storage.CategoryRepository;
 import com.aivlev.vcp.service.CategoryService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,13 +44,14 @@ public class CategoryServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
+        reset(categoryRepository);
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
     public void testFindAllCategories() throws Exception {
         when(categoryRepository.findAll(pageable)).thenReturn(categoryPage);
-        categoryService.findAllCategories(pageable);
+        categoryService.findAll(pageable);
         verify(categoryRepository).findAll(pageable);
 
     }
@@ -58,14 +60,14 @@ public class CategoryServiceImplTest {
     public void testFindCategory() throws Exception {
         String id = "someId";
         when(categoryRepository.findOne(id)).thenReturn(category);
-        categoryService.findCategory(id);
+        categoryService.findOne(id);
         verify(categoryRepository).findOne(id);
     }
 
     @Test(expected = ModelNotFoundException.class)
     public void testFindCategoryWithException() throws Exception {
         when(categoryRepository.findOne(anyString())).thenReturn(null);
-        categoryService.findCategory(anyString());
+        categoryService.findOne(anyString());
     }
 
     @Test
@@ -111,5 +113,12 @@ public class CategoryServiceImplTest {
         when(categoryRepository.findOne(anyString())).thenReturn(null);
         categoryService.deleteCategory(anyString());
         verify(categoryRepository, times(0)).delete(anyString());
+    }
+
+    @Test
+    public void testCount() throws Exception {
+        when(categoryRepository.count()).thenReturn(1l);
+        categoryService.count();
+        verify(categoryRepository, times(1)).count();
     }
 }

@@ -24,13 +24,13 @@ public class CompanyController {
 
     @RequestMapping(method = RequestMethod.GET)
     public Object getCompanies(@PageableDefault(size = 10)Pageable pageable){
-        Page<Company> result = companyService.findAllCompanies(pageable);
+        Page<Company> result = companyService.findAll(pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Object getCompany(@PathVariable(value = "id") String id){
-        Company company = companyService.findCompany(id);
+        Company company = companyService.findOne(id);
         return new ResponseEntity<>(company, HttpStatus.OK);
     }
 

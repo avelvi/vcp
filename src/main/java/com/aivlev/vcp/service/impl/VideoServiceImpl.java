@@ -57,6 +57,7 @@ public class VideoServiceImpl implements VideoService {
     public Video findOne(String id) {
         Video video = videoRepository.findOne(id);
         if(video == null){
+            LOGGER.error("Video with id = " + id + " not found");
             throw new ModelNotFoundException("Video not found");
         }
         return video;
@@ -86,22 +87,18 @@ public class VideoServiceImpl implements VideoService {
     @Override
     @Transactional
     public void deleteVideo(boolean isAdmin, String userName, String id) {
-        Video video = videoRepository.findOne(id);
-        if(video != null){
-            if(isAdmin){
+        Video video = findOne(id);
+        if(isAdmin){
+            videoRepository.delete(id);
+        } else {
+            User user = userService.findByLogin(userName);
+            if(video.getOwner().getId().equals(user.getId())){
                 videoRepository.delete(id);
             } else {
-                User user = userService.findByLogin(userName);
-                if(video.getOwner().getId().equals(user.getId())){
-                    videoRepository.delete(id);
-                } else {
-                    throw new AccessDeniedException("Sorry, but you don't have permissions");
-                }
+                LOGGER.error("Sorry, but you don't have permissions");
+                throw new AccessDeniedException("Sorry, but you don't have permissions");
             }
-        }else {
-            throw new ModelNotFoundException("Video not found");
         }
-
     }
 
     @Override
@@ -120,10 +117,12 @@ public class VideoServiceImpl implements VideoService {
                     videoRepository.save(video);
                     videoSearchRepository.save(video);
                 } else {
+                    LOGGER.error("Sorry, but you don't have permissions.");
                     throw new AccessDeniedException("Sorry, but you don't have permissions.");
                 }
             }
         } else {
+            LOGGER.error("Video with id = " + id + " not found");
             throw new ModelNotFoundException("Video not found");
         }
     }

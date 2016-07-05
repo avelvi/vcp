@@ -5,6 +5,7 @@ import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.Company;
 import com.aivlev.vcp.repository.storage.CompanyRepository;
 import com.aivlev.vcp.service.CompanyService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,13 +43,14 @@ public class CompanyServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
+        reset(companyRepository);
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
     public void testFindAllCompanies() throws Exception {
         when(companyRepository.findAll(pageable)).thenReturn(companyPage);
-        companyService.findAllCompanies(pageable);
+        companyService.findAll(pageable);
         verify(companyRepository).findAll(pageable);
 
     }
@@ -57,14 +59,14 @@ public class CompanyServiceImplTest {
     public void testFindCompany() throws Exception {
         String id = "someId";
         when(companyRepository.findOne(id)).thenReturn(company);
-        companyService.findCompany(id);
+        companyService.findOne(id);
         verify(companyRepository).findOne(id);
     }
 
     @Test(expected = ModelNotFoundException.class)
     public void testFindCompanyWithException() throws Exception {
         when(companyRepository.findOne(anyString())).thenReturn(null);
-        companyService.findCompany(anyString());
+        companyService.findOne(anyString());
     }
 
     @Test
@@ -111,6 +113,12 @@ public class CompanyServiceImplTest {
         when(companyRepository.findOne(anyString())).thenReturn(null);
         companyService.deleteCompany(anyString());
         verify(companyRepository, times(0)).delete(anyString());
+    }
 
+    @Test
+    public void testCount() throws Exception {
+        when(companyRepository.count()).thenReturn(1l);
+        companyService.count();
+        verify(companyRepository).count();
     }
 }

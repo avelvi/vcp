@@ -96,6 +96,9 @@ public class UserServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
+        reset(videoRepository);
+        reset(videoSearchRepository);
+        reset(userRepository);
         MockitoAnnotations.initMocks(this);
     }
 
@@ -344,11 +347,11 @@ public class UserServiceImplTest {
         verify(userRepository, times(0)).save(user);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        reset(videoRepository);
-        reset(videoSearchRepository);
-        reset(userRepository);
+    @Test
+    public void testCount() throws Exception {
+        when(userRepository.count()).thenReturn(1l);
+        userService.count();
+        verify(userRepository).count();
     }
 
 }

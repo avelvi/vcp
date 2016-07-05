@@ -10,9 +10,9 @@ import org.springframework.data.domain.Pageable;
  */
 public interface CategoryService {
 
-    Page<Category> findAllCategories(Pageable pageable);
+    Page<Category> findAll(Pageable pageable);
 
-    Category findCategory(String id);
+    Category findOne(String id);
 
     void createOrUpdate(String id, Category category);
 

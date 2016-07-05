@@ -87,10 +87,8 @@ public class TestMockConfig {
     }
 
     @Bean
-    public static PropertyPlaceholderConfigurer placeholderConfigurer(){
-        PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
-        configurer.setLocations(new Resource[] {new ClassPathResource("/application.properties")});
-        return configurer;
+    public VideoStatisticService videoStatisticService(){
+        return new VideoStatisticServiceImpl();
     }
 
     @Bean
@@ -126,6 +124,18 @@ public class TestMockConfig {
     @Bean
     public JavaMailSender javaMailSender(){
         return Mockito.mock(JavaMailSender.class);
+    }
+
+    @Bean
+    public VideoStatisticRepository videoStatisticRepository(){
+        return Mockito.mock(VideoStatisticRepository.class);
+    }
+
+    @Bean
+    public static PropertyPlaceholderConfigurer placeholderConfigurer(){
+        PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
+        configurer.setLocations(new Resource[] {new ClassPathResource("/application.properties")});
+        return configurer;
     }
 
 }

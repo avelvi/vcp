@@ -46,7 +46,7 @@ public class CompanyServiceIntegrationTest {
 
     @Test
     public void testFindAllCompanies() throws Exception {
-        Page<Company> result = companyService.findAllCompanies(pageable);
+        Page<Company> result = companyService.findAll(pageable);
         assertNotNull(result);
         assertEquals(5, result.getSize());
         assertEquals(1, result.getTotalElements());
@@ -56,14 +56,14 @@ public class CompanyServiceIntegrationTest {
     public void testFindCompany() throws Exception {
         Company company = new Company("Company1", "Company address1", "company1@company.test", "000-000-00-00");
         companyService.createOrUpdate(null, company);
-        Company result = companyService.findCompany(company.getId());
+        Company result = companyService.findOne(company.getId());
         assertNotNull(result);
     }
 
     @Test
     public void testFindCompanyWithModelNotFoundException() throws Exception {
         try{
-            companyService.findCompany("1");
+            companyService.findOne("1");
         } catch (ModelNotFoundException ex){
             String expected = "Company not found";
             assertEquals(expected, ex.getMessage());
@@ -77,7 +77,7 @@ public class CompanyServiceIntegrationTest {
         companyService.createOrUpdate(null, company);
         company.setName("Updated Company Name");
         companyService.createOrUpdate(company.getId(), company);
-        Company updatedCompany = companyService.findCompany(company.getId());
+        Company updatedCompany = companyService.findOne(company.getId());
         assertEquals(company.getName(), updatedCompany.getName());
     }
 
@@ -112,10 +112,10 @@ public class CompanyServiceIntegrationTest {
     public void testDeleteCompany() throws Exception {
         Company company = new Company("Company 1", "Company address1", "company1@company.test", "000-000-00-00");
         companyService.createOrUpdate(null, company);
-        Page<Company> all = companyService.findAllCompanies(pageable);
+        Page<Company> all = companyService.findAll(pageable);
         assertEquals(2, all.getTotalElements());
         companyService.deleteCompany(company.getId());
-        all = companyService.findAllCompanies(pageable);
+        all = companyService.findAll(pageable);
         assertEquals(1, all.getTotalElements());
 
     }

@@ -13,6 +13,8 @@ import com.aivlev.vcp.service.UserService;
 import com.aivlev.vcp.service.VideoProcessorService;
 import com.aivlev.vcp.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,8 @@ import java.util.Calendar;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -52,17 +56,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void uploadVideo(String login, UploadForm form, Category category) {
-        User user = userRepository.findByLogin(login);
-        if(user != null){
-            Video video = videoProcessorService.processVideo(form);
-            video.setOwner(user);
-            video.setCategory(category);
-            videoRepository.save(video);
-            videoSearchRepository.save(video);
-        } else {
-            throw new ModelNotFoundException("User not found");
-        }
-
+        User user = findByLogin(login);
+        Video video = videoProcessorService.processVideo(form);
+        video.setOwner(user);
+        video.setCategory(category);
+        videoRepository.save(video);
+        videoSearchRepository.save(video);
     }
 
     @Override
@@ -71,6 +70,7 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             return user;
         } else {
+            LOGGER.error("User with login = " + login + " not found");
             throw new ModelNotFoundException("User not found");
         }
     }
@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             return user;
         } else {
+            LOGGER.error("User with email = " + email + " not found");
             throw new ModelNotFoundException("User not found");
         }
     }
@@ -91,8 +92,9 @@ public class UserServiceImpl implements UserService {
         if(id == null){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         } else {
-            User userFromDB = userRepository.findOne(id);
+            User userFromDB = findOne(id);
             if(userFromDB == null){
+                LOGGER.error("User with id = " + id + " not found");
                 throw new ModelNotFoundException("User not found");
             }
         }
@@ -105,6 +107,7 @@ public class UserServiceImpl implements UserService {
         if(userFromDb == null){
             userFromDb = userRepository.findByEmail(user.getEmail());
             if(userFromDb != null){
+                LOGGER.error("User with the same email exists. Email - " + user.getEmail());
                 throw new DuplicateEntityException("User with the same email exists");
             }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -120,6 +123,7 @@ public class UserServiceImpl implements UserService {
             }
             userRepository.save(user);
         } else {
+            LOGGER.error("User with the same login exists. Login - " + user.getLogin());
             throw new DuplicateEntityException("User with the same login exists");
         }
     }
@@ -128,16 +132,18 @@ public class UserServiceImpl implements UserService {
     public User findUser(boolean isAdmin, String login, String id) {
         User user;
         if(isAdmin){
-            user = userRepository.findOne(id);
+            user = findOne(id);
         } else {
             user = userRepository.findByLogin(login);
             if(user != null && !user.getId().equals(id)){
+                LOGGER.error("Sorry, but you don't have permissions.");
                 throw new AccessDeniedException("Sorry, but you don't have permissions.");
             }
         }
         if(user != null){
             user.setPassword("");
         } else {
+            LOGGER.error("User with id = " + id + " not found");
             throw new ModelNotFoundException("User not found");
         }
         return user;
@@ -160,6 +166,7 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             userRepository.delete(id);
         } else {
+            LOGGER.error("Error has occurred while deleting user with id = " + id + ". User not found");
             throw new ModelNotFoundException("User not found");
         }
     }
@@ -167,25 +174,23 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(String id, User user) {
-        User userFromDB = userRepository.findOne(id);
-        if(userFromDB != null){
-            if(!userFromDB.getEmail().equalsIgnoreCase(user.getEmail())) {
-                User tempUser = userRepository.findByEmail(user.getEmail());
-                if (tempUser != null) {
-                    throw new DuplicateEntityException("User with the same email exists");
-                }
+        User userFromDB = findOne(id);
+        if(!userFromDB.getEmail().equalsIgnoreCase(user.getEmail())) {
+            User tempUser = userRepository.findByEmail(user.getEmail());
+            if (tempUser != null) {
+                LOGGER.error("User with the same email exists. Email - " + user.getEmail());
+                throw new DuplicateEntityException("User with the same email exists");
             }
-            if(!userFromDB.getLogin().equalsIgnoreCase(user.getLogin())){
-                User tempUser = userRepository.findByLogin(user.getLogin());
-                if(tempUser != null){
-                    throw new DuplicateEntityException("User with the same login exists");
-                }
-            }
-            user.setPassword(userFromDB.getPassword());
-            userRepository.save(user);
-        } else {
-            throw new ModelNotFoundException("User not found");
         }
+        if(!userFromDB.getLogin().equalsIgnoreCase(user.getLogin())){
+            User tempUser = userRepository.findByLogin(user.getLogin());
+            if(tempUser != null){
+                LOGGER.error("User with the same login exists. Login - " + user.getLogin());
+                throw new DuplicateEntityException("User with the same login exists");
+            }
+        }
+        user.setPassword(userFromDB.getPassword());
+        userRepository.save(user);
     }
 
     @Override
@@ -193,23 +198,21 @@ public class UserServiceImpl implements UserService {
         Claims claims = JWTUtils.getClaims(code);
         if(claims != null){
             String login = claims.getId();
-            User user = userRepository.findByLogin(login);
-            if(user != null){
-                if(!user.isActive()){
-                    Calendar expiredDate = Calendar.getInstance();
-                    expiredDate.setTime(claims.getExpiration());
-                    Calendar now = Calendar.getInstance();
-                    if(now.before(expiredDate)){
-                        user.setActive(true);
-                        userRepository.save(user);
-                    } else {
-                        throw new CodeExpiredException("Activation code was expired");
-                    }
+            User user = findByLogin(login);
+            if(!user.isActive()){
+                Calendar expiredDate = Calendar.getInstance();
+                expiredDate.setTime(claims.getExpiration());
+                Calendar now = Calendar.getInstance();
+                if(now.before(expiredDate)){
+                    user.setActive(true);
+                    userRepository.save(user);
+                } else {
+                    LOGGER.error("Activation code was expired");
+                    throw new CodeExpiredException("Activation code was expired");
                 }
-            } else {
-                throw new ModelNotFoundException("User not found");
             }
         } else {
+            LOGGER.error("Recovery password code not found");
             throw new CodeNotFoundException("Recovery password code not found");
         }
     }
@@ -218,17 +221,17 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updatePassword(String id, UpdatePasswordDto updatePasswordDto, String userName) {
         if(id != null){
-            User user = userRepository.findOne(id);
-            if(user != null){
-                User userFromDB = userRepository.findByLogin(userName);
-                if(userFromDB != null && userFromDB.getId().equalsIgnoreCase(id)){
-                    user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
-                    userRepository.save(user);
-                } else {
-                    throw new AccessDeniedException("Sorry, but you don't have permissions");
-                }
+            User user = findOne(id);
+            User userFromDB = userRepository.findByLogin(userName);
+            if(userFromDB != null && userFromDB.getId().equalsIgnoreCase(id)){
+                user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+                userRepository.save(user);
+            } else {
+                LOGGER.error("Sorry, but you don't have permissions");
+                throw new AccessDeniedException("Sorry, but you don't have permissions");
             }
         } else {
+            LOGGER.error("User with id = " + id + " not found");
             throw new ModelNotFoundException("User not found");
         }
 
@@ -245,6 +248,7 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             return user;
         } else {
+            LOGGER.error("User with id = " + id + " not found");
             throw new ModelNotFoundException("User not found");
         }
     }

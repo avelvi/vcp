@@ -45,6 +45,7 @@ public class VideoProcessorServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
+        clearMediaSubFolders();
         MockitoAnnotations.initMocks(this);
     }
 
@@ -56,11 +57,6 @@ public class VideoProcessorServiceImplTest {
         when(uploadForm.getDescription()).thenReturn("description");
         when(uploadVideoTempStorage.getTempUploadedVideoPath()).thenReturn(path);
         videoProcessorService.processVideo(uploadForm);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        clearMediaSubFolders();
     }
 
     private void clearMediaSubFolders() {

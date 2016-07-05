@@ -85,6 +85,9 @@ public class VideoServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
+        reset(videoRepository);
+        reset(videoSearchRepository);
+        clearMediaSubFolders();
         MockitoAnnotations.initMocks(this);
     }
 
@@ -211,11 +214,11 @@ public class VideoServiceImplTest {
         String path = videoService.saveVideo(file.toPath());
     }
 
-    @After
-    public void tearDown() throws Exception {
-        reset(videoRepository);
-        reset(videoSearchRepository);
-        clearMediaSubFolders();
+    @Test
+    public void testCount() throws Exception {
+        when(videoRepository.count()).thenReturn(1l);
+        videoService.count();
+        verify(videoRepository).count();
     }
 
     private void clearMediaSubFolders() {

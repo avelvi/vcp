@@ -11,6 +11,8 @@ import com.aivlev.vcp.service.NotificationService;
 import com.aivlev.vcp.service.UserService;
 import com.aivlev.vcp.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ import java.util.Calendar;
  */
 @Service
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ForgotPasswordServiceImpl.class);
 
     @Autowired
     private UserService userService;
@@ -56,12 +60,15 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
                     user.setRecoveryCode(null);
                     userService.save(user.getId(), user);
                 } else {
+                    LOGGER.error("Recover code was expired");
                     throw new CodeExpiredException("Recover code was expired");
                 }
             } else {
+                LOGGER.error("Recovery password code not found");
                 throw new CodeNotFoundException("Recovery password code not found");
             }
         } else {
+            LOGGER.error("Recovery password code not found");
             throw new CodeNotFoundException("Recovery password code not found");
         }
     }
@@ -77,12 +84,15 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
                 expiredDate.setTime(claims.getExpiration());
                 Calendar now = Calendar.getInstance();
                 if(now.after(expiredDate)){
+                    LOGGER.error("Recover code was expired");
                     throw new CodeExpiredException("Recovery password code was expired");
                 }
             } else {
+                LOGGER.error("Recovery password code not found");
                 throw new CodeNotFoundException("Recovery password code not found");
             }
         } else {
+            LOGGER.error("Recovery password code not found");
             throw new CodeNotFoundException("Recovery password code not found");
         }
     }

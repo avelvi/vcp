@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
  * Created by aivlev on 5/5/16.
  */
 public interface CompanyService {
-    Page<Company> findAllCompanies(Pageable pageable);
+    Page<Company> findAll(Pageable pageable);
 
-    Company findCompany(String id);
+    Company findOne(String id);
 
     void createOrUpdate(String id, Company company);
 

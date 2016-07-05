@@ -1,10 +1,12 @@
 package com.aivlev.vcp.service.impl;
 
 import com.aivlev.vcp.config.TestMockConfig;
+import com.aivlev.vcp.dto.StatisticsDto;
 import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.repository.storage.UserRepository;
-import com.aivlev.vcp.service.AdminService;
+import com.aivlev.vcp.service.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
@@ -27,6 +30,18 @@ public class AdminServiceImplTest {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private VideoService videoService;
 
     @Autowired
     private UserRepository userRepository;
@@ -64,5 +79,18 @@ public class AdminServiceImplTest {
     public void testFindUserWithModelNotFoundException() {
         when(userRepository.findOne(anyString())).thenReturn(null);
         adminService.findUser(anyString());
+    }
+
+    @Test
+    public void testGetStatistics() {
+        when(categoryService.count()).thenReturn(1l);
+        when(companyService.count()).thenReturn(1l);
+        when(userService.count()).thenReturn(1l);
+        when(videoService.count()).thenReturn(1l);
+        StatisticsDto statisticsDto = adminService.getStatistics();
+        assertEquals(1l, statisticsDto.getCategoriesCount());
+        assertEquals(1l, statisticsDto.getCompaniesCount());
+        assertEquals(1l, statisticsDto.getUsersCount());
+        assertEquals(1l, statisticsDto.getVideosCount());
     }
 }

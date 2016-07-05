@@ -24,14 +24,14 @@ public class CategoryController {
 
     @RequestMapping(method = RequestMethod.GET)
     public Object getCategories(@PageableDefault(size = 10)Pageable pageable){
-        Page<Category> result = categoryService.findAllCategories(pageable);
+        Page<Category> result = categoryService.findAll(pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Object getCategory(@PathVariable(value = "id") String id){
-        Category category = categoryService.findCategory(id);
+        Category category = categoryService.findOne(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 

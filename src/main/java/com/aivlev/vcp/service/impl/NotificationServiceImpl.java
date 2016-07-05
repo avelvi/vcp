@@ -67,7 +67,7 @@ public class NotificationServiceImpl implements NotificationService {
             String fullName = user.getName() + " " + user.getSurname();
             executorService.submit(new EmailItem(subject, content, email, fullName, tryCount));
         } else {
-            LOGGER.error("Can't send email to username=" + user.getId() + ": email not found!");
+            LOGGER.error("Can't send email to user " + user.getName() + ": email not found!");
         }
     }
 
@@ -112,7 +112,7 @@ public class NotificationServiceImpl implements NotificationService {
                 javaMailSender.send(msg.getMimeMessage());
                 LOGGER.debug("Email to {} successful sent", destinationEmail);
             } catch (Exception e) {
-                LOGGER.error("Can't send email to " + destinationEmail + ": " + e.getMessage(), e);
+                LOGGER.error("Can't send email to " + destinationEmail);
                 tryCount--;
                 if (tryCount > 0) {
                     LOGGER.debug("Decrement tryCount and try again to send email: tryCount={}, destinationEmail={}", tryCount, destinationEmail);

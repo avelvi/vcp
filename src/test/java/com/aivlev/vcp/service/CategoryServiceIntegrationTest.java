@@ -49,7 +49,7 @@ public class CategoryServiceIntegrationTest {
 
     @Test
     public void testFindAllCategories() throws Exception {
-        Page<Category> result = categoryService.findAllCategories(pageable);
+        Page<Category> result = categoryService.findAll(pageable);
         assertNotNull(result);
         assertEquals(5, result.getSize());
         assertEquals(1, result.getTotalElements());
@@ -59,14 +59,14 @@ public class CategoryServiceIntegrationTest {
     public void testFindCategory() throws Exception {
         Category category = new Category("Category 1");
         categoryService.createOrUpdate(null, category);
-        Category result = categoryService.findCategory(category.getId());
+        Category result = categoryService.findOne(category.getId());
         assertNotNull(result);
     }
 
     @Test
     public void testFindCategoryWithModelNotFoundException() throws Exception {
         try{
-            categoryService.findCategory("1");
+            categoryService.findOne("1");
         } catch (ModelNotFoundException ex){
             String expected = "Category not found";
             assertEquals(expected, ex.getMessage());
@@ -80,7 +80,7 @@ public class CategoryServiceIntegrationTest {
         categoryService.createOrUpdate(null, category);
         category.setName("Updated Category Name");
         categoryService.createOrUpdate(category.getId(), category);
-        Category updatedCategory = categoryService.findCategory(category.getId());
+        Category updatedCategory = categoryService.findOne(category.getId());
         assertEquals(category.getName(), updatedCategory.getName());
     }
 
@@ -115,10 +115,10 @@ public class CategoryServiceIntegrationTest {
     public void testDeleteCategory() throws Exception {
         Category category = new Category("Category 1");
         categoryService.createOrUpdate(null, category);
-        Page<Category> all = categoryService.findAllCategories(pageable);
+        Page<Category> all = categoryService.findAll(pageable);
         assertEquals(2, all.getTotalElements());
         categoryService.deleteCategory(category.getId());
-        all = categoryService.findAllCategories(pageable);
+        all = categoryService.findAll(pageable);
         assertEquals(1, all.getTotalElements());
 
     }
