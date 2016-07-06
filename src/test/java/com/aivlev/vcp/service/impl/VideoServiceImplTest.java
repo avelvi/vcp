@@ -113,21 +113,21 @@ public class VideoServiceImplTest {
         when(video.getOwner()).thenReturn(user);
         when(user.getId()).thenReturn(userId);
         videoService.deleteVideo(false, userLogin, videoId);
-        verify(videoRepository, times(1)).delete(videoId);
+        verify(videoRepository, times(1)).delete(video);
     }
 
     @Test
     public void testDeleteVideoAsAdmin(){
         when(videoRepository.findOne(videoId)).thenReturn(video);
         videoService.deleteVideo(true, userLogin, videoId);
-        verify(videoRepository, times(1)).delete(videoId);
+        verify(videoRepository, times(1)).delete(video);
     }
 
     @Test(expected = ModelNotFoundException.class)
     public void testDeleteVideoWithModelNotFound(){
         when(videoRepository.findOne(videoId)).thenReturn(null);
         videoService.deleteVideo(false, userLogin, videoId);
-        verify(videoRepository, times(0)).delete(videoId);
+        verify(videoRepository, times(0)).delete(any(Video.class));
     }
 
     @Test(expected = AccessDeniedException.class)

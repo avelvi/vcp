@@ -89,11 +89,11 @@ public class VideoServiceImpl implements VideoService {
     public void deleteVideo(boolean isAdmin, String userName, String id) {
         Video video = findOne(id);
         if(isAdmin){
-            videoRepository.delete(id);
+            videoRepository.delete(video);
         } else {
             User user = userService.findByLogin(userName);
             if(video.getOwner().getId().equals(user.getId())){
-                videoRepository.delete(id);
+                videoRepository.delete(video);
             } else {
                 LOGGER.error("Sorry, but you don't have permissions");
                 throw new AccessDeniedException("Sorry, but you don't have permissions");

@@ -34,7 +34,7 @@ import static com.aivlev.vcp.config.SecurityConfig.REMEMBER_ME_KEY;
 @Service
 public class RememberMeServices extends AbstractRememberMeServices {
 
-    private final Logger log = LoggerFactory.getLogger(RememberMeServices.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(RememberMeServices.class);
 
     private static final int TOKEN_VALIDITY_DAYS = 31;
 
@@ -66,7 +66,7 @@ public class RememberMeServices extends AbstractRememberMeServices {
         String login = token.getUserLogin();
 
         // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
-        log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());
+        LOGGER.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());
         token.setDate(new Date());
         token.setValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
@@ -75,7 +75,7 @@ public class RememberMeServices extends AbstractRememberMeServices {
             tokenRepository.save(token);
             addCookie(token, request, response);
         } catch (DataAccessException e) {
-            log.error("Failed to update token: ", e);
+            LOGGER.error("Failed to update token: ", e);
             throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
         }
         return getUserDetailsService().loadUserByUsername(login);
@@ -85,7 +85,7 @@ public class RememberMeServices extends AbstractRememberMeServices {
     protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication successfulAuthentication) {
         String login = successfulAuthentication.getName();
 
-        log.debug("Creating new persistent login for user {}", login);
+        LOGGER.debug("Creating new persistent login for user {}", login);
         User user = userRepository.findByLogin(login);
         Token token = new Token();
         token.setSeries(generateSeriesData());
@@ -98,7 +98,7 @@ public class RememberMeServices extends AbstractRememberMeServices {
             tokenRepository.save(token);
             addCookie(token, request, response);
         } catch (DataAccessException e) {
-            log.error("Failed to save persistent token ", e);
+            LOGGER.error("Failed to save persistent token ", e);
         }
     }
 
@@ -118,9 +118,9 @@ public class RememberMeServices extends AbstractRememberMeServices {
                 Token token = getPersistentToken(cookieTokens);
                 tokenRepository.delete(token.getSeries());
             } catch (InvalidCookieException ice) {
-                log.info("Invalid cookie, no persistent token could be deleted");
+                LOGGER.info("Invalid cookie, no persistent token could be deleted");
             } catch (RememberMeAuthenticationException rmae) {
-                log.debug("No persistent token found, so no token could be deleted");
+                LOGGER.debug("No persistent token found, so no token could be deleted");
             }
         }
         super.logout(request, response, authentication);
@@ -142,7 +142,7 @@ public class RememberMeServices extends AbstractRememberMeServices {
         try {
             token = tokenRepository.findOne(presentedSeries);
         } catch (DataAccessException e) {
-            log.error("Error to access database", e );
+            LOGGER.error("Error to access database", e);
         }
 
         if (token == null) {
@@ -151,7 +151,7 @@ public class RememberMeServices extends AbstractRememberMeServices {
         }
 
         // We have a match for this user/series combination
-        log.info("presentedToken={} / tokenValue={}", presentedToken, token.getValue());
+        LOGGER.info("presentedToken={} / tokenValue={}", presentedToken, token.getValue());
         if (!presentedToken.equals(token.getValue())) {
             // Token doesn't match series value. Delete this session and throw an exception.
             tokenRepository.delete(token.getSeries());
