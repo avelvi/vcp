@@ -2,7 +2,6 @@ package com.aivlev.vcp.generator;
 
 import com.aivlev.vcp.config.MongoConfig;
 import com.aivlev.vcp.config.ServiceConfig;
-import com.aivlev.vcp.model.Role;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.model.Video;
 import org.jcodec.api.FrameGrab;
@@ -91,7 +90,7 @@ public class TestGenerator {
     }
 
     private static List<Video> buildVideo(List<User> users) throws IOException, JCodecException {
-        List<Video> videos = new ArrayList<Video>();
+        List<Video> videos = new ArrayList<>();
         int i = 1;
         for (String videoLink : VIDEO_LINKS) {
 
@@ -111,7 +110,7 @@ public class TestGenerator {
     }
 
     private static List<String> createThumbnails(File destVideo) throws IOException, JCodecException {
-        List<String> thumbnails = new ArrayList<String>();
+        List<String> thumbnails = new ArrayList<>();
         FrameGrab grab = new FrameGrab(
                 new FileChannelWrapper(FileChannel.open(Paths.get(destVideo.getAbsolutePath()))));
         for (int i = 0; i < RANDOM.nextInt(15) + 3; i++) {

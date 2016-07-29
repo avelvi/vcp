@@ -4,7 +4,6 @@ import com.aivlev.vcp.dto.UpdatePasswordDto;
 import com.aivlev.vcp.exception.*;
 import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.repository.search.VideoSearchRepository;
-import com.aivlev.vcp.repository.storage.AuthorityRepository;
 import com.aivlev.vcp.repository.storage.UserRepository;
 import com.aivlev.vcp.repository.storage.VideoRepository;
 import com.aivlev.vcp.service.AuthorityService;
@@ -22,8 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 
 /**
  * Created by aivlev on 4/26/16.
@@ -114,7 +113,7 @@ public class UserServiceImpl implements UserService {
             String code = JWTUtils.generateCode(user);
             if(isRegistrationForm){
                 Authority authority = authorityService.findByName("user");
-                user.setAuthorities(Arrays.asList(authority));
+                user.setAuthorities(Collections.singletonList(authority));
                 user.setActive(false);
                 notificationService.sendNotification(user, code, NotificationReason.ACTIVATION.name());
             }
@@ -220,19 +219,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updatePassword(String id, UpdatePasswordDto updatePasswordDto, String userName) {
-        if(id != null){
-            User user = findOne(id);
-            User userFromDB = userRepository.findByLogin(userName);
-            if(userFromDB != null && userFromDB.getId().equalsIgnoreCase(id)){
-                user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
-                userRepository.save(user);
-            } else {
-                LOGGER.error("Sorry, but you don't have permissions");
-                throw new AccessDeniedException("Sorry, but you don't have permissions");
-            }
+        User user = findOne(id);
+        User userFromDB = userRepository.findByLogin(userName);
+        if(userFromDB != null && userFromDB.getId().equalsIgnoreCase(id)){
+            user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+            userRepository.save(user);
         } else {
-            LOGGER.error("User with id = " + id + " not found");
-            throw new ModelNotFoundException("User not found");
+            LOGGER.error("Sorry, but you don't have permissions");
+            throw new AccessDeniedException("Sorry, but you don't have permissions");
         }
 
     }

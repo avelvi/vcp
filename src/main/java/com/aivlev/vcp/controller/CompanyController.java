@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/companies")
-@PreAuthorize("hasAuthority('admin')")
 public class CompanyController {
 
     @Autowired
@@ -28,22 +27,26 @@ public class CompanyController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Object getCompany(@PathVariable(value = "id") String id){
         Company company = companyService.findOne(id);
         return new ResponseEntity<>(company, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void updateCompany(@PathVariable(value = "id") String id, @RequestBody Company company){
         companyService.createOrUpdate(id, company);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(method = RequestMethod.POST)
     public void createCompany(@RequestBody Company company){
         companyService.createOrUpdate(null, company);
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteCompany(@PathVariable(value = "id") String id){
         companyService.deleteCompany(id);

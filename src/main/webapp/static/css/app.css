@@ -72,10 +72,9 @@ button,input,select,textarea{
     position: absolute;
     top: 0;
     width: 250px;
-    margin: 0;
     padding: 0;
     list-style: none;
-    margin-top: 2px;
+    margin: 2px 0 0;
 }
 
 .sidebar-nav li {
@@ -173,8 +172,8 @@ button,input,select,textarea{
 }
 
 .small-avatar {
-    width: 80px;
-    height: 80px;
+    width: 45px;
+    height: 45px;
 }
 
 

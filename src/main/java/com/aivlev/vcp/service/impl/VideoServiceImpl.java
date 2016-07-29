@@ -24,7 +24,6 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -73,9 +72,8 @@ public class VideoServiceImpl implements VideoService {
         }
     }
 
-    @Nonnull
     @Override
-    public Page<Video> findAllVideosByOwnerId(@Nonnull String ownerId, @Nonnull Pageable pageable) {
+    public Page<Video> findAllVideosByOwnerId(String ownerId, Pageable pageable) {
         return videoRepository.findByOwnerId(ownerId, pageable);
     }
 

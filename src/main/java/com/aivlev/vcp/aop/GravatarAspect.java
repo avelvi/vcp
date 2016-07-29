@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -23,31 +22,66 @@ import java.util.List;
 @Aspect
 @Component
 public class GravatarAspect {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(GravatarAspect.class);
 
     @Value("${base.url}")
     private String baseUrl;
 
-    @Around("execution(* com.aivlev.vcp.service.VideoService.findAll(..))")
-    public Object advice(ProceedingJoinPoint pjp) throws Throwable {
+    @Around("execution(* com.aivlev.vcp.service.VideoService.findAll*(..))" +
+            "|| execution(* com.aivlev.vcp.service.UserService.findVideos(..))")
+    public Object videosAdvice(ProceedingJoinPoint pjp) throws Throwable {
+        Page val = null;
         try {
-            Page val = (Page)pjp.proceed();
+            val = (Page)pjp.proceed();
             List content = val.getContent();
-            Iterator<Video> it = content.iterator();
-            while(it.hasNext()){
-                User user = it.next().getOwner();
-                String hash = md5Hex(user.getEmail());
-                if(hash != null){
-                    String avatarRedirectPath = user.getAvatar() != null ? baseUrl + user.getAvatar() : baseUrl + "/media/static/images/avatar.png";
-                    user.setAvatar("http://www.gravatar.com/avatar/" + hash + "?d=" + avatarRedirectPath);
-                }
-
+            for (Video aContent : (Iterable<Video>) content) {
+                rewriteAvatar(aContent.getOwner());
             }
-            return val;
+        } catch (Exception ex){
+            LOGGER.error("Error has occurred while getting result data", ex);
+        }
+        return val;
+    }
+
+    @Around("execution(* com.aivlev.vcp.service.VideoService.findOne(..))")
+    public Object videoAdvice(ProceedingJoinPoint pjp) throws Throwable {
+        Video video = null;
+        try {
+            video = (Video)pjp.proceed();
+            rewriteAvatar(video.getOwner());
+        } catch (Exception ex){
+            LOGGER.error("Error has occurred while getting result data", ex);
+        }
+        return video;
+    }
+
+    @Around("execution(* com.aivlev.vcp.service.UserService.find*(..))")
+    public Object userAdvice(ProceedingJoinPoint pjp) throws Throwable {
+        try {
+            Object result = pjp.proceed();
+            if(result instanceof Page){
+                List<User> users = ((Page) result).getContent();
+                for (User user : users) {
+                    rewriteAvatar(user);
+                }
+                return result;
+            } else if(result instanceof User){
+                rewriteAvatar((User) result);
+            }
+            return result;
         } catch (Exception ex){
             LOGGER.error("Error has occurred while getting result data", ex);
         }
         return null;
+    }
+
+    private void rewriteAvatar(User user) {
+        String hash = md5Hex(user.getEmail());
+        if(hash != null){
+            String avatarRedirectPath = (user.getAvatar() != null) ? baseUrl + user.getAvatar() : baseUrl + "/media/static/images/avatar.png";
+            user.setAvatar("http://www.gravatar.com/avatar/" + hash + "?d=" + avatarRedirectPath);
+        }
     }
 
     private String md5Hex(String email) {
@@ -61,9 +95,9 @@ public class GravatarAspect {
     }
 
     private String hex(byte[] array) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < array.length; ++i) {
-            sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+        StringBuilder sb = new StringBuilder();
+        for (byte anArray : array) {
+            sb.append(Integer.toHexString((anArray & 0xFF) | 0x100).substring(1, 3));
         }
         return sb.toString();
     }

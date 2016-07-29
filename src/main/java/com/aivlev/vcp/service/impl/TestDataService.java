@@ -102,9 +102,13 @@ public class TestDataService {
 
     private void clearMediaSubFolders() {
         for(File dir : getMediaDirs()) {
-            for (File f : dir.listFiles()) {
-                f.delete();
+            File[] files = dir.listFiles();
+            if(files != null){
+                for (File f : files) {
+                    f.delete();
+                }
             }
+
         }
         LOGGER.info("Media sub folders cleared");
     }
@@ -126,11 +130,11 @@ public class TestDataService {
 
         return new ArrayList<>(Arrays.asList(
                 new User("Tim", "Surname 1", "login1", "test1@test.ua", "12345",
-                        "https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg", null, true),
+                        null, null, true),
                 new User("Ron", "Surname 2", "login2", "test2@test.ua", "12345",
-                        "https://s3.amazonaws.com/uifaces/faces/twitter/k/128.jpg", null, true),
+                        null, null, true),
                 new User("Alex", "Surname 3", "login3", "test3@test.ua", "12345",
-                        "https://s3.amazonaws.com/uifaces/faces/twitter/marcosmoralez/128.jpg", null, true)));
+                        null, null, true)));
     }
 
     private List<User> createUsers(List<Authority> authorities) {
@@ -140,11 +144,9 @@ public class TestDataService {
             if(i == 2){
                 user.setAuthorities(authorities);
             } else {
-                Iterator<Authority> it = authorities.iterator();
-                while (it.hasNext()){
-                    Authority authority = it.next();
-                    if(authority.getName().equals("user")){
-                        user.setAuthorities(Arrays.asList(authority));
+                for (Authority authority : authorities) {
+                    if (authority.getName().equals("user")) {
+                        user.setAuthorities(Collections.singletonList(authority));
                         break;
                     }
                 }
@@ -189,10 +191,9 @@ public class TestDataService {
     }
 
     private String[] getTestVideoLinks() {
-        String[] videoLinks = { "https://www.dropbox.com/s/r4ijmbn0bnxfxp0/Build%20a%20Simple%20Android%20App.mp4?dl=1",
+        return new String[]{ "https://www.dropbox.com/s/r4ijmbn0bnxfxp0/Build%20a%20Simple%20Android%20App.mp4?dl=1",
                 "https://www.dropbox.com/s/w8xy8hjhugvhibt/How%20the%20Internet%20Works.mp4?dl=1",
                 "https://www.dropbox.com/s/088f5bn54g3pwqx/Learn%20Functional%20Python%20at%20Treehouse.mp4?dl=1" };
-        return videoLinks;
     }
 
     private void downloadFile(File file, String url) throws IOException {

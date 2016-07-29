@@ -3,7 +3,6 @@ package com.aivlev.vcp.service.impl;
 import com.aivlev.vcp.dto.ResetPasswordDto;
 import com.aivlev.vcp.exception.CodeExpiredException;
 import com.aivlev.vcp.exception.CodeNotFoundException;
-import com.aivlev.vcp.exception.ModelNotFoundException;
 import com.aivlev.vcp.model.NotificationReason;
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.service.ForgotPasswordService;

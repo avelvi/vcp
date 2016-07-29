@@ -31,8 +31,7 @@ public class JWTUtils {
                 .signWith(signatureAlgorithm, signingKey);
 
         //Builds the JWT and serializes it to a compact, URL-safe string
-        String code = builder.compact();
-        return code;
+        return builder.compact();
     }
 
     public static Claims getClaims(String code){

@@ -4,7 +4,6 @@ import com.aivlev.vcp.model.Video;
 import com.aivlev.vcp.model.VideoStatistic;
 import com.aivlev.vcp.repository.storage.VideoRepository;
 import com.aivlev.vcp.repository.storage.VideoStatisticRepository;
-import com.aivlev.vcp.service.VideoService;
 import com.aivlev.vcp.service.VideoStatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

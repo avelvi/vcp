@@ -5,7 +5,6 @@ import com.aivlev.vcp.model.Video;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.annotation.Nonnull;
 import java.nio.file.Path;
 
 /**
@@ -15,11 +14,9 @@ public interface VideoService {
 
     Video findOne(String id);
 
-    @Nonnull
-    String saveVideo (@Nonnull Path tempFilePath) throws ProcessMediaContentException;
+    String saveVideo (Path tempFilePath) throws ProcessMediaContentException;
 
-    @Nonnull
-    Page<Video> findAllVideosByOwnerId(@Nonnull String ownerId, Pageable pageable);
+    Page<Video> findAllVideosByOwnerId(String ownerId, Pageable pageable);
 
     Page<Video> findAll(Pageable pageable);
 

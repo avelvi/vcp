@@ -5,7 +5,6 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -26,7 +25,7 @@ public class ServiceConfig {
     @Bean
     public static PropertyPlaceholderConfigurer placeholderConfigurer(){
         PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
-        configurer.setLocations(new Resource[] {new ClassPathResource("application.properties")});
+        configurer.setLocations(new ClassPathResource("application.properties"));
         return configurer;
     }
 

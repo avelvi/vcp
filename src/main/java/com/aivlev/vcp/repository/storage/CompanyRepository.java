@@ -2,7 +2,6 @@ package com.aivlev.vcp.repository.storage;
 
 import com.aivlev.vcp.model.Company;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Created by aivlev on 5/5/16.

@@ -1,6 +1,5 @@
 package com.aivlev.vcp.service;
 
-import com.aivlev.vcp.model.Video;
 import com.aivlev.vcp.model.VideoStatistic;
 
 /**

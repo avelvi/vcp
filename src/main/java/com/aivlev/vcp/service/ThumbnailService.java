@@ -2,7 +2,6 @@ package com.aivlev.vcp.service;
 
 import com.aivlev.vcp.exception.ProcessMediaContentException;
 
-import javax.annotation.Nonnull;
 import java.nio.file.Path;
 
 /**
@@ -10,6 +9,5 @@ import java.nio.file.Path;
  */
 public interface ThumbnailService {
 
-    @Nonnull
-    byte[] createThumbnail(@Nonnull Path videoFilePath) throws ProcessMediaContentException;
+    byte[] createThumbnail(Path videoFilePath) throws ProcessMediaContentException;
 }
