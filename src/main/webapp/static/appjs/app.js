@@ -64,9 +64,6 @@ app.run(function ($rootScope, $location, $http, AuthSharedService, Session, USER
             }
         }
 
-
-        console.log($rootScope.history)
-
         if(next.originalPath === "/signin" && $rootScope.authenticated) {
             event.preventDefault();
         } else if (next.access && next.access.loginRequired && !$rootScope.authenticated) {

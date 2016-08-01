@@ -14,6 +14,17 @@ app.directive('access', [ 'AuthSharedService', function (AuthSharedService) {
     };
 }]);
 
+app.directive('checkImage', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            element.bind('error', function() {
+                element.attr('src', '/static/images/avatar.png'); // set default image
+            });
+        }
+    }
+});
+
 app.directive('video', ['VideoStatisticService', function(VideoStatisticService){
     return {
         restrict: 'A',

@@ -9,6 +9,9 @@
                 </div>
                 <div class="caption">
                     <div class="media">
+                        <div class="media-left">
+                            <img check-image ng-src="{{video.owner.avatar}}" class="small-avatar">
+                        </div>
                         <div class="media-body">
                             <h6 class="created_date" ng-if="video.views">Views: {{video.views}}</h6>
                             <h4 class="media-heading"><a ng-href="#/videos/{{video.id}}">{{video.title}}</a></h4>

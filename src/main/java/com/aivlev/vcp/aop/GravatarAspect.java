@@ -2,9 +2,11 @@ package com.aivlev.vcp.aop;
 
 import com.aivlev.vcp.model.User;
 import com.aivlev.vcp.model.Video;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,58 +30,46 @@ public class GravatarAspect {
     @Value("${base.url}")
     private String baseUrl;
 
-    @Around("execution(* com.aivlev.vcp.service.VideoService.findAll*(..))" +
-            "|| execution(* com.aivlev.vcp.service.UserService.findVideos(..))")
-    public Object videosAdvice(ProceedingJoinPoint pjp) throws Throwable {
-        Page val = null;
+
+    @AfterReturning(pointcut = "execution(com.aivlev.vcp.model.User com.aivlev.vcp.service.UserService.*(..))",
+            returning = "retVal")
+    public void userAdvice(User retVal) throws Throwable {
         try {
-            val = (Page)pjp.proceed();
-            List content = val.getContent();
+            rewriteAvatar(retVal);
+        } catch (Exception ex){
+            LOGGER.error("Error has occurred while getting result data", ex);
+        }
+    }
+
+
+    @AfterReturning(pointcut = "execution(org.springframework.data.domain.Page com.aivlev.vcp.service.VideoService.*(..)) " +
+            "|| execution(org.springframework.data.domain.Page com.aivlev.vcp.service.UserService.findVideos(..)))",
+            returning = "retVal"
+    )
+    public void videosAdvice(Page<Video> retVal) throws Throwable {
+        try {
+            List content = (retVal.getContent());
             for (Video aContent : (Iterable<Video>) content) {
                 rewriteAvatar(aContent.getOwner());
             }
         } catch (Exception ex){
             LOGGER.error("Error has occurred while getting result data", ex);
         }
-        return val;
     }
 
-    @Around("execution(* com.aivlev.vcp.service.VideoService.findOne(..))")
-    public Object videoAdvice(ProceedingJoinPoint pjp) throws Throwable {
-        Video video = null;
+    @AfterReturning(pointcut = "execution(com.aivlev.vcp.model.Video com.aivlev.vcp.service.VideoService.findOne(..))", returning = "retVal")
+    public void videoAdvice(Video retVal) throws Throwable {
         try {
-            video = (Video)pjp.proceed();
-            rewriteAvatar(video.getOwner());
+            rewriteAvatar(retVal.getOwner());
         } catch (Exception ex){
             LOGGER.error("Error has occurred while getting result data", ex);
         }
-        return video;
-    }
-
-    @Around("execution(* com.aivlev.vcp.service.UserService.find*(..))")
-    public Object userAdvice(ProceedingJoinPoint pjp) throws Throwable {
-        try {
-            Object result = pjp.proceed();
-            if(result instanceof Page){
-                List<User> users = ((Page) result).getContent();
-                for (User user : users) {
-                    rewriteAvatar(user);
-                }
-                return result;
-            } else if(result instanceof User){
-                rewriteAvatar((User) result);
-            }
-            return result;
-        } catch (Exception ex){
-            LOGGER.error("Error has occurred while getting result data", ex);
-        }
-        return null;
     }
 
     private void rewriteAvatar(User user) {
         String hash = md5Hex(user.getEmail());
         if(hash != null){
-            String avatarRedirectPath = (user.getAvatar() != null) ? baseUrl + user.getAvatar() : baseUrl + "/media/static/images/avatar.png";
+            String avatarRedirectPath = (user.getAvatar() != null) ? baseUrl + user.getAvatar() : "404";
             user.setAvatar("http://www.gravatar.com/avatar/" + hash + "?d=" + avatarRedirectPath);
         }
     }
