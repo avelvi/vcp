@@ -14,6 +14,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by aivlev on 5/13/16.
  */
@@ -56,4 +59,17 @@ public class VideoController extends GenericController{
                               @AuthenticationPrincipal UserDetails userDetails){
         videoService.updateVideo(isAdmin(userDetails), userDetails.getUsername(), id, video);
     }
+
+    @RequestMapping(value = "/latest", method = RequestMethod.GET)
+    public Object getLatestVideos(@PageableDefault(size = 3)Pageable pageable){
+        Page<Video> result = videoService.findTop3ByOrderByCreatedDateDesc(pageable);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/popular", method = RequestMethod.GET)
+    public Object getPopularVideos(@PageableDefault(size = 3)Pageable pageable){
+        Page<Video> result = videoService.findTop3ByOrderByViewsDesc(pageable);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }

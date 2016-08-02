@@ -1,4 +1,52 @@
 <div class="container">
+    <h4>Latest</h4>
+    <hr class="section" />
+    <div class="row">
+        <div class="col-md-4"  ng-repeat="latestVideo in latestVideos.content">
+            <div class="thumbnail">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video id="{{latestVideo.id}}" data-video="" ng-src="{{latestVideo.videoUrl}}" ng-attr-poster="{{latestVideo.thumbnails[0]}}" controls="controls"></video>
+                </div>
+                <div class="caption">
+                    <div class="media">
+                        <div class="media-left">
+                            <img check-image ng-src="{{latestVideo.owner.avatar}}" class="small-avatar">
+                        </div>
+                        <div class="media-body">
+                            <h6 class="created_date" ng-if="latestVideo.views">Views: {{latestVideo.views}}</h6>
+                            <h4 class="media-heading"><a ng-href="#/videos/{{latestVideo.id}}">{{latestVideo.title}}</a></h4>
+                            <h6 class="created_date">{{latestVideo.createdDate | date : 'yyyy-MM-dd'}}</h6>
+                            <h5 class="media-heading">{{latestVideo.owner.name}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4>Popular</h4>
+    <hr class="section" />
+    <div class="row">
+        <div class="col-md-4"  ng-repeat="popularVideo in popularVideos.content">
+            <div class="thumbnail">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video id="{{popularVideo.id}}" data-video="" ng-src="{{popularVideo.videoUrl}}" ng-attr-poster="{{popularVideo.thumbnails[0]}}" controls="controls"></video>
+                </div>
+                <div class="caption">
+                    <div class="media">
+                        <div class="media-left">
+                            <img check-image ng-src="{{popularVideo.owner.avatar}}" class="small-avatar">
+                        </div>
+                        <div class="media-body">
+                            <h6 class="created_date" ng-if="popularVideo.views">Views: {{popularVideo.views}}</h6>
+                            <h4 class="media-heading"><a ng-href="#/videos/{{popularVideo.id}}">{{popularVideo.title}}</a></h4>
+                            <h6 class="created_date">{{popularVideo.createdDate | date : 'yyyy-MM-dd'}}</h6>
+                            <h5 class="media-heading">{{popularVideo.owner.name}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <h4>Videos</h4>
     <hr class="section" />
     <div class="row">

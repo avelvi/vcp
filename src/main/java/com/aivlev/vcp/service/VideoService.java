@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.nio.file.Path;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by aivlev on 4/19/16.
@@ -25,6 +27,10 @@ public interface VideoService {
     void updateVideo(boolean isAdmin, String login, String id, Video video);
 
     Page<Video> findAllVideosBySearchQuery(String searchQuery, Pageable pageable);
+
+    Page<Video> findTop3ByOrderByCreatedDateDesc(Pageable pageable);
+
+    Page<Video> findTop3ByOrderByViewsDesc(Pageable pageable);
 
     long count();
 

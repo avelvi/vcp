@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -129,6 +131,17 @@ public class VideoServiceImpl implements VideoService {
     public Page<Video> findAllVideosBySearchQuery(String searchQuery, Pageable pageable) {
         SearchQuery sq = createSearchQuery(searchQuery, pageable);
         return videoSearchRepository.search(sq);
+    }
+
+
+    @Override
+    public Page<Video> findTop3ByOrderByCreatedDateDesc(Pageable pageable) {
+        return videoRepository.findTop3ByOrderByCreatedDateDesc(pageable);
+    }
+
+    @Override
+    public Page<Video> findTop3ByOrderByViewsDesc(Pageable pageable) {
+        return videoRepository.findTop3ByOrderByViewsDesc(pageable);
     }
 
     @Override

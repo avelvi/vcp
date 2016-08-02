@@ -12,6 +12,16 @@ services.factory('VideoService', ['$resource', function($resource){
             },
             update: {
                 method: 'PUT'
+            },
+            getLatest: {
+                method: 'GET',
+                isArray: false,
+                url: '/videos/latest'
+            },
+            getPopular: {
+                method: 'GET',
+                isArray: false,
+                url: '/videos/popular'
             }
         });
     return data;

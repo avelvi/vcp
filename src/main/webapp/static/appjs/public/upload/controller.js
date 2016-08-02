@@ -21,16 +21,16 @@ appUpload.controller('UploadController', ['$scope', '$http', '$location', 'Categ
             $scope.percentValue = progressPercentage;
         }).success(function (data, status, headers, config) {
             $scope.loading = false;
-            $scope.cancel()
+            $scope.title = null;
+            $scope.description = null;
+            $scope.file = null;
+            $scope.category = null
         });
 
     }
 
     $scope.cancel = function(){
-        $scope.title = null;
-        $scope.description = null;
-        $scope.file = null;
-        $scope.category = null
+        $location.path("/videos");
     }
 
 }]);

@@ -4,12 +4,26 @@ appVideo.controller('VideoController', ['$scope', '$location', '$controller', 'V
     function($scope, $location, $controller, VideoService){
         $controller('ModalController', {$scope: $scope})
         $scope.loading = true;
+        VideoService.getLatest().$promise.then(
+            function onsuccess(response){
+                $scope.latestVideos = response;
+            }
+        );
+
+        VideoService.getPopular().$promise.then(
+            function onsuccess(response){
+                $scope.popularVideos = response;
+            }
+        );
+
         VideoService.query().$promise.then(
             function onsuccess(response){
                 $scope.videos = response;
                 $scope.loading = false;
             }
         );
+
+
 
         $scope.loadMore = function(){
             $scope.loading = true;
