@@ -1,0 +1,21 @@
+<div id="toast-container" ng-controller="ConfirmController">
+    <div class="toast toast-confirm modal-content">
+        <span class="ti-help-alt">
+
+        </span>
+        <div class="confirm-button-group">
+            <button type="button" class="toast-general-button" ng-click="ok()">
+            <span class="ti-check">
+
+            </span></button>
+            <button type="button" class="toast-general-button" ng-click="cancel()"><span class="ti-close"></span></button>
+        </div>
+        <div class="toast-message">
+            {{confirmMessage}}
+        </div>
+
+    </div>
+</div>
+
+
+

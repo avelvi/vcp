@@ -45,29 +45,35 @@ appUsers.controller('UserVideosController', ['$scope', '$location', '$controller
 
         $scope.deleteVideo = function(id){
             $controller('ModalController', {$scope: $scope})
-            VideoService.delete({id: id}).$promise.then(
-                function onsuccess(){
-                    $scope.open("success", "Video was deleted");
-                    UsersService.getUserVideos({id: $routeParams.id, page: page, size: size}).$promise.then(
-                        function onsuccess(response){
-                            $scope.videos = response;
+            $controller('ConfirmController', {$scope: $scope})
+
+            $scope.openConfirm('Are you sure you want to delete this entry', function(result) {
+                if (result) {
+                    VideoService.delete({id: id}).$promise.then(
+                        function onsuccess() {
+                            $scope.open("success", "Video was deleted");
+                            UsersService.getUserVideos({id: $routeParams.id, page: page, size: size}).$promise.then(
+                                function onsuccess(response) {
+                                    $scope.videos = response;
+                                },
+                                function onerror(response) {
+                                    $scope.open("error", response.data.message);
+                                }
+                            );
                         },
-                        function onerror(response){
+                        function onerror(response) {
                             $scope.open("error", response.data.message);
+                            UsersService.getUserVideos({id: $routeParams.id}, {page: page, size: size}).$promise.then(
+                                function onsuccess(response) {
+                                    $scope.videos = response;
+                                },
+                                function onerror(response) {
+                                    $scope.open("error", response.data.message);
+                                }
+                            );
                         }
-                    );
-                },
-                function onerror(response){
-                    $scope.open("error", response.data.message);
-                    UsersService.getUserVideos({id: $routeParams.id},{page: page, size: size}).$promise.then(
-                        function onsuccess(response){
-                            $scope.videos = response;
-                        },
-                        function onerror(response){
-                            $scope.open("error", response.data.message);
-                        }
-                    );
+                    )
                 }
-            )
+            })
         }
     }]);

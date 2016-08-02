@@ -26,8 +26,8 @@ appAuth.service('Session', function () {
 });
 
 
-appAuth.factory('AuthSharedService', ['$rootScope', '$http', '$resource', '$location', '$timeout', 'authService', 'Session',
-    function ($rootScope, $http, $resource, $location, $timeout, authService, Session) {
+appAuth.factory('AuthSharedService', ['$rootScope', '$http', '$q', '$resource', '$location', '$timeout', 'authService', 'Session',
+    function ($rootScope, $http, $q, $resource, $location, $timeout, authService, Session) {
         return {
             register: function (name, surname, login, email, password) {
                 var userData = {
@@ -94,9 +94,9 @@ appAuth.factory('AuthSharedService', ['$rootScope', '$http', '$resource', '$loca
                 return isAuthorized;
             },
             activate: function(code){
-                $http.get('/activate/code/' + code)
-                    .then(function (response) {
-                        $location.path("/signin");
+                return $http.get('/activate/code/' + code)
+                    .then(function(response){
+                        return response;
                     });
             }
         };

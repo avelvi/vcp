@@ -23,16 +23,23 @@ appUsers.controller('UsersController', ['$scope', '$location', '$controller', 'E
 
     $scope.deleteUser = function(id){
         $controller('ModalController', {$scope: $scope})
-        UsersService.delete({id: id}).$promise.then(
-            function onsuccess(){
-                $scope.open("success", "User was deleted");
-                $scope.users = UsersService.query({page: page, size: size});
-            },
-            function onerror(response){
-                $scope.open("error", response.data.message);
-                $scope.users = UsersService.query({page: page, size: size});
+        $controller('ConfirmController', {$scope: $scope})
+
+        $scope.openConfirm('Are you sure you want to delete this entry', function(result) {
+            if (result) {
+                UsersService.delete({id: id}).$promise.then(
+                    function onsuccess() {
+                        $scope.open("success", "User was deleted");
+                    },
+                    function onerror(response) {
+                        $scope.open("error", response.data.message);
+
+                    }
+                ).finally(function(){
+                        $scope.users = UsersService.query({page: page, size: size});
+                    })
             }
-        )
+        })
     }
 
     $scope.showVideos = function(userId){

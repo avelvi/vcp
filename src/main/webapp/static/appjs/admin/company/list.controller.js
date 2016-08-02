@@ -23,16 +23,23 @@ appCompany.controller('CompanyController', ['$scope', '$location', '$controller'
 
     $scope.deleteCompany = function(id){
         $controller('ModalController', {$scope: $scope})
-        CompanyService.delete({id: id}).$promise.then(
-            function onsuccess(){
-                $scope.open("success", "Company was deleted");
-                $scope.companies = CompanyService.query({page: page, size: size});
-            },
-            function onerror(response){
-                $scope.open("error", response.data.message);
-                $scope.companies = CompanyService.query({page: page, size: size});
+        $controller('ConfirmController', {$scope: $scope})
+
+        $scope.openConfirm('Are you sure you want to delete this entry', function(result) {
+            if (result) {
+                CompanyService.delete({id: id}).$promise.then(
+                    function onsuccess() {
+                        $scope.open("success", "Company was deleted");
+                    },
+                    function onerror(response) {
+                        $scope.open("error", response.data.message);
+
+                    }
+                ).finally(function(){
+                        $scope.companies = CompanyService.query({page: page, size: size});
+                    })
             }
-        )
+        });
 
     }
 

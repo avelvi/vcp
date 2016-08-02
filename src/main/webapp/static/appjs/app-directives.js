@@ -14,7 +14,7 @@ app.directive('access', [ 'AuthSharedService', function (AuthSharedService) {
     };
 }]);
 
-app.directive('checkImage', function() {
+app.directive('checkImage', [function() {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
@@ -23,7 +23,7 @@ app.directive('checkImage', function() {
             });
         }
     }
-});
+}]);
 
 app.directive('video', ['VideoStatisticService', function(VideoStatisticService){
     return {

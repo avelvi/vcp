@@ -33,7 +33,7 @@ var appAuth = angular.module('app.auth', ['ngRoute', 'app.constants'])
                         authorizedRoles: [USER_ROLES.all]
                     }
                 }).when('/activate/code/:code', {
-                    templateUrl: 'partials/public/activation.html',
+                    templateUrl: 'static/appjs/public/auth/activation.html',
                     controller: 'ActivationController',
                     access: {
                         loginRequired: false,

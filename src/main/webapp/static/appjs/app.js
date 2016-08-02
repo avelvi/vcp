@@ -5,7 +5,7 @@ var app = angular.module('app', ['ngResource', 'ngRoute', 'ngFileUpload', 'ui.ro
     'app-controllers', 'app-services', 'app.constants', 'app.company',
     'app.category', 'app.auth', 'app.users', 'app.profile',
     'app.adminHome', 'app.adminVideo', 'app.video', 'app.navBar',
-    'app.error', 'app.search', 'app.upload', 'app.forgot', 'app.modal'
+    'app.error', 'app.search', 'app.upload', 'app.forgot', 'app.modal', 'app.confirm'
 ]);
 
 angular.module('app.constants', [])

@@ -116,9 +116,10 @@ public class UserServiceImpl implements UserService {
                 user.setAuthorities(Collections.singletonList(authority));
                 user.setActive(false);
                 notificationService.sendNotification(user, code, NotificationReason.ACTIVATION.name());
-            }
-            if(!user.isActive()){
-                notificationService.sendNotification(user, code, NotificationReason.ACTIVATION.name());
+            } else {
+                if(!user.isActive()){
+                    notificationService.sendNotification(user, code, NotificationReason.ACTIVATION.name());
+                }
             }
             userRepository.save(user);
         } else {
@@ -209,6 +210,9 @@ public class UserServiceImpl implements UserService {
                     LOGGER.error("Activation code was expired");
                     throw new CodeExpiredException("Activation code was expired");
                 }
+            } else {
+                LOGGER.error("Activation code was expired");
+                throw new CodeExpiredException("Your profile was activated");
             }
         } else {
             LOGGER.error("Recovery password code not found");

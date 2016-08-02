@@ -593,6 +593,8 @@ button.toast-close-button {
 }
 .toast-info {
     background-color: #6197c7
+}.toast-confirm {
+    background-color: #4fb5ff
 }
 .toast-warning {
     background-color: #e5bb68
@@ -603,7 +605,7 @@ button.toast-close-button {
         padding: 8px 8px 8px 50px;
         width: 11em
     }
-    #toast-container .toast-close-button {
+    #toast-container .toast-close-button, #toast-container .toast-general-button {
         right: -.2em;
         top: -.2em
     }
@@ -613,7 +615,7 @@ button.toast-close-button {
         padding: 8px 8px 8px 50px;
         width: 18em
     }
-    #toast-container .toast-close-button {
+    #toast-container .toast-close-button, #toast-container .toast-general-button {
         right: -.2em;
         top: -.2em
     }
@@ -628,3 +630,56 @@ button.toast-close-button {
 .checkbox label{
     color: #8c8c8c;
 }
+
+.toast-general-button {
+    position: relative;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    -webkit-text-shadow: 0 1px 0 #cccf;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .8;
+    -ms-filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=80);
+    filter: alpha(opacity=80)
+}
+.toast-general-button:focus,
+.toast-general-button:hover {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: .4;
+    -ms-filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=40);
+    filter: alpha(opacity=40)
+}
+button.toast-general-button {
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    -webkit-appearance: none
+}
+
+.ti-help-alt {
+    font-size: 32px;
+    float: left;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #ffffff !important;
+}
+
+.ti-check, .ti-close {
+    color: #ffffff !important;
+}
+
+button .ti-check {
+    margin-right: 15px;
+}
+
+.confirm-button-group {
+    width: 75px;
+    float: right;
+    line-height: normal;
+}
+
+

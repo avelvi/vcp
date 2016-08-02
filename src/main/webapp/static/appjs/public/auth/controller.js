@@ -30,7 +30,15 @@ appAuth.controller('AuthController', ['$scope', '$rootScope', '$location', 'Auth
     }
 }]);
 
-appAuth.controller('ActivationController', ['$scope', '$routeParams', 'AuthSharedService', function ($scope, $routeParams, AuthSharedService) {
+appAuth.controller('ActivationController', ['$scope', '$routeParams', '$controller', 'AuthSharedService', function ($scope, $routeParams, $controller, AuthSharedService) {
     var code = $routeParams.code;
-    AuthSharedService.activate(code);
+    $controller('ModalController', {$scope: $scope});
+    AuthSharedService.activate(code).then(
+        function onsuccess(){
+            $scope.open("success", "Your profile was activated", "/signin");
+        },
+        function onerror(response){
+            $scope.open("info", response.data.message, "/signin");
+        }
+    );
 }])

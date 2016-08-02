@@ -3,7 +3,7 @@
 appNavBar.controller('NavController', ['$scope', '$location', 'Session', 'AuthSharedService', function($scope, $location, Session, AuthSharedService){
 
     $scope.isShowNavBar = function(){
-        var excludeUrls = ["/signin", "/signup", "/error", "/loading", "/registration", "/forgot-password", "/recovery"];
+        var excludeUrls = ["/signin", "/signup", "/error", "/loading", "/registration", "/forgot-password", "/recovery", "/activate"];
         var path = $location.path();
         for (var i = 0; i < excludeUrls.length; i++) {
             var excludeUrl = excludeUrls[i];

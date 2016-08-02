@@ -22,16 +22,23 @@ appAdminVideo.controller('AdminVideoController', ['$scope', '$location', '$contr
     }
 
     $scope.deleteVideo = function(id){
-        $controller('ModalController', {$scope: $scope})
-        VideoService.delete({id: id}).$promise.then(
-            function onsuccess(){
-                $scope.open("success", "Video was deleted");
-                $scope.videos = VideoService.query({page: page, size: size});
-            },
-            function onerror(response){
-                $scope.open("error", response.data.message);
-                $scope.videos = VideoService.query({page: page, size: size});
+        $controller('ConfirmController', {$scope: $scope})
+
+        $scope.openConfirm('Are you sure you want to delete this entry', function(result) {
+            if (result) {
+                $controller('ModalController', {$scope: $scope})
+                VideoService.delete({id: id}).$promise.then(
+                    function onsuccess() {
+                        $scope.open("success", "Video was deleted");
+                    },
+                    function onerror(response) {
+                        $scope.open("error", response.data.message);
+
+                    }
+                ).finally(function(){
+                        $scope.videos = VideoService.query({page: page, size: size});
+                    })
             }
-        )
+        })
     }
 }]);
