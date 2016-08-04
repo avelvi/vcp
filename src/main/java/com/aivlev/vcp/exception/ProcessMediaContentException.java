@@ -11,10 +11,6 @@ public class ProcessMediaContentException extends ApplicationException {
         super(message);
     }
 
-    public ProcessMediaContentException(Throwable cause) {
-        super(cause);
-    }
-
     public ProcessMediaContentException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -29,4 +29,8 @@ appProfile.controller('ProfileEditController', ['$scope', '$routeParams', '$cont
             $location.path("/profile/" + $routeParams.id + "/changePassword")
         }
 
+        $scope.changeAvatar = function(){
+            $location.path("/profile/" + $routeParams.id + "/changeAvatar")
+        }
+
 }]);

@@ -13,6 +13,10 @@ public class UploadForm {
     public UploadForm() {
         super();
     }
+    public UploadForm(MultipartFile file) {
+        super();
+        this.file = file;
+    }
     public UploadForm(String title, String description, MultipartFile file) {
         super();
         this.title = title;

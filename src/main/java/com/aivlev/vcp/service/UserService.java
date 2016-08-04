@@ -41,4 +41,6 @@ public interface UserService {
     long count();
 
     User findOne(String id);
+
+    String changeAvatar(String login, UploadForm uploadForm);
 }

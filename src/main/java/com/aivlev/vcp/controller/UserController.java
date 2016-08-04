@@ -17,6 +17,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 /**
  * Created by aivlev on 5/1/16.
@@ -69,17 +72,16 @@ public class UserController extends GenericController{
     }
 
     @PreAuthorize("hasAuthority('user')")
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public void uploadVideo(@AuthenticationPrincipal UserDetails userDetails,
-                            @RequestParam("file") MultipartFile file,
-                            @RequestParam("title") String title,
-                            @RequestParam("description") String description,
-                            @RequestParam("categoryId") String id,
-                            @RequestParam("categoryName") String name
+    @RequestMapping(value = "/{id}/changeAvatar", method = RequestMethod.POST)
+    public ResponseEntity<String> changeAvatar(@PathVariable(value = "id") String id,
+            @AuthenticationPrincipal UserDetails userDetails,
+                            @RequestParam("file") MultipartFile file
                             ){
-        Category category = new Category(id, name);
-        UploadForm uploadForm = new UploadForm(title, description, file);
-        userService.uploadVideo(userDetails.getUsername(), uploadForm, category);
+        UploadForm uploadForm = new UploadForm(file);
+        String path = userService.changeAvatar(userDetails.getUsername(), uploadForm);
+//        URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(details.getId())
+//                .toUri();
+        return new ResponseEntity<>(path, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/updatePassword", method = RequestMethod.POST)
@@ -87,5 +89,19 @@ public class UserController extends GenericController{
                                @RequestBody UpdatePasswordDto updatePasswordDto,
                                @AuthenticationPrincipal UserDetails userDetails){
         userService.updatePassword(id, updatePasswordDto, userDetails.getUsername());
+    }
+
+    @PreAuthorize("hasAuthority('user')")
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public void uploadVideo(@AuthenticationPrincipal UserDetails userDetails,
+                            @RequestParam("file") MultipartFile file,
+                            @RequestParam("title") String title,
+                            @RequestParam("description") String description,
+                            @RequestParam("categoryId") String id,
+                            @RequestParam("categoryName") String name
+    ){
+        Category category = new Category(id, name);
+        UploadForm uploadForm = new UploadForm(title, description, file);
+        userService.uploadVideo(userDetails.getUsername(), uploadForm, category);
     }
 }

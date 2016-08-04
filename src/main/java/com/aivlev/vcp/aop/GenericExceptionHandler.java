@@ -50,4 +50,11 @@ public class GenericExceptionHandler {
         Response response = new Response(HttpStatus.NOT_FOUND.value(), ex.getMessage(), error);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(BadImageException.class)
+    public ResponseEntity<Response> badImageExceptionHandler(BadImageException ex) {
+        com.aivlev.vcp.model.Error error = new Error("Bad Image Error", ex.getMessage());
+        Response response = new Response(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), ex.getMessage(), error);
+        return new ResponseEntity<>(response, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
+
 }

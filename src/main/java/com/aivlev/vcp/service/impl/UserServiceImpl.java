@@ -6,21 +6,22 @@ import com.aivlev.vcp.model.*;
 import com.aivlev.vcp.repository.search.VideoSearchRepository;
 import com.aivlev.vcp.repository.storage.UserRepository;
 import com.aivlev.vcp.repository.storage.VideoRepository;
-import com.aivlev.vcp.service.AuthorityService;
-import com.aivlev.vcp.service.NotificationService;
-import com.aivlev.vcp.service.UserService;
-import com.aivlev.vcp.service.VideoProcessorService;
+import com.aivlev.vcp.service.*;
 import com.aivlev.vcp.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Collections;
 
@@ -32,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
+    @Value("${media.dir}")
+    private String mediaDir;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -40,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AuthorityService authorityService;
+
+    @Autowired
+    private ImageService imageService;
 
     @Autowired
     private NotificationService notificationService;
@@ -249,5 +256,25 @@ public class UserServiceImpl implements UserService {
             LOGGER.error("User with id = " + id + " not found");
             throw new ModelNotFoundException("User not found");
         }
+    }
+
+    @Override
+    public String changeAvatar(String login, UploadForm uploadForm) {
+        User user = findByLogin(login);
+        try {
+            byte[] imageBytes = uploadForm.getFile().getBytes();
+            String avatarPath = imageService.saveImageData(imageBytes, false);
+            if(user.getAvatar() != null){
+                Files.deleteIfExists(Paths.get(mediaDir.substring(0, mediaDir.length() - 6) + user.getAvatar()));
+            }
+            user.setAvatar(avatarPath);
+            userRepository.save(user);
+            return avatarPath;
+
+        } catch (IOException e) {
+            LOGGER.error("Error has occurred while reading image");
+            throw new BadImageException("Bad Image");
+        }
+
     }
 }

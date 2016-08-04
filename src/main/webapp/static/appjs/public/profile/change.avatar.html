@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="panel panel-default table-dynamic">
+        <div class="panel-heading"><strong><span class="ti-user"></span> Change Avatar</strong></div>
+        <div class="profile-avatar-wrapper">
+            <div class="profile-avatar">
+                <img check-image ng-src="{{avatarSrc}}" >
+            </div>
+        </div>
+        <form role="form" name="uploadForm" class="details">
+            <div class="form-group">
+                <label for="file">Click or Drop file for upload</label>
+                <input image-select ng-change="onChange()" gng-readonly="true" type="text" class="form-control" id="file" placeholder="{{file.name}}" data-ng-model="file"
+                       ngf-select="" ngf-drop="" data-ng-model="file" ngf-drag-over-class="'dragover'"
+                       ngf-allow-dir="true" accept="image/jpeg" ngf-pattern="'image/jpeg'" name="file" required="required">
+            </div>
+            <button class="btn btn-success btn-sm" ng-click="upload()" ng-disabled="!uploadForm.$valid">
+                Upload</button>
+            <button class="btn btn-danger btn-sm" ng-click="cancel()">
+                Cancel</button>
+        </form>
+    </div>
+</div>

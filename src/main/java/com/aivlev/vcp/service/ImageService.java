@@ -7,6 +7,6 @@ import com.aivlev.vcp.exception.ProcessMediaContentException;
  */
 public interface ImageService {
 
-    String saveImageData (byte[] imageBytes) throws ProcessMediaContentException;
+    String saveImageData (byte[] imageBytes, boolean isThumbnail) throws ProcessMediaContentException;
 
 }

@@ -37,7 +37,7 @@ public class VideoProcessorServiceImpl implements VideoProcessorService {
         Path tempUploadedVideoPath = uploadVideoTempStorage.getTempUploadedVideoPath();
         String videoUrl = videoService.saveVideo(tempUploadedVideoPath);
         byte[] thumbnailImageData = thumbnailService.createThumbnail(tempUploadedVideoPath);
-        String thumbnailImageUrl = imageService.saveImageData(thumbnailImageData);
+        String thumbnailImageUrl = imageService.saveImageData(thumbnailImageData, true);
 
         return new Video(uploadForm.getTitle(), uploadForm.getDescription(),
                 String.valueOf(new Date().getTime()), videoUrl, Collections.singletonList(thumbnailImageUrl));

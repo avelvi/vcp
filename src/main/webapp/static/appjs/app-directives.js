@@ -25,6 +25,21 @@ app.directive('checkImage', [function() {
     }
 }]);
 
+app.directive("imageSelect", function() {
+    return {
+        link: function($scope) {
+            $scope.onChange = function(){
+                var file = $scope.file
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $scope.avatarSrc = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    };
+    });
+
 app.directive('video', ['VideoStatisticService', function(VideoStatisticService){
     return {
         restrict: 'A',

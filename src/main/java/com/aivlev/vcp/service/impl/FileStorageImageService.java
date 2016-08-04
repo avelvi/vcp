@@ -19,27 +19,30 @@ import java.util.UUID;
 @Service
 public class FileStorageImageService implements ImageService {
 
-    private static final String PATH_PREFIX = "/media/thumbnails/";
+    private static final String THUMBNAIL_PATH_PREFIX = "/media/thumbnails/";
+    private static final String AVATAR_PATH_PREFIX = "/media/avatars/";
     private static final Logger LOGGER = LoggerFactory.getLogger(FileStorageImageService.class);
 
     @Value("${media.dir}")
     private String mediaDir;
 
     @Override
-    public String saveImageData(byte[] imageBytes) {
+    public String saveImageData(byte[] imageBytes, boolean isThumbnail) {
         try {
-            return saveImageDataInternal(imageBytes);
+            return saveImageDataInternal(imageBytes, isThumbnail);
         } catch (IOException e) {
             LOGGER.error("Error has occurred while saving image data", e.getMessage());
             throw new ProcessMediaContentException("Error has occurred while saving image data: " + e.getMessage(), e);
         }
     }
 
-    private String saveImageDataInternal(byte[] imageBytes) throws IOException {
+    private String saveImageDataInternal(byte[] imageBytes, boolean isThumbnail) throws IOException {
         String uniqueThumbnailFileName = generateUniqueThumbnailFileName();
-        Path path = Paths.get(mediaDir + "/thumbnails/" + uniqueThumbnailFileName);
+        String fileSubdirPath = isThumbnail ? "/thumbnails/" : "/avatars/";
+        Path path = Paths.get(mediaDir + fileSubdirPath + uniqueThumbnailFileName);
         Files.write(path, imageBytes);
-        return PATH_PREFIX + uniqueThumbnailFileName;
+        String filePathPrefix = isThumbnail ? THUMBNAIL_PATH_PREFIX : AVATAR_PATH_PREFIX;
+        return filePathPrefix + uniqueThumbnailFileName;
     }
 
     private String generateUniqueThumbnailFileName() {
