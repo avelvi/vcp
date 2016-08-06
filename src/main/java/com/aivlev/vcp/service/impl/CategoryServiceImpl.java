@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by aivlev on 5/6/16.
  */
 @Service
+@Transactional
 public class CategoryServiceImpl implements CategoryService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryServiceImpl.class);
 
@@ -41,7 +42,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public void createOrUpdate(String id, Category category) {
         if(id != null){
             Category categoryFromDB = categoryRepository.findOne(id);
@@ -59,7 +59,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public void deleteCategory(String id) {
         Category categoryFromDB = categoryRepository.findOne(id);
         if(categoryFromDB != null){

@@ -7,11 +7,13 @@ import com.aivlev.vcp.repository.storage.VideoStatisticRepository;
 import com.aivlev.vcp.service.VideoStatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by aivlev on 6/24/16.
  */
 @Service
+@Transactional
 public class VideoStatisticServiceImpl implements VideoStatisticService {
 
     @Autowired

@@ -9,6 +9,7 @@ import com.aivlev.vcp.service.VideoProcessorService;
 import com.aivlev.vcp.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Path;
 import java.util.Collections;
@@ -18,6 +19,7 @@ import java.util.Date;
  * Created by aivlev on 5/18/16.
  */
 @Service
+@Transactional
 public class VideoProcessorServiceImpl implements VideoProcessorService {
 
     @Autowired

@@ -29,6 +29,7 @@ import java.util.Collections;
  * Created by aivlev on 4/26/16.
  */
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -93,7 +94,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void save(String id, User user) {
         if(id == null){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -167,7 +167,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void deleteUser(String id) {
         User user = userRepository.findOne(id);
         if(user != null){
@@ -179,7 +178,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void updateUser(String id, User user) {
         User userFromDB = findOne(id);
         if(!userFromDB.getEmail().equalsIgnoreCase(user.getEmail())) {
@@ -228,7 +226,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void updatePassword(String id, UpdatePasswordDto updatePasswordDto, String userName) {
         User user = findOne(id);
         User userFromDB = userRepository.findByLogin(userName);

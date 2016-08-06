@@ -28,14 +28,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by aivlev on 4/19/16.
  */
 @Service
+@Transactional
 public class VideoServiceImpl implements VideoService {
 
     private static final String PATH_PREFIX = "/media/video/";
@@ -85,7 +84,6 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    @Transactional
     public void deleteVideo(boolean isAdmin, String userName, String id) {
         Video video = findOne(id);
         if(isAdmin){
@@ -102,7 +100,6 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    @Transactional
     public void updateVideo(boolean isAdmin, String login, String id, Video video) {
         Video videoFromDB = videoRepository.findOne(id);
         if(videoFromDB != null && videoFromDB.getId().equals(video.getId())){

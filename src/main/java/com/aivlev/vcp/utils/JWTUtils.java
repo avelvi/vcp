@@ -29,8 +29,6 @@ public class JWTUtils {
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + EXPIRED_DELTA_TIME))
                 .signWith(signatureAlgorithm, signingKey);
-
-        //Builds the JWT and serializes it to a compact, URL-safe string
         return builder.compact();
     }
 

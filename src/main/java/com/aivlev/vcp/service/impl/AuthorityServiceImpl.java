@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * Created by aivlev on 5/9/16.
  */
 @Service
+@Transactional
 public class AuthorityServiceImpl implements AuthorityService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorityServiceImpl.class);
 

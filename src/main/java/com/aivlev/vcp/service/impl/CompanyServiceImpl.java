@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by aivlev on 5/5/16.
  */
 @Service
+@Transactional
 public class CompanyServiceImpl implements CompanyService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
 
@@ -40,7 +41,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    @Transactional
     public void createOrUpdate(String id, Company company) {
         if(id != null){
             Company companyFromDB = companyRepository.findOne(id);
@@ -58,7 +58,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    @Transactional
     public void deleteCompany(String id) {
         Company company = companyRepository.findOne(id);
         if(company != null) {

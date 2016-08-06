@@ -10,6 +10,7 @@ import org.jcodec.scale.AWTUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -22,6 +23,7 @@ import java.nio.file.Path;
  * Created by aivlev on 4/20/16.
  */
 @Service
+@Transactional
 public class JCodecThumbnailService implements ThumbnailService{
     private static final Logger LOGGER = LoggerFactory.getLogger(JCodecThumbnailService.class);
 

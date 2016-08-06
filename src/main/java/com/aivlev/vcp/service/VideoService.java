@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.nio.file.Path;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by aivlev on 4/19/16.
